@@ -1,59 +1,253 @@
-# StockAdmin
+# Sistema de Gestión de Inventario Web
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.9.
+## Estado Actual del Proyecto
 
-## Development server
+Proyecto frontend desarrollado con Angular moderno (Standalone Components), enfocado en la creación de un sistema administrativo de inventario profesional para portafolio y aprendizaje.
 
-To start a local development server, run:
+---
 
-```bash
-ng serve
+# Tecnologías Utilizadas
+
+## Frontend
+- Angular 21
+- TypeScript
+- HTML5
+- CSS3
+
+---
+
+# Arquitectura Actual
+
+El proyecto utiliza:
+- Angular Standalone Components
+- Angular Router
+- SPA (Single Page Application)
+- Componentes reutilizables
+- Navegación dinámica
+
+---
+
+# Estructura del Proyecto
+
+```text
+src/
+ └── app/
+      ├── dashboard/
+      ├── layout/
+      ├── login/
+      ├── products/
+      ├── app.config.ts
+      ├── app.routes.ts
+      ├── app.routes.server.ts
+      ├── app.ts
+      ├── app.html
+      └── app.css
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+---
 
-## Code scaffolding
+# Funcionalidades Implementadas
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+## 1. Login UI
 
-```bash
-ng generate component component-name
-```
+Pantalla de inicio de sesión con:
+- Input Email
+- Input Contraseña
+- Botón Ingresar
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+### Objetivo
+Crear la primera interfaz del sistema y comprender la estructura básica de Angular.
 
-```bash
-ng generate --help
-```
+---
 
-## Building
+## 2. Layout Administrativo
 
-To build the project run:
+Se implementó:
+- Sidebar lateral
+- Navbar superior
+- Área dinámica de contenido
 
-```bash
-ng build
-```
+### Objetivo
+Crear una estructura reutilizable para todo el sistema administrativo.
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+---
 
-## Running unit tests
+## 3. Sidebar Navegable
 
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
+Módulos actuales:
+- Dashboard
+- Productos
+- Categorías
+- Movimientos
+- Usuarios
 
-```bash
-ng test
-```
+### Características
+- Navegación SPA
+- Cambio dinámico de contenido
+- URL dinámica
 
-## Running end-to-end tests
+---
 
-For end-to-end (e2e) testing, run:
+# Sistema de Rutas
 
-```bash
-ng e2e
-```
+## Rutas implementadas
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+| Ruta | Pantalla |
+|---|---|
+| /dashboard | Dashboard |
+| /products | Productos |
 
-## Additional Resources
+---
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+# Dashboard
+
+Pantalla principal con:
+- Total productos
+- Productos con stock bajo
+- Movimientos diarios
+
+### Objetivo
+Visualizar información general del sistema.
+
+---
+
+# Módulo Productos
+
+## Funcionalidades actuales
+
+### Tabla dinámica
+Visualización de productos usando:
+- Arrays
+- *ngFor
+
+### Datos mostrados
+- Código
+- Nombre
+- Precio
+- Stock
+- Estado
+
+---
+
+# Modal Nuevo Producto
+
+## Características
+- Apertura dinámica
+- Formulario funcional
+- Inputs enlazados con ngModel
+- Guardado dinámico en tabla
+
+---
+
+# CRUD Actual
+
+## Implementado
+- Create
+- Read
+
+## Pendiente
+- Update
+- Delete
+
+---
+
+# Conceptos Angular Aprendidos
+
+## Componentes
+- Standalone Components
+- Reutilización
+
+---
+
+## Routing
+- RouterModule
+- routerLink
+- router-outlet
+
+---
+
+## Directivas
+- *ngFor
+- *ngIf
+
+---
+
+## Forms
+- FormsModule
+- ngModel
+
+---
+
+# Diseño UI Actual
+
+## Sidebar
+- Menú lateral oscuro
+- Navegación dinámica
+
+---
+
+## Navbar
+- Barra superior administrativa
+
+---
+
+## Dashboard
+- Cards informativas
+
+---
+
+## Productos
+- Tabla moderna
+- Modal emergente
+- Diseño responsive básico
+
+---
+
+# Estado General del Proyecto
+
+## Actualmente el sistema:
+ Navega entre páginas  
+ Usa Angular Router  
+ Tiene estructura administrativa  
+ Permite crear productos dinámicamente  
+ Maneja estado básico frontend  
+ Posee componentes organizados  
+
+---
+
+# Próximas Funcionalidades
+
+## Corto plazo
+- Editar productos
+- Eliminar productos
+- Categorías
+- Movimientos inventario
+
+---
+
+## Mediano plazo
+- Backend ASP.NET Core
+- API REST
+- PostgreSQL
+- Autenticación JWT
+
+---
+
+## Largo plazo
+- Roles de usuario
+- Reportes
+- Dashboard avanzado
+- Exportación PDF/Excel
+
+---
+
+# Objetivo del Proyecto
+
+Construir una aplicación:
+- Profesional
+- Escalable
+- Moderna
+- Presentable para GitHub
+- Útil para portafolio laboral
+
+---
