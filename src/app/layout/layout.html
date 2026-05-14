@@ -1,0 +1,65 @@
+<div class="layout-container">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+
+        <h2>StockAdmin</h2>
+
+        <ul>
+
+            <li>
+                <a routerLink="/dashboard" routerLinkActive="active">
+                    Dashboard
+                </a>
+            </li>
+
+            <li>
+                <a routerLink="/products" routerLinkActive="active">
+                    Productos
+                </a>
+            </li>
+
+            <li>
+                <a href="#">
+                    Categorías
+                </a>
+            </li>
+
+            <li>
+                <a href="#">
+                    Movimientos
+                </a>
+            </li>
+
+            <li>
+                <a href="#">
+                    Usuarios
+                </a>
+            </li>
+
+        </ul>
+
+    </aside>
+
+    <!-- Main -->
+    <div class="main-content">
+
+        <!-- Navbar -->
+        <header class="navbar">
+
+            <h3>Sistema de Gestión de Inventario</h3>
+
+            <span>Administrador</span>
+
+        </header>
+
+        <!-- Dynamic Content -->
+        <section class="content">
+
+            <router-outlet></router-outlet>
+
+        </section>
+
+    </div>
+
+</div>
