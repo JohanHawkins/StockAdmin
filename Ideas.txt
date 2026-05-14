@@ -1,0 +1,265 @@
+# Sistema de Gestión de Inventario Web
+
+## Objetivo del Proyecto
+
+Construir una aplicación web moderna para administrar inventario de manera sencilla y profesional.
+
+El sistema permitirá:
+- Iniciar sesión
+- Administrar productos
+- Controlar stock
+- Registrar entradas y salidas
+- Visualizar información básica del inventario
+
+---
+
+# Tecnologías del Proyecto
+
+## Frontend
+Angular
+
+Responsable de:
+- Interfaces visuales
+- Formularios
+- Dashboard
+- Consumo de API
+
+---
+
+## Backend
+ASP.NET Core
+
+Responsable de:
+- Lógica del negocio
+- Validaciones
+- API REST
+- Autenticación
+
+---
+
+## Base de Datos
+PostgreSQL
+
+Responsable de:
+- Almacenar usuarios
+- Productos
+- Movimientos
+- Categorías
+
+---
+
+# Funcionalidades MVP
+
+## 1. Login
+
+Permitir el acceso al sistema mediante:
+- Email
+- Contraseña
+
+Funciones:
+- Iniciar sesión
+- Cerrar sesión
+
+---
+
+## 2. Dashboard
+
+Mostrar información general:
+- Total de productos
+- Productos con stock bajo
+- Movimientos recientes
+
+---
+
+## 3. Gestión de Productos
+
+Funciones:
+- Crear producto
+- Editar producto
+- Listar productos
+- Buscar productos
+
+Campos del producto:
+- Código
+- Nombre
+- Descripción
+- Precio
+- Stock
+- Stock mínimo
+- Categoría
+
+---
+
+## 4. Gestión de Categorías
+
+Funciones:
+- Crear categoría
+- Editar categoría
+- Listar categorías
+
+Ejemplos:
+- Tecnología
+- Oficina
+- Hogar
+
+---
+
+## 5. Movimientos de Inventario
+
+Registrar:
+- Entradas
+- Salidas
+
+Campos:
+- Producto
+- Tipo de movimiento
+- Cantidad
+- Fecha
+- Observación
+
+---
+
+# Entidades Principales
+
+## users
+
+Guarda los usuarios del sistema.
+
+| Campo | Tipo |
+|---|---|
+| id | int |
+| nombre | string |
+| email | string |
+| password | string |
+
+---
+
+## products
+
+Guarda los productos.
+
+| Campo | Tipo |
+|---|---|
+| id | int |
+| nombre | string |
+| stock | int |
+| precio | decimal |
+
+---
+
+## categories
+
+Guarda las categorías.
+
+| Campo | Tipo |
+|---|---|
+| id | int |
+| nombre | string |
+
+---
+
+## movements
+
+Guarda entradas y salidas de inventario.
+
+| Campo | Tipo |
+|---|---|
+| id | int |
+| producto | relation |
+| tipo | entrada/salida |
+| cantidad | int |
+
+---
+
+# Flujo Básico del Sistema
+
+1. Usuario inicia sesión
+2. Ingresa al dashboard
+3. Administra productos
+4. Registra entradas o salidas
+5. El sistema actualiza el stock automáticamente
+
+---
+
+# Pantallas del Sistema
+
+## Login
+- Email
+- Contraseña
+- Botón ingresar
+
+---
+
+## Dashboard
+- Total productos
+- Stock bajo
+- Movimientos recientes
+
+---
+
+## Productos
+- Tabla de productos
+- Crear producto
+- Editar producto
+
+---
+
+## Categorías
+- Lista de categorías
+
+---
+
+## Movimientos
+- Registrar entradas
+- Registrar salidas
+
+---
+
+# Objetivo del MVP
+
+Crear una aplicación:
+- Funcional
+- Moderna
+- Ordenada
+- Presentable para GitHub
+- Útil para portafolio profesional
+
+---
+
+
+
+
+1. Pantallas del sistema
+
+Ejemplo:
+
+Login
+Email
+Password
+Botón ingresar
+Dashboard
+Total productos
+Productos bajos de stock
+Movimientos recientes
+Productos
+Tabla productos
+Crear producto
+Editar producto
+Categorías
+Lista categorías
+Movimientos
+Registrar entrada
+Registrar salida
+2. Navegación
+
+Cómo se moverá el usuario.
+
+Ejemplo:
+
+Login
+  ↓
+Dashboard
+  ↓
+Productos
+  ↓
+Movimientos
