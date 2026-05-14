@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
+import { ProductService } from '../services/product.service';
+
 @Component({
   selector: 'app-products',
   standalone: true,
@@ -22,22 +24,7 @@ export class ProductsComponent {
 
   currentIndex = -1;
 
-  products = [
-    {
-      code: 'P001',
-      name: 'Mouse Gamer',
-      price: 80,
-      stock: 10,
-      status: 'Activo'
-    },
-    {
-      code: 'P002',
-      name: 'Teclado Mecánico',
-      price: 150,
-      stock: 5,
-      status: 'Activo'
-    }
-  ];
+  products: any[] = [];
 
   newProduct = {
     code: '',
@@ -47,13 +34,20 @@ export class ProductsComponent {
     status: 'Activo'
   };
 
+  constructor(private productService: ProductService){
+
+    this.products = this.productService.getProducts();
+  }
+
   openModal(){
+
     this.showModal = true;
 
     this.isEditing = false;
   }
 
   closeModal(){
+
     this.showModal = false;
   }
 
@@ -61,15 +55,16 @@ export class ProductsComponent {
 
     if(this.isEditing){
 
-      this.products[this.currentIndex] = {
-        ...this.newProduct
-      };
+      this.productService.updateProduct(
+        this.currentIndex,
+        { ...this.newProduct }
+      );
 
     }else{
 
-      this.products.push({
-        ...this.newProduct
-      });
+      this.productService.addProduct(
+        { ...this.newProduct }
+      );
 
     }
 
@@ -105,7 +100,9 @@ export class ProductsComponent {
 
   confirmDelete(){
 
-    this.products.splice(this.currentIndex, 1);
+    this.productService.deleteProduct(
+      this.currentIndex
+    );
 
     this.closeDeleteModal();
   }
