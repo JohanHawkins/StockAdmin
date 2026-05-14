@@ -1,11 +1,13 @@
 import { Injectable } from '@angular/core';
 
+import { Product } from '../models/product.model';
+
 @Injectable({
   providedIn: 'root'
 })
 export class ProductService {
 
-  products = [
+  products: Product[] = [
     {
       code: 'P001',
       name: 'Mouse Gamer',
@@ -22,21 +24,22 @@ export class ProductService {
     }
   ];
 
-  getProducts(){
+  getProducts(): Product[]{
+
     return this.products;
   }
 
-  addProduct(product: any){
+  addProduct(product: Product): void{
 
     this.products.push(product);
   }
 
-  updateProduct(index: number, product: any){
+  updateProduct(index: number, product: Product): void{
 
     this.products[index] = product;
   }
 
-  deleteProduct(index: number){
+  deleteProduct(index: number): void{
 
     this.products.splice(index, 1);
   }

@@ -4,6 +4,8 @@ import { FormsModule } from '@angular/forms';
 
 import { ProductService } from '../services/product.service';
 
+import { Product } from '../models/product.model';
+
 @Component({
   selector: 'app-products',
   standalone: true,
@@ -24,9 +26,9 @@ export class ProductsComponent {
 
   currentIndex = -1;
 
-  products: any[] = [];
+  products: Product[] = [];
 
-  newProduct = {
+  newProduct: Product = {
     code: '',
     name: '',
     price: 0,
@@ -73,7 +75,7 @@ export class ProductsComponent {
     this.closeModal();
   }
 
-  editProduct(product: any, index: number){
+  editProduct(product: Product, index: number){
 
     this.newProduct = {
       ...product
