@@ -16,6 +16,12 @@ export class ProductsComponent {
 
   showModal = false;
 
+  showDeleteModal = false;
+
+  isEditing = false;
+
+  currentIndex = -1;
+
   products = [
     {
       code: 'P001',
@@ -43,6 +49,8 @@ export class ProductsComponent {
 
   openModal(){
     this.showModal = true;
+
+    this.isEditing = false;
   }
 
   closeModal(){
@@ -51,9 +59,58 @@ export class ProductsComponent {
 
   saveProduct(){
 
-    this.products.push({
-      ...this.newProduct
-    });
+    if(this.isEditing){
+
+      this.products[this.currentIndex] = {
+        ...this.newProduct
+      };
+
+    }else{
+
+      this.products.push({
+        ...this.newProduct
+      });
+
+    }
+
+    this.resetForm();
+
+    this.closeModal();
+  }
+
+  editProduct(product: any, index: number){
+
+    this.newProduct = {
+      ...product
+    };
+
+    this.currentIndex = index;
+
+    this.isEditing = true;
+
+    this.showModal = true;
+  }
+
+  openDeleteModal(index: number){
+
+    this.currentIndex = index;
+
+    this.showDeleteModal = true;
+  }
+
+  closeDeleteModal(){
+
+    this.showDeleteModal = false;
+  }
+
+  confirmDelete(){
+
+    this.products.splice(this.currentIndex, 1);
+
+    this.closeDeleteModal();
+  }
+
+  resetForm(){
 
     this.newProduct = {
       code: '',
@@ -63,7 +120,9 @@ export class ProductsComponent {
       status: 'Activo'
     };
 
-    this.closeModal();
+    this.currentIndex = -1;
+
+    this.isEditing = false;
   }
 
 }

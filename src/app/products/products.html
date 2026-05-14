@@ -20,19 +20,36 @@
                 <th>Precio</th>
                 <th>Stock</th>
                 <th>Estado</th>
+                <th>Acciones</th>
             </tr>
 
         </thead>
 
         <tbody>
 
-            <tr *ngFor="let product of products">
+            <tr *ngFor="let product of products; let i = index">
 
                 <td>{{ product.code }}</td>
                 <td>{{ product.name }}</td>
                 <td>${{ product.price }}</td>
                 <td>{{ product.stock }}</td>
                 <td>{{ product.status }}</td>
+
+                <td class="actions">
+
+                    <button
+                        class="edit-btn"
+                        (click)="editProduct(product, i)">
+                        Editar
+                    </button>
+
+                    <button
+                        class="delete-btn"
+                        (click)="openDeleteModal(i)">
+                        Eliminar
+                    </button>
+
+                </td>
 
             </tr>
 
@@ -42,13 +59,15 @@
 
 </div>
 
-<!-- MODAL -->
+<!-- CREATE / EDIT MODAL -->
 
 <div class="modal-backdrop" *ngIf="showModal">
 
     <div class="modal">
 
-        <h2>Nuevo Producto</h2>
+        <h2>
+            {{ isEditing ? 'Editar Producto' : 'Nuevo Producto' }}
+        </h2>
 
         <div class="form-group">
 
@@ -92,12 +111,56 @@
 
         <div class="modal-actions">
 
-            <button class="save-btn" (click)="saveProduct()">
-                Guardar
+            <button
+                class="save-btn"
+                (click)="saveProduct()">
+
+                {{ isEditing ? 'Actualizar' : 'Guardar' }}
+
             </button>
 
-            <button class="cancel-btn" (click)="closeModal()">
+            <button
+                class="cancel-btn"
+                (click)="closeModal()">
+
                 Cancelar
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- DELETE MODAL -->
+
+<div class="modal-backdrop" *ngIf="showDeleteModal">
+
+    <div class="modal delete-modal">
+
+        <h2>Confirmar Eliminación</h2>
+
+        <p>
+            ¿Deseas eliminar este producto?
+        </p>
+
+        <div class="modal-actions">
+
+            <button
+                class="cancel-btn"
+                (click)="closeDeleteModal()">
+
+                Cancelar
+
+            </button>
+
+            <button
+                class="delete-btn"
+                (click)="confirmDelete()">
+
+                Eliminar
+
             </button>
 
         </div>

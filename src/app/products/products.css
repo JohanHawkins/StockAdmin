@@ -125,3 +125,31 @@ tbody tr:hover{
 .cancel-btn{
     background-color: #dc2626;
 }
+
+/* ACTIONS */
+
+.actions{
+    display: flex;
+    gap: 10px;
+}
+
+.edit-btn{
+    background-color: #f59e0b;
+    color: white;
+}
+
+.delete-btn{
+    background-color: #dc2626;
+    color: white;
+}
+
+/* DELETE MODAL */
+
+.delete-modal{
+    width: 350px;
+}
+
+.delete-modal p{
+    margin: 20px 0;
+    color: #444;
+}
