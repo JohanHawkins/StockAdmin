@@ -1,9 +1,8 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-
+import { ToastComponent } from '../shared/toast/toast';
 import { ProductService } from '../services/product.service';
-
 import { Product } from '../models/product.model';
 
 @Component({
@@ -11,12 +10,19 @@ import { Product } from '../models/product.model';
   standalone: true,
   imports: [
     CommonModule,
-    FormsModule
+    FormsModule,
+    ToastComponent
   ],
   templateUrl: './products.html',
   styleUrl: './products.css'
 })
 export class ProductsComponent {
+
+  toastVisible = false;
+
+  toastMessage = '';
+
+  toastType: 'success' | 'error' = 'success';
 
   showModal = false;
 
@@ -55,6 +61,8 @@ export class ProductsComponent {
 
   saveProduct(){
 
+    const wasEditing = this.isEditing;
+
     if(this.isEditing){
 
       this.productService.updateProduct(
@@ -71,6 +79,13 @@ export class ProductsComponent {
     }
 
     this.resetForm();
+
+    this.showToast(
+      wasEditing
+        ? 'Producto actualizado correctamente'
+        : 'Producto creado correctamente',
+      'success'
+    );
 
     this.closeModal();
   }
@@ -102,6 +117,11 @@ export class ProductsComponent {
 
   confirmDelete(){
 
+    this.showToast(
+      'Producto eliminado correctamente',
+      'success'
+    );
+
     this.productService.deleteProduct(
       this.currentIndex
     );
@@ -122,6 +142,24 @@ export class ProductsComponent {
     this.currentIndex = -1;
 
     this.isEditing = false;
+  }
+
+  showToast(
+    message: string,
+    type: 'success' | 'error' = 'success'
+  ){
+
+    this.toastMessage = message;
+
+    this.toastType = type;
+
+    this.toastVisible = true;
+
+    setTimeout(() => {
+
+      this.toastVisible = false;
+
+    }, 3000);
   }
 
 }
