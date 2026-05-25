@@ -17,6 +17,7 @@ import { Product } from '../models/product.model';
   styleUrl: './products.css'
 })
 export class ProductsComponent {
+  searchTerm = '';
 
   toastVisible = false;
 
@@ -162,4 +163,12 @@ export class ProductsComponent {
     }, 3000);
   }
 
+  get filteredProducts(): Product[] {
+
+  return this.products.filter(p =>
+    p.name.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+    p.code.toLowerCase().includes(this.searchTerm.toLowerCase())
+  );
+
+  }
 }

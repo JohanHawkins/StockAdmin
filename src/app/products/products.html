@@ -1,9 +1,9 @@
 <div class="products-container">
 
     <div class="products-header">
-
+        
         <h1>Gestión de Productos</h1>
-
+        <input type="text" placeholder="Buscar producto..." [(ngModel)]="searchTerm" class="search-input">
         <button (click)="openModal()">
             + Nuevo Producto
         </button>
@@ -27,7 +27,7 @@
 
         <tbody>
 
-            <tr *ngFor="let product of products; let i = index">
+            <tr *ngFor="let product of filteredProducts; let i = index">
 
                 <td>{{ product.code }}</td>
                 <td>{{ product.name }}</td>
@@ -54,7 +54,19 @@
             </tr>
 
         </tbody>
+        <tbody *ngIf="filteredProducts.length === 0">
 
+            <tr>
+
+                <td colspan="6" class="empty-message">
+
+                    Producto no encontrado
+
+                </td>
+
+            </tr>
+
+        </tbody>
     </table>
 
 </div>
