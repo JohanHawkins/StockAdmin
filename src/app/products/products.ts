@@ -165,10 +165,11 @@ export class ProductsComponent {
 
   get filteredProducts(): Product[] {
 
-  return this.products.filter(p =>
-    p.name.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-    p.code.toLowerCase().includes(this.searchTerm.toLowerCase())
-  );
+    return this.products.filter(p =>
+      p.name.toLowerCase().includes(
+        this.searchTerm.toLowerCase()
+      )
+    );
 
   }
 }
