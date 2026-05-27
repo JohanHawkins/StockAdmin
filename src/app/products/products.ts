@@ -36,12 +36,19 @@ export class ProductsComponent {
   products: Product[] = [];
 
   newProduct: Product = {
-    code: '',
+    code: this.generateProductCode(),
     name: '',
     price: 0,
     stock: 0,
     status: 'Activo'
   };
+
+  generateProductCode(): string {
+
+    const nextNumber = this.products.length + 1;
+
+    return 'P' + nextNumber.toString().padStart(3, '0');
+  }
 
   constructor(private productService: ProductService){
 
@@ -61,6 +68,51 @@ export class ProductsComponent {
   }
 
   saveProduct(){
+    if(!this.newProduct.code.trim()){
+
+      this.showToast(
+        'El código es obligatorio',
+        'error'
+      );
+
+      return;
+    }
+
+    if(!this.newProduct.name.trim()){
+
+      this.showToast(
+        'El nombre es obligatorio',
+        'error'
+      );
+
+      return;
+    }
+
+    if(
+      this.newProduct.price <= 0 ||
+      !Number.isInteger(this.newProduct.price)
+    ){
+
+      this.showToast(
+        'El precio debe ser un valor mayor a 0',
+        'error'
+      );
+
+      return;
+    }
+
+    if(
+      this.newProduct.stock < 0 ||
+      !Number.isInteger(this.newProduct.stock)
+    ){
+
+      this.showToast(
+        'El stock debe ser un valor mayor a 0',
+        'error'
+      );
+
+      return;
+    }
 
     const wasEditing = this.isEditing;
 
@@ -133,7 +185,7 @@ export class ProductsComponent {
   resetForm(){
 
     this.newProduct = {
-      code: '',
+      code: this.generateProductCode(),
       name: '',
       price: 0,
       stock: 0,
