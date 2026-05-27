@@ -5,13 +5,8 @@ import { RouterModule } from '@angular/router';
 @Component({
   selector: 'app-layout',
   standalone: true,
-  imports: [
-    CommonModule,
-    RouterModule
-  ],
+  imports: [CommonModule, RouterModule],
   templateUrl: './layout.html',
-  styleUrl: './layout.css'
+  styleUrl: './layout.css',
 })
-export class LayoutComponent {
-
-}
+export class LayoutComponent {}

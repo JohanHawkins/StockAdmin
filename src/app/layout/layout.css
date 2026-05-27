@@ -1,98 +1,98 @@
-*{
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-.layout-container{
-    display: flex;
-    width: 100%;
-    height: 100vh;
+.layout-container {
+  display: flex;
+  width: 100%;
+  height: 100vh;
 }
 
 /* SIDEBAR */
 
-.sidebar{
-    width: 250px;
-    background-color: #1e293b;
-    color: white;
+.sidebar {
+  width: 250px;
+  background-color: #1e293b;
+  color: white;
 
-    padding: 20px;
+  padding: 20px;
 }
 
-.sidebar h2{
-    margin-bottom: 40px;
-    text-align: center;
+.sidebar h2 {
+  margin-bottom: 40px;
+  text-align: center;
 }
 
-.sidebar ul{
-    list-style: none;
+.sidebar ul {
+  list-style: none;
 }
 
-.sidebar li{
-    padding: 15px;
-    margin-bottom: 10px;
+.sidebar li {
+  padding: 15px;
+  margin-bottom: 10px;
 
-    border-radius: 8px;
+  border-radius: 8px;
 
-    cursor: pointer;
+  cursor: pointer;
 
-    transition: 0.3s;
+  transition: 0.3s;
 }
 
-.sidebar li:hover{
-    background-color: #334155;
+.sidebar li:hover {
+  background-color: #334155;
 }
 
 /* MAIN CONTENT */
 
-.main-content{
-    flex: 1;
+.main-content {
+  flex: 1;
 
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 
 /* NAVBAR */
 
-.navbar{
-    height: 70px;
+.navbar {
+  height: 70px;
 
-    background-color: white;
+  background-color: white;
 
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 
-    padding: 0 30px;
+  padding: 0 30px;
 
-    border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
 }
 
 /* CONTENT */
 
-.content{
-    flex: 1;
+.content {
+  flex: 1;
 
-    padding: 30px;
+  padding: 30px;
 
-    background-color: #f4f6f9;
+  background-color: #f4f6f9;
 }
 
-.content h1{
-    margin-bottom: 15px;
+.content h1 {
+  margin-bottom: 15px;
 }
 
-.sidebar a{
-    color: white;
-    text-decoration: none;
+.sidebar a {
+  color: white;
+  text-decoration: none;
 
-    display: block;
-    width: 100%;
-    height: 100%;
+  display: block;
+  width: 100%;
+  height: 100%;
 }
 
-.active{
-    background-color: #334155;
-    border-radius: 8px;
+.active {
+  background-color: #334155;
+  border-radius: 8px;
 }

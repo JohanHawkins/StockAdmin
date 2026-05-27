@@ -6,14 +6,12 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './toast.html',
-  styleUrl: './toast.css'
+  styleUrl: './toast.css',
 })
 export class ToastComponent {
-
   @Input() message = '';
 
   @Input() type: 'success' | 'error' = 'success';
 
   @Input() visible = false;
-
 }

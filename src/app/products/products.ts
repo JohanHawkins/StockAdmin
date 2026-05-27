@@ -8,13 +8,9 @@ import { Product } from '../models/product.model';
 @Component({
   selector: 'app-products',
   standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule,
-    ToastComponent
-  ],
+  imports: [CommonModule, FormsModule, ToastComponent],
   templateUrl: './products.html',
-  styleUrl: './products.css'
+  styleUrl: './products.css',
 })
 export class ProductsComponent {
   searchTerm = '';
@@ -40,113 +36,75 @@ export class ProductsComponent {
     name: '',
     price: 0,
     stock: 0,
-    status: 'Activo'
+    status: 'Activo',
   };
 
   generateProductCode(): string {
-
     const nextNumber = this.products.length + 1;
 
     return 'P' + nextNumber.toString().padStart(3, '0');
   }
 
-  constructor(private productService: ProductService){
-
+  constructor(private productService: ProductService) {
     this.products = this.productService.getProducts();
   }
 
-  openModal(){
-
+  openModal() {
     this.showModal = true;
 
     this.isEditing = false;
   }
 
-  closeModal(){
-
+  closeModal() {
     this.showModal = false;
   }
 
-  saveProduct(){
-    if(!this.newProduct.code.trim()){
-
-      this.showToast(
-        'El código es obligatorio',
-        'error'
-      );
+  saveProduct() {
+    if (!this.newProduct.code.trim()) {
+      this.showToast('El código es obligatorio', 'error');
 
       return;
     }
 
-    if(!this.newProduct.name.trim()){
-
-      this.showToast(
-        'El nombre es obligatorio',
-        'error'
-      );
+    if (!this.newProduct.name.trim()) {
+      this.showToast('El nombre es obligatorio', 'error');
 
       return;
     }
 
-    if(
-      this.newProduct.price <= 0 ||
-      !Number.isInteger(this.newProduct.price)
-    ){
-
-      this.showToast(
-        'El precio debe ser un valor mayor a 0',
-        'error'
-      );
+    if (this.newProduct.price <= 0 || !Number.isInteger(this.newProduct.price)) {
+      this.showToast('El precio debe ser un valor mayor a 0', 'error');
 
       return;
     }
 
-    if(
-      this.newProduct.stock < 0 ||
-      !Number.isInteger(this.newProduct.stock)
-    ){
-
-      this.showToast(
-        'El stock debe ser un valor mayor a 0',
-        'error'
-      );
+    if (this.newProduct.stock < 0 || !Number.isInteger(this.newProduct.stock)) {
+      this.showToast('El stock debe ser un valor mayor a 0', 'error');
 
       return;
     }
 
     const wasEditing = this.isEditing;
 
-    if(this.isEditing){
-
-      this.productService.updateProduct(
-        this.currentIndex,
-        { ...this.newProduct }
-      );
-
-    }else{
-
-      this.productService.addProduct(
-        { ...this.newProduct }
-      );
-
+    if (this.isEditing) {
+      this.productService.updateProduct(this.currentIndex, { ...this.newProduct });
+    } else {
+      this.productService.addProduct({ ...this.newProduct });
     }
 
     this.resetForm();
 
     this.showToast(
-      wasEditing
-        ? 'Producto actualizado correctamente'
-        : 'Producto creado correctamente',
-      'success'
+      wasEditing ? 'Producto actualizado correctamente' : 'Producto creado correctamente',
+      'success',
     );
 
     this.closeModal();
   }
 
-  editProduct(product: Product, index: number){
-
+  editProduct(product: Product, index: number) {
     this.newProduct = {
-      ...product
+      ...product,
     };
 
     this.currentIndex = index;
@@ -156,40 +114,31 @@ export class ProductsComponent {
     this.showModal = true;
   }
 
-  openDeleteModal(index: number){
-
+  openDeleteModal(index: number) {
     this.currentIndex = index;
 
     this.showDeleteModal = true;
   }
 
-  closeDeleteModal(){
-
+  closeDeleteModal() {
     this.showDeleteModal = false;
   }
 
-  confirmDelete(){
+  confirmDelete() {
+    this.showToast('Producto eliminado correctamente', 'success');
 
-    this.showToast(
-      'Producto eliminado correctamente',
-      'success'
-    );
-
-    this.productService.deleteProduct(
-      this.currentIndex
-    );
+    this.productService.deleteProduct(this.currentIndex);
 
     this.closeDeleteModal();
   }
 
-  resetForm(){
-
+  resetForm() {
     this.newProduct = {
       code: this.generateProductCode(),
       name: '',
       price: 0,
       stock: 0,
-      status: 'Activo'
+      status: 'Activo',
     };
 
     this.currentIndex = -1;
@@ -197,11 +146,7 @@ export class ProductsComponent {
     this.isEditing = false;
   }
 
-  showToast(
-    message: string,
-    type: 'success' | 'error' = 'success'
-  ){
-
+  showToast(message: string, type: 'success' | 'error' = 'success') {
     this.toastMessage = message;
 
     this.toastType = type;
@@ -209,19 +154,13 @@ export class ProductsComponent {
     this.toastVisible = true;
 
     setTimeout(() => {
-
       this.toastVisible = false;
-
     }, 3000);
   }
 
   get filteredProducts(): Product[] {
-
-    return this.products.filter(p =>
-      p.name.toLowerCase().includes(
-        this.searchTerm.toLowerCase()
-      )
+    return this.products.filter((p) =>
+      p.name.toLowerCase().includes(this.searchTerm.toLowerCase()),
     );
-
   }
 }

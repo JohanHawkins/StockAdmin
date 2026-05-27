@@ -1,13 +1,11 @@
 export interface Product {
+  code: string;
 
-    code: string;
+  name: string;
 
-    name: string;
+  price: number;
 
-    price: number;
+  stock: number;
 
-    stock: number;
-
-    status: string;
-
+  status: string;
 }

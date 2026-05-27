@@ -1,176 +1,177 @@
-.products-container{
-    width: 100%;
+.products-container {
+  width: 100%;
 }
 
-.products-header{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+.products-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 
-    margin-bottom: 30px;
+  margin-bottom: 30px;
 }
 
-.products-header h1{
-    color: #333;
+.products-header h1 {
+  color: #333;
 }
 
-.products-header button{
-    padding: 12px 20px;
+.products-header button {
+  padding: 12px 20px;
 
-    border: none;
-    border-radius: 8px;
+  border: none;
+  border-radius: 8px;
 
-    background-color: #1976d2;
-    color: white;
+  background-color: #1976d2;
+  color: white;
 
-    font-weight: bold;
+  font-weight: bold;
 
-    cursor: pointer;
+  cursor: pointer;
 }
 
-table{
-    width: 100%;
+table {
+  width: 100%;
 
-    border-collapse: collapse;
+  border-collapse: collapse;
 
-    background-color: white;
+  background-color: white;
 
-    border-radius: 12px;
+  border-radius: 12px;
 
-    overflow: hidden;
+  overflow: hidden;
 
-    box-shadow: 0px 2px 10px rgba(0,0,0,0.1);
+  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
 }
 
-thead{
-    background-color: #1e293b;
-    color: white;
+thead {
+  background-color: #1e293b;
+  color: white;
 }
 
-th, td{
-    padding: 15px;
-    text-align: left;
+th,
+td {
+  padding: 15px;
+  text-align: left;
 }
 
-tbody tr{
-    border-bottom: 1px solid #eee;
+tbody tr {
+  border-bottom: 1px solid #eee;
 }
 
-tbody tr:hover{
-    background-color: #f9fafb;
+tbody tr:hover {
+  background-color: #f9fafb;
 }
 
 /* MODAL */
 
-.modal-backdrop{
-    position: fixed;
+.modal-backdrop {
+  position: fixed;
 
-    top: 0;
-    left: 0;
+  top: 0;
+  left: 0;
 
-    width: 100%;
-    height: 100%;
+  width: 100%;
+  height: 100%;
 
-    background-color: rgba(0,0,0,0.5);
+  background-color: rgba(0, 0, 0, 0.5);
 
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.modal{
-    width: 400px;
+.modal {
+  width: 400px;
 
-    background-color: white;
+  background-color: white;
 
-    padding: 30px;
+  padding: 30px;
 
-    border-radius: 12px;
+  border-radius: 12px;
 }
 
-.modal h2{
-    margin-bottom: 20px;
+.modal h2 {
+  margin-bottom: 20px;
 }
 
-.form-group{
-    margin-bottom: 20px;
+.form-group {
+  margin-bottom: 20px;
 }
 
-.form-group label{
-    display: block;
-    margin-bottom: 8px;
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
 }
 
-.form-group input{
-    width: 100%;
-    padding: 12px;
+.form-group input {
+  width: 100%;
+  padding: 12px;
 
-    border: 1px solid #ccc;
-    border-radius: 8px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
 }
 
-.modal-actions{
-    display: flex;
-    gap: 10px;
+.modal-actions {
+  display: flex;
+  gap: 10px;
 }
 
-.modal-actions button{
-    flex: 1;
+.modal-actions button {
+  flex: 1;
 }
 
-.save-btn{
-    background-color: #16a34a;
+.save-btn {
+  background-color: #16a34a;
 }
 
-.cancel-btn{
-    background-color: #dc2626;
+.cancel-btn {
+  background-color: #dc2626;
 }
 
 /* ACTIONS */
 
-.actions{
-    display: flex;
-    gap: 10px;
+.actions {
+  display: flex;
+  gap: 10px;
 }
 
-.edit-btn{
-    background-color: #f59e0b;
-    color: white;
+.edit-btn {
+  background-color: #f59e0b;
+  color: white;
 }
 
-.delete-btn{
-    background-color: #dc2626;
-    color: white;
+.delete-btn {
+  background-color: #dc2626;
+  color: white;
 }
 
 /* DELETE MODAL */
 
-.delete-modal{
-    width: 350px;
+.delete-modal {
+  width: 350px;
 }
 
-.delete-modal p{
-    margin: 20px 0;
-    color: #444;
+.delete-modal p {
+  margin: 20px 0;
+  color: #444;
 }
 
-.search-input{
-    width: 300px;
+.search-input {
+  width: 300px;
 
-    padding: 12px;
+  padding: 12px;
 
-    border: 1px solid #ccc;
-    border-radius: 8px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
 
-    margin: 20px 0;
+  margin: 20px 0;
 }
 
-.empty-message{
-    text-align: center;
+.empty-message {
+  text-align: center;
 
-    padding: 30px;
+  padding: 30px;
 
-    color: #777;
+  color: #777;
 
-    font-weight: bold;
+  font-weight: bold;
 }

@@ -5,12 +5,8 @@ import { LayoutComponent } from './layout/layout';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [
-    LayoutComponent
-  ],
+  imports: [LayoutComponent],
   templateUrl: './app.html',
-  styleUrl: './app.css'
+  styleUrl: './app.css',
 })
-export class App {
-
-}
+export class App {}
