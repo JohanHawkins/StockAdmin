@@ -32,7 +32,7 @@ export class ProductsComponent {
   products: Product[] = [];
 
   newProduct: Product = {
-    code: this.generateProductCode(),
+    code: '',
     name: '',
     price: 0,
     stock: 0,
@@ -40,7 +40,15 @@ export class ProductsComponent {
   };
 
   generateProductCode(): string {
-    const nextNumber = this.products.length + 1;
+    if (this.products.length === 0) {
+      return 'P001';
+    }
+
+    const lastProduct = this.products[this.products.length - 1];
+
+    const lastCodeNumber = parseInt(lastProduct.code.replace('P', ''));
+
+    const nextNumber = lastCodeNumber + 1;
 
     return 'P' + nextNumber.toString().padStart(3, '0');
   }
@@ -50,6 +58,14 @@ export class ProductsComponent {
   }
 
   openModal() {
+    this.newProduct = {
+      code: this.generateProductCode(),
+      name: '',
+      price: 0,
+      stock: 0,
+      status: 'Activo',
+    };
+
     this.showModal = true;
 
     this.isEditing = false;
@@ -134,7 +150,7 @@ export class ProductsComponent {
 
   resetForm() {
     this.newProduct = {
-      code: this.generateProductCode(),
+      code: '',
       name: '',
       price: 0,
       stock: 0,
