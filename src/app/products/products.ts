@@ -39,6 +39,13 @@ export class ProductsComponent {
     status: 'Activo',
   };
 
+  formErrors = {
+    code: '',
+    name: '',
+    price: '',
+    stock: ''
+  };
+
   generateProductCode(): string {
     if (this.products.length === 0) {
       return 'P001';
@@ -58,6 +65,8 @@ export class ProductsComponent {
   }
 
   openModal() {
+  this.clearErrors();
+
     this.newProduct = {
       code: this.generateProductCode(),
       name: '',
@@ -76,25 +85,31 @@ export class ProductsComponent {
   }
 
   saveProduct() {
+    this.clearErrors();
+
     if (!this.newProduct.code.trim()) {
+      this.formErrors.code = 'El código es obligatorio';
       this.showToast('El código es obligatorio', 'error');
 
       return;
     }
 
     if (!this.newProduct.name.trim()) {
+      this.formErrors.name = 'El nombre es obligatorio';
       this.showToast('El nombre es obligatorio', 'error');
 
       return;
     }
 
     if (this.newProduct.price <= 0 || !Number.isInteger(this.newProduct.price)) {
+      this.formErrors.price = 'El precio debe ser un valor mayor a 0';
       this.showToast('El precio debe ser un valor mayor a 0', 'error');
 
       return;
     }
 
     if (this.newProduct.stock < 0 || !Number.isInteger(this.newProduct.stock)) {
+      this.formErrors.stock = 'El stock debe ser un valor mayor a 0';
       this.showToast('El stock debe ser un valor mayor a 0', 'error');
 
       return;
@@ -172,6 +187,16 @@ export class ProductsComponent {
     setTimeout(() => {
       this.toastVisible = false;
     }, 3000);
+  }
+
+  clearErrors(){
+
+  this.formErrors = {
+      code: '',
+      name: '',
+      price: '',
+      stock: ''
+    };
   }
 
   get filteredProducts(): Product[] {

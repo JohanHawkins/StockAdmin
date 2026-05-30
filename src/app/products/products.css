@@ -175,3 +175,17 @@ tbody tr:hover {
 
   font-weight: bold;
 }
+
+.input-error{
+    border: 2px solid red;
+}
+
+.error-message{
+    margin-top: 5px;
+
+    color: red;
+
+    font-size: 12px;
+
+    font-weight: 600;
+}
