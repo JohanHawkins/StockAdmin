@@ -66,7 +66,12 @@
     <div class="form-group">
       <label>Nombre</label>
 
-      <input type="text" [(ngModel)]="newProduct.name" [class.input-error]="formErrors.name" />
+      <input
+        type="text"
+        [(ngModel)]="newProduct.name"
+        [class.input-error]="formErrors.name"
+        (input)="clearNameError()"
+      />
 
       <div class="error-message" *ngIf="formErrors.name">
         {{ formErrors.name }}
@@ -76,7 +81,12 @@
     <div class="form-group">
       <label>Precio</label>
 
-      <input type="number" [(ngModel)]="newProduct.price" [class.input-error]="formErrors.price" />
+      <input
+        type="number"
+        [(ngModel)]="newProduct.price"
+        [class.input-error]="formErrors.price"
+        (input)="clearPriceError()"
+      />
       <div class="error-message" *ngIf="formErrors.price">
         {{ formErrors.price }}
       </div>
@@ -85,7 +95,12 @@
     <div class="form-group">
       <label>Stock</label>
 
-      <input type="number" [(ngModel)]="newProduct.stock" [class.input-error]="formErrors.stock" />
+      <input
+        type="number"
+        [(ngModel)]="newProduct.stock"
+        [class.input-error]="formErrors.stock"
+        (input)="clearStockError()"
+      />
       <div class="error-message" *ngIf="formErrors.stock">
         {{ formErrors.stock }}
       </div>

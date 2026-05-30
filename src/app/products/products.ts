@@ -46,6 +46,21 @@ export class ProductsComponent {
     stock: ''
   };
 
+  clearNameError(){
+
+    this.formErrors.name = '';
+  }
+
+  clearPriceError(){
+
+    this.formErrors.price = '';
+  }
+
+  clearStockError(){
+
+    this.formErrors.stock = '';
+  }
+
   generateProductCode(): string {
     if (this.products.length === 0) {
       return 'P001';
