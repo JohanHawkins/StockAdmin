@@ -2,28 +2,51 @@
   <h1>Dashboard</h1>
 
   <div class="cards">
-    <div class="card">
+    <div class="card products-card">
       <h2>{{ totalProducts }}</h2>
 
       <p>Total Productos</p>
     </div>
 
-    <div class="card">
+    <div class="card stock-card">
       <h2>{{ totalStock }}</h2>
 
       <p>Stock Total</p>
     </div>
 
-    <div class="card">
+    <div class="card value-card">
       <h2>${{ inventoryValue }}</h2>
 
       <p>Valor Inventario</p>
     </div>
 
-    <div class="card">
+    <div class="card active-card">
       <h2>{{ activeProducts }}</h2>
 
       <p>Productos Activos</p>
     </div>
   </div>
+</div>
+<div class="recent-products">
+  <h2>Productos Recientes</h2>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Código</th>
+        <th>Nombre</th>
+        <th>Stock</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr *ngFor="let product of recentProducts">
+        <td>{{ product.code }}</td>
+
+        <td>{{ product.name }}</td>
+
+        <td>{{ product.stock }}</td>
+      </tr>
+    </tbody>
+  </table>
 </div>

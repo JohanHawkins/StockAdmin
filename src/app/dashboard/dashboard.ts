@@ -33,4 +33,8 @@ export class DashboardComponent {
   get activeProducts(): number {
     return this.products.filter((product) => product.status === 'Activo').length;
   }
+
+  get recentProducts(): Product[] {
+    return [...this.products].slice(-5).reverse();
+  }
 }
