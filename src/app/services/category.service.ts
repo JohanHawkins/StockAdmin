@@ -1,0 +1,76 @@
+import { Injectable } from '@angular/core';
+
+import { Category } from '../models/category.model';
+
+@Injectable({
+  providedIn: 'root',
+})
+export class CategoryService {
+  private storageKey = 'categories';
+
+  private categories: Category[] = [];
+
+  constructor() {
+    this.loadFromStorage();
+  }
+
+  private isBrowser(): boolean {
+    return typeof window !== 'undefined';
+  }
+
+  private loadFromStorage(): void {
+    if (!this.isBrowser()) {
+      this.categories = [];
+      return;
+    }
+
+    const data = localStorage.getItem(this.storageKey);
+
+    if (data) {
+      this.categories = JSON.parse(data);
+    } else {
+      this.categories = [
+        {
+          id: 1,
+          name: 'Tecnología',
+        },
+        {
+          id: 2,
+          name: 'Accesorios',
+        },
+      ];
+
+      this.saveToStorage();
+    }
+  }
+
+  private saveToStorage(): void {
+    if (!this.isBrowser()) {
+      return;
+    }
+
+    localStorage.setItem(this.storageKey, JSON.stringify(this.categories));
+  }
+
+  getCategories(): Category[] {
+    return this.categories;
+  }
+
+  addCategory(category: Category): void {
+    this.categories.push(category);
+
+    this.saveToStorage();
+  }
+
+  updateCategory(index: number, category: Category): void {
+    this.categories[index] = category;
+
+    this.saveToStorage();
+  }
+
+  deleteCategory(index: number): void {
+    this.categories.splice(index, 1);
+
+    this.saveToStorage();
+  }
+}
