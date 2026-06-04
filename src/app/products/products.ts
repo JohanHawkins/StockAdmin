@@ -43,21 +43,18 @@ export class ProductsComponent {
     code: '',
     name: '',
     price: '',
-    stock: ''
+    stock: '',
   };
 
-  clearNameError(){
-
+  clearNameError() {
     this.formErrors.name = '';
   }
 
-  clearPriceError(){
-
+  clearPriceError() {
     this.formErrors.price = '';
   }
 
-  clearStockError(){
-
+  clearStockError() {
     this.formErrors.stock = '';
   }
 
@@ -80,7 +77,7 @@ export class ProductsComponent {
   }
 
   openModal() {
-  this.clearErrors();
+    this.clearErrors();
 
     this.newProduct = {
       code: this.generateProductCode(),
@@ -204,13 +201,12 @@ export class ProductsComponent {
     }, 3000);
   }
 
-  clearErrors(){
-
-  this.formErrors = {
+  clearErrors() {
+    this.formErrors = {
       code: '',
       name: '',
       price: '',
-      stock: ''
+      stock: '',
     };
   }
 

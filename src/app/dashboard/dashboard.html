@@ -3,18 +3,27 @@
 
   <div class="cards">
     <div class="card">
-      <h2>120</h2>
-      <p>Productos</p>
+      <h2>{{ totalProducts }}</h2>
+
+      <p>Total Productos</p>
     </div>
 
     <div class="card">
-      <h2>15</h2>
-      <p>Stock Bajo</p>
+      <h2>{{ totalStock }}</h2>
+
+      <p>Stock Total</p>
     </div>
 
     <div class="card">
-      <h2>35</h2>
-      <p>Movimientos Hoy</p>
+      <h2>${{ inventoryValue }}</h2>
+
+      <p>Valor Inventario</p>
+    </div>
+
+    <div class="card">
+      <h2>{{ activeProducts }}</h2>
+
+      <p>Productos Activos</p>
     </div>
   </div>
 </div>
