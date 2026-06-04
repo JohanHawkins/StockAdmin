@@ -2,7 +2,7 @@
 
 ## Estado Actual del Proyecto
 
-Proyecto frontend desarrollado con Angular moderno (Standalone Components), enfocado en la creación de un sistema administrativo de inventario profesional para portafolio y aprendizaje.
+Frontend desarrollado con Angular 21 y componentes Standalone. El proyecto es un panel administrativo de inventario con navegación SPA y páginas para dashboard, productos y categorías.
 
 ---
 
@@ -10,9 +10,12 @@ Proyecto frontend desarrollado con Angular moderno (Standalone Components), enfo
 
 ## Frontend
 - Angular 21
-- TypeScript
+- TypeScript 5.9
 - HTML5
 - CSS3
+- Angular Router
+- Angular SSR (`@angular/ssr`)
+- Express
 
 ---
 
@@ -21,9 +24,10 @@ Proyecto frontend desarrollado con Angular moderno (Standalone Components), enfo
 El proyecto utiliza:
 - Angular Standalone Components
 - Angular Router
-- SPA (Single Page Application)
-- Componentes reutilizables
-- Navegación dinámica
+- SPA con configuración SSR básica
+- Componentes y servicios organizados
+- Layout administrativo con sidebar y navbar
+- Routing basado en `app.routes.ts`
 
 ---
 
@@ -36,6 +40,7 @@ src/
       ├── layout/
       ├── login/
       ├── products/
+      ├── categories/
       ├── app.config.ts
       ├── app.routes.ts
       ├── app.routes.server.ts
@@ -50,41 +55,34 @@ src/
 
 ## 1. Login UI
 
-Pantalla de inicio de sesión con:
-- Input Email
-- Input Contraseña
+- Componente de login presente con inputs para email y contraseña
 - Botón Ingresar
-
-### Objetivo
-Crear la primera interfaz del sistema y comprender la estructura básica de Angular.
+- No está todavía expuesto mediante ruta ni es parte de la navegación principal
 
 ---
 
 ## 2. Layout Administrativo
 
 Se implementó:
-- Sidebar lateral
+- Sidebar lateral con navegación
 - Navbar superior
-- Área dinámica de contenido
-
-### Objetivo
-Crear una estructura reutilizable para todo el sistema administrativo.
+- Área dinámica de contenido con `router-outlet`
 
 ---
 
 ## 3. Sidebar Navegable
 
-Módulos actuales:
+Elementos visibles:
 - Dashboard
 - Productos
 - Categorías
-- Movimientos
-- Usuarios
+- Movimientos (placeholder)
+- Usuarios (placeholder)
 
 ### Características
-- Navegación SPA
-- Cambio dinámico de contenido
-- URL dinámica
+- Navegación SPA real para Dashboard, Productos y Categorías
+- Links de Movimientos y Usuarios aún no enlazados a rutas reales
+- `routerLink` en los items activos
 
 ---
 
@@ -94,17 +92,18 @@ Módulos actuales:
 
 | Ruta | Pantalla |
 |---|---|
+| / | Redirige a /dashboard |
 | /dashboard | Dashboard |
 | /products | Productos |
+| /categories | Categorías |
 
 ---
 
 # Dashboard
 
-Pantalla principal con:
-- Total productos
-- Productos con stock bajo
-- Movimientos diarios
+Pantalla principal del panel con:
+- Cards informativas
+- Resumen general del inventario
 
 ### Objetivo
 Visualizar información general del sistema.
@@ -115,12 +114,14 @@ Visualizar información general del sistema.
 
 ## Funcionalidades actuales
 
-### Tabla dinámica
-Visualización de productos usando:
-- Arrays
-- *ngFor
+- Tabla dinámica de productos
+- Búsqueda y filtro con `searchTerm`
+- Modal para crear y editar productos
+- Formulario con validación básica
+- Toasts de estado
+- CRUD completo: Create, Read, Update, Delete
 
-### Datos mostrados
+## Datos mostrados
 - Código
 - Nombre
 - Precio
@@ -129,25 +130,15 @@ Visualización de productos usando:
 
 ---
 
-# Modal Nuevo Producto
+# Módulo Categorías
 
-## Características
-- Apertura dinámica
-- Formulario funcional
-- Inputs enlazados con ngModel
-- Guardado dinámico en tabla
+## Funcionalidades actuales
 
----
-
-# CRUD Actual
-
-## Implementado
-- Create
-- Read
-
-## Pendiente
-- Update
-- Delete
+- Lista dinámica de categorías
+- Búsqueda y filtro
+- Modal para crear y editar categorías
+- Toasts de estado
+- CRUD completo: Create, Read, Update, Delete
 
 ---
 
@@ -155,7 +146,7 @@ Visualización de productos usando:
 
 ## Componentes
 - Standalone Components
-- Reutilización
+- Reutilización de componentes
 
 ---
 
@@ -181,13 +172,12 @@ Visualización de productos usando:
 # Diseño UI Actual
 
 ## Sidebar
-- Menú lateral oscuro
-- Navegación dinámica
+- Menú lateral administrativo
 
 ---
 
 ## Navbar
-- Barra superior administrativa
+- Barra superior con título y usuario
 
 ---
 
@@ -206,22 +196,23 @@ Visualización de productos usando:
 # Estado General del Proyecto
 
 ## Actualmente el sistema:
- Navega entre páginas  
- Usa Angular Router  
- Tiene estructura administrativa  
- Permite crear productos dinámicamente  
- Maneja estado básico frontend  
- Posee componentes organizados  
+- Navega entre páginas con Angular Router
+- Usa layout administrativo
+- Permite crear, editar y eliminar productos
+- Permite crear, editar y eliminar categorías
+- Incluye placeholders de Movimientos y Usuarios
+- Está organizado con componentes y servicios
+- Tiene configuración SSR básica
 
 ---
 
 # Próximas Funcionalidades
 
 ## Corto plazo
-- Editar productos
-- Eliminar productos
-- Categorías
-- Movimientos inventario
+- Exponer la pantalla de login y autenticación real
+- Añadir rutas y contenido para Movimientos
+- Añadir rutas y contenido para Usuarios
+- Mejorar filtros y búsqueda
 
 ---
 
