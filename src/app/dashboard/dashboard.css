@@ -72,6 +72,8 @@
   border-radius: 16px;
 
   box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.08);
+
+  border-left: 6px solid #4b5563;
 }
 
 .recent-products h2 {
@@ -95,4 +97,42 @@
 
 .recent-products th {
   font-weight: 600;
+}
+.low-stock-products {
+  margin-top: 30px;
+
+  background: white;
+
+  padding: 25px;
+
+  border-radius: 16px;
+
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.08);
+
+  border-left: 6px solid #ef4444;
+}
+
+.low-stock-products h2 {
+  margin-bottom: 20px;
+}
+
+.low-stock-products table {
+  width: 100%;
+
+  border-collapse: collapse;
+}
+
+.low-stock-products th,
+.low-stock-products td {
+  padding: 12px;
+
+  text-align: left;
+
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.empty-message {
+  color: #666;
+
+  font-style: italic;
 }

@@ -37,4 +37,8 @@ export class DashboardComponent {
   get recentProducts(): Product[] {
     return [...this.products].slice(-5).reverse();
   }
+
+  get lowStockProducts(): Product[] {
+    return this.products.filter((product) => product.stock <= 5);
+  }
 }

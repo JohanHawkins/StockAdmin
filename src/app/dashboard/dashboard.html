@@ -50,3 +50,30 @@
     </tbody>
   </table>
 </div>
+<div class="low-stock-products">
+  <h2>Productos con Stock Bajo</h2>
+
+  <table *ngIf="lowStockProducts.length > 0">
+    <thead>
+      <tr>
+        <th>Código</th>
+        <th>Nombre</th>
+        <th>Stock</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr *ngFor="let product of lowStockProducts">
+        <td>{{ product.code }}</td>
+
+        <td>{{ product.name }}</td>
+
+        <td>{{ product.stock }}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p class="empty-message" *ngIf="lowStockProducts.length === 0">
+    No hay productos con stock bajo.
+  </p>
+</div>
