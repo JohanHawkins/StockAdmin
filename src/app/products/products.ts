@@ -16,17 +16,13 @@ export class ProductsComponent {
   searchTerm = '';
 
   toastVisible = false;
-
   toastMessage = '';
-
   toastType: 'success' | 'error' = 'success';
 
   showModal = false;
-
   showDeleteModal = false;
 
   isEditing = false;
-
   currentIndex = -1;
 
   products: Product[] = [];
@@ -46,36 +42,26 @@ export class ProductsComponent {
     stock: '',
   };
 
-  clearNameError() {
-    this.formErrors.name = '';
-  }
-
-  clearPriceError() {
-    this.formErrors.price = '';
-  }
-
-  clearStockError() {
-    this.formErrors.stock = '';
-  }
-
-  generateProductCode(): string {
-    if (this.products.length === 0) {
-      return 'P001';
-    }
-
-    const lastProduct = this.products[this.products.length - 1];
-
-    const lastCodeNumber = parseInt(lastProduct.code.replace('P', ''));
-
-    const nextNumber = lastCodeNumber + 1;
-
-    return 'P' + nextNumber.toString().padStart(3, '0');
-  }
-
   constructor(private productService: ProductService) {
     this.products = this.productService.getProducts();
   }
 
+  // -------------------------
+  // TOAST
+  // -------------------------
+  showToast(message: string, type: 'success' | 'error' = 'success') {
+    this.toastMessage = message;
+    this.toastType = type;
+    this.toastVisible = true;
+
+    setTimeout(() => {
+      this.toastVisible = false;
+    }, 3000);
+  }
+
+  // -------------------------
+  // MODAL
+  // -------------------------
   openModal() {
     this.clearErrors();
 
@@ -87,43 +73,54 @@ export class ProductsComponent {
       status: 'Activo',
     };
 
-    this.showModal = true;
-
     this.isEditing = false;
+    this.showModal = true;
   }
 
   closeModal() {
     this.showModal = false;
   }
 
+  // -------------------------
+  // VALIDATION + SAVE
+  // -------------------------
   saveProduct() {
     this.clearErrors();
 
     if (!this.newProduct.code.trim()) {
       this.formErrors.code = 'El código es obligatorio';
       this.showToast('El código es obligatorio', 'error');
-
       return;
     }
 
     if (!this.newProduct.name.trim()) {
       this.formErrors.name = 'El nombre es obligatorio';
       this.showToast('El nombre es obligatorio', 'error');
+      return;
+    }
 
+    // 🔴 FIX DUPLICADOS (CREAR + EDITAR)
+    const nameExists = this.products.some(
+      (p, index) =>
+        p.name.toLowerCase() === this.newProduct.name.trim().toLowerCase() &&
+        index !== this.currentIndex,
+    );
+
+    if (nameExists) {
+      this.formErrors.name = 'Ya existe un producto con este nombre';
+      this.showToast('Ya existe un producto con este nombre', 'error');
       return;
     }
 
     if (this.newProduct.price <= 0 || !Number.isInteger(this.newProduct.price)) {
       this.formErrors.price = 'El precio debe ser un valor mayor a 0';
       this.showToast('El precio debe ser un valor mayor a 0', 'error');
-
       return;
     }
 
     if (this.newProduct.stock < 0 || !Number.isInteger(this.newProduct.stock)) {
       this.formErrors.stock = 'El stock debe ser un valor mayor a 0';
       this.showToast('El stock debe ser un valor mayor a 0', 'error');
-
       return;
     }
 
@@ -145,21 +142,21 @@ export class ProductsComponent {
     this.closeModal();
   }
 
+  // -------------------------
+  // EDIT
+  // -------------------------
   editProduct(product: Product, index: number) {
-    this.newProduct = {
-      ...product,
-    };
-
+    this.newProduct = { ...product };
     this.currentIndex = index;
-
     this.isEditing = true;
-
     this.showModal = true;
   }
 
+  // -------------------------
+  // DELETE
+  // -------------------------
   openDeleteModal(index: number) {
     this.currentIndex = index;
-
     this.showDeleteModal = true;
   }
 
@@ -168,13 +165,16 @@ export class ProductsComponent {
   }
 
   confirmDelete() {
-    this.showToast('Producto eliminado correctamente', 'success');
-
     this.productService.deleteProduct(this.currentIndex);
+
+    this.showToast('Producto eliminado correctamente', 'success');
 
     this.closeDeleteModal();
   }
 
+  // -------------------------
+  // UTILS
+  // -------------------------
   resetForm() {
     this.newProduct = {
       code: '',
@@ -185,20 +185,7 @@ export class ProductsComponent {
     };
 
     this.currentIndex = -1;
-
     this.isEditing = false;
-  }
-
-  showToast(message: string, type: 'success' | 'error' = 'success') {
-    this.toastMessage = message;
-
-    this.toastType = type;
-
-    this.toastVisible = true;
-
-    setTimeout(() => {
-      this.toastVisible = false;
-    }, 3000);
   }
 
   clearErrors() {
@@ -210,6 +197,38 @@ export class ProductsComponent {
     };
   }
 
+  clearNameError() {
+    this.formErrors.name = '';
+  }
+
+  clearPriceError() {
+    this.formErrors.price = '';
+  }
+
+  clearStockError() {
+    this.formErrors.stock = '';
+  }
+
+  // -------------------------
+  // CODE GENERATOR
+  // -------------------------
+  generateProductCode(): string {
+    if (this.products.length === 0) {
+      return 'P001';
+    }
+
+    const lastProduct = this.products[this.products.length - 1];
+
+    const lastCodeNumber = parseInt(lastProduct.code.replace('P', ''));
+
+    const nextNumber = lastCodeNumber + 1;
+
+    return 'P' + nextNumber.toString().padStart(3, '0');
+  }
+
+  // -------------------------
+  // FILTER
+  // -------------------------
   get filteredProducts(): Product[] {
     return this.products.filter((p) =>
       p.name.toLowerCase().includes(this.searchTerm.toLowerCase()),

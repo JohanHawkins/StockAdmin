@@ -13,15 +13,12 @@ import { Category } from '../models/category.model';
   styleUrl: './categories.css',
 })
 export class CategoriesComponent {
+  // -------------------------
+  // STATE
+  // -------------------------
   formErrors = {
     name: '',
   };
-
-  clearNameError(): void {
-    this.formErrors.name = '';
-  }
-
-  previewCode = '';
 
   searchTerm = '';
 
@@ -43,6 +40,8 @@ export class CategoriesComponent {
 
   toastType: 'success' | 'error' = 'success';
 
+  previewCode = '';
+
   constructor(private categoryService: CategoryService) {
     this.categories = this.categoryService.getCategories();
   }
@@ -57,12 +56,13 @@ export class CategoriesComponent {
   }
 
   // -------------------------
-  // MODAL CREATE / EDIT
+  // MODAL CREATE
   // -------------------------
   openModal(): void {
     this.showModal = true;
     this.isEditing = false;
     this.newCategory = '';
+    this.currentIndex = -1;
 
     this.previewCode = this.generateCategoryCode();
   }
@@ -71,6 +71,9 @@ export class CategoriesComponent {
     this.showModal = false;
   }
 
+  // -------------------------
+  // EDIT
+  // -------------------------
   editCategory(category: Category, index: number): void {
     this.newCategory = category.name;
     this.currentIndex = index;
@@ -80,6 +83,9 @@ export class CategoriesComponent {
     this.previewCode = category.code;
   }
 
+  // -------------------------
+  // SAVE (CREATE / UPDATE)
+  // -------------------------
   addCategory(): void {
     if (!this.newCategory.trim()) {
       this.formErrors.name = 'El nombre es obligatorio';
@@ -89,11 +95,15 @@ export class CategoriesComponent {
 
     const categoryName = this.newCategory.trim();
 
-    const exists = this.categories.some((c) => c.name.toLowerCase() === categoryName.toLowerCase());
+    // 🔴 FIX DUPLICADOS (CREAR + EDITAR)
+    const nameExists = this.categories.some(
+      (c, index) =>
+        c.name.toLowerCase() === categoryName.toLowerCase() && index !== this.currentIndex,
+    );
 
-    if (!this.isEditing && exists) {
-      this.formErrors.name = 'La categoría ya existe';
-      this.showToast('La categoría ya existe', 'error');
+    if (nameExists) {
+      this.formErrors.name = 'Ya existe una categoría con este nombre';
+      this.showToast('Ya existe una categoría con este nombre', 'error');
       return;
     }
 
@@ -118,7 +128,7 @@ export class CategoriesComponent {
   }
 
   // -------------------------
-  // DELETE MODAL
+  // DELETE
   // -------------------------
   openDeleteModal(index: number): void {
     this.currentIndex = index;
@@ -144,6 +154,7 @@ export class CategoriesComponent {
     this.newCategory = '';
     this.currentIndex = -1;
     this.isEditing = false;
+    this.formErrors.name = '';
   }
 
   showToast(message: string, type: 'success' | 'error' = 'success'): void {
@@ -156,6 +167,13 @@ export class CategoriesComponent {
     }, 3000);
   }
 
+  clearNameError(): void {
+    this.formErrors.name = '';
+  }
+
+  // -------------------------
+  // CODE GENERATOR
+  // -------------------------
   generateCategoryCode(): string {
     if (this.categories.length === 0) {
       return 'C001';
