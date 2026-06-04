@@ -31,11 +31,11 @@ export class CategoryService {
     } else {
       this.categories = [
         {
-          id: 1,
+          code: 'C001',
           name: 'Tecnología',
         },
         {
-          id: 2,
+          code: 'C002',
           name: 'Accesorios',
         },
       ];

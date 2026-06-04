@@ -120,11 +120,35 @@ tbody tr:hover {
 }
 
 .save-btn {
+  border: none;
+
+  padding: 8px 12px;
+
+  border-radius: 6px;
+
+  cursor: pointer;
+
+  margin-right: 8px;
+
   background-color: #16a34a;
+
+  color: white;
 }
 
 .cancel-btn {
+  border: none;
+
+  padding: 8px 12px;
+
+  border-radius: 6px;
+
+  cursor: pointer;
+
+  margin-right: 8px;
+
   background-color: #dc2626;
+
+  color: white;
 }
 
 /* ACTIONS */
@@ -135,13 +159,40 @@ tbody tr:hover {
 }
 
 .edit-btn {
+  border: none;
+
+  padding: 8px 12px;
+
+  border-radius: 6px;
+
+  cursor: pointer;
+
+  margin-right: 8px;
+
   background-color: #f59e0b;
+
   color: white;
 }
 
 .delete-btn {
+  border: none;
+
+  padding: 8px 12px;
+
+  border-radius: 6px;
+
+  cursor: pointer;
+
   background-color: #dc2626;
   color: white;
+}
+
+.edit-btn:hover {
+  opacity: 0.9;
+}
+
+.delete-btn:hover {
+  opacity: 0.9;
 }
 
 /* DELETE MODAL */
@@ -176,16 +227,16 @@ tbody tr:hover {
   font-weight: bold;
 }
 
-.input-error{
-    border: 2px solid red;
+.input-error {
+  border: 2px solid red;
 }
 
-.error-message{
-    margin-top: 5px;
+.error-message {
+  margin-top: 5px;
 
-    color: red;
+  color: red;
 
-    font-size: 12px;
+  font-size: 12px;
 
-    font-weight: 600;
+  font-weight: 600;
 }

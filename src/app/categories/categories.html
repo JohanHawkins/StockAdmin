@@ -6,22 +6,31 @@
   <div class="add-category">
     <input type="text" placeholder="Nombre de la categoría" [(ngModel)]="newCategory" />
 
-    <button (click)="addCategory()">Agregar</button>
+    <button (click)="addCategory()">
+      {{ isEditing ? 'Actualizar' : 'Agregar' }}
+    </button>
   </div>
 
   <table>
     <thead>
       <tr>
-        <th>ID</th>
+        <th>Código</th>
         <th>Nombre</th>
+        <th>Acciones</th>
       </tr>
     </thead>
 
     <tbody>
-      <tr *ngFor="let category of categories">
-        <td>{{ category.id }}</td>
+      <tr *ngFor="let category of categories; let i = index">
+        <td>{{ category.code }}</td>
 
         <td>{{ category.name }}</td>
+
+        <td>
+          <button class="edit-btn" (click)="editCategory(category, i)">Editar</button>
+
+          <button class="delete-btn" (click)="deleteCategory(i)">Eliminar</button>
+        </td>
       </tr>
     </tbody>
   </table>
