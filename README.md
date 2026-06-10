@@ -9,6 +9,7 @@ Frontend desarrollado con Angular 21 y componentes Standalone. El proyecto es un
 # Tecnologías Utilizadas
 
 ## Frontend
+
 - Angular 21
 - TypeScript 5.9
 - HTML5
@@ -22,6 +23,7 @@ Frontend desarrollado con Angular 21 y componentes Standalone. El proyecto es un
 # Arquitectura Actual
 
 El proyecto utiliza:
+
 - Angular Standalone Components
 - Angular Router
 - SPA con configuración SSR básica
@@ -64,6 +66,7 @@ src/
 ## 2. Layout Administrativo
 
 Se implementó:
+
 - Sidebar lateral con navegación
 - Navbar superior
 - Área dinámica de contenido con `router-outlet`
@@ -73,6 +76,7 @@ Se implementó:
 ## 3. Sidebar Navegable
 
 Elementos visibles:
+
 - Dashboard
 - Productos
 - Categorías
@@ -80,6 +84,7 @@ Elementos visibles:
 - Usuarios (placeholder)
 
 ### Características
+
 - Navegación SPA real para Dashboard, Productos y Categorías
 - Links de Movimientos y Usuarios aún no enlazados a rutas reales
 - `routerLink` en los items activos
@@ -90,22 +95,24 @@ Elementos visibles:
 
 ## Rutas implementadas
 
-| Ruta | Pantalla |
-|---|---|
-| / | Redirige a /dashboard |
-| /dashboard | Dashboard |
-| /products | Productos |
-| /categories | Categorías |
+| Ruta        | Pantalla              |
+| ----------- | --------------------- |
+| /           | Redirige a /dashboard |
+| /dashboard  | Dashboard             |
+| /products   | Productos             |
+| /categories | Categorías            |
 
 ---
 
 # Dashboard
 
 Pantalla principal del panel con:
+
 - Cards informativas
 - Resumen general del inventario
 
 ### Objetivo
+
 Visualizar información general del sistema.
 
 ---
@@ -122,6 +129,7 @@ Visualizar información general del sistema.
 - CRUD completo: Create, Read, Update, Delete
 
 ## Datos mostrados
+
 - Código
 - Nombre
 - Precio
@@ -145,12 +153,14 @@ Visualizar información general del sistema.
 # Conceptos Angular Aprendidos
 
 ## Componentes
+
 - Standalone Components
 - Reutilización de componentes
 
 ---
 
 ## Routing
+
 - RouterModule
 - routerLink
 - router-outlet
@@ -158,12 +168,14 @@ Visualizar información general del sistema.
 ---
 
 ## Directivas
-- *ngFor
-- *ngIf
+
+- \*ngFor
+- \*ngIf
 
 ---
 
 ## Forms
+
 - FormsModule
 - ngModel
 
@@ -172,21 +184,25 @@ Visualizar información general del sistema.
 # Diseño UI Actual
 
 ## Sidebar
+
 - Menú lateral administrativo
 
 ---
 
 ## Navbar
+
 - Barra superior con título y usuario
 
 ---
 
 ## Dashboard
+
 - Cards informativas
 
 ---
 
 ## Productos
+
 - Tabla moderna
 - Modal emergente
 - Diseño responsive básico
@@ -196,6 +212,7 @@ Visualizar información general del sistema.
 # Estado General del Proyecto
 
 ## Actualmente el sistema:
+
 - Navega entre páginas con Angular Router
 - Usa layout administrativo
 - Permite crear, editar y eliminar productos
@@ -209,6 +226,7 @@ Visualizar información general del sistema.
 # Próximas Funcionalidades
 
 ## Corto plazo
+
 - Exponer la pantalla de login y autenticación real
 - Añadir rutas y contenido para Movimientos
 - Añadir rutas y contenido para Usuarios
@@ -217,6 +235,7 @@ Visualizar información general del sistema.
 ---
 
 ## Mediano plazo
+
 - Backend ASP.NET Core
 - API REST
 - PostgreSQL
@@ -225,6 +244,7 @@ Visualizar información general del sistema.
 ---
 
 ## Largo plazo
+
 - Roles de usuario
 - Reportes
 - Dashboard avanzado
@@ -235,6 +255,7 @@ Visualizar información general del sistema.
 # Objetivo del Proyecto
 
 Construir una aplicación:
+
 - Profesional
 - Escalable
 - Moderna

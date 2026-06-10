@@ -1,0 +1,37 @@
+<div class="movements-container">
+  <div class="movements-header">
+    <h1>Gestión de Movimientos</h1>
+
+    <button>+ Nuevo Movimiento</button>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Código</th>
+        <th>Producto</th>
+        <th>Tipo</th>
+        <th>Cantidad</th>
+        <th>Fecha</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr *ngFor="let movement of movements">
+        <td>{{ movement.id }}</td>
+
+        <td>{{ movement.productCode }}</td>
+
+        <td>{{ movement.type }}</td>
+
+        <td>{{ movement.quantity }}</td>
+
+        <td>{{ movement.date | date: 'dd/MM/yyyy HH:mm' }}</td>
+      </tr>
+
+      <tr *ngIf="movements.length === 0">
+        <td colspan="5" class="empty-message">No hay movimientos registrados</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
