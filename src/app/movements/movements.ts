@@ -49,7 +49,11 @@ export class MovementsComponent {
     this.movements = this.movementService.getMovements();
     this.products = this.productService.getProducts();
   }
+  getProductName(productCode: string): string {
+    const product = this.products.find((p) => p.code === productCode);
 
+    return product?.name ?? productCode;
+  }
   addMovement(): void {
     if (!this.newMovement.productCode || this.newMovement.quantity <= 0) {
       return;

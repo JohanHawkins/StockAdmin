@@ -20,7 +20,7 @@
       <tr *ngFor="let movement of movements">
         <td>{{ movement.id }}</td>
 
-        <td>{{ movement.productCode }}</td>
+        <td>{{ getProductName(movement.productCode) }}</td>
 
         <td>{{ movement.type }}</td>
 
