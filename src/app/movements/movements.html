@@ -2,7 +2,7 @@
   <div class="movements-header">
     <h1>Gestión de Movimientos</h1>
 
-    <button>+ Nuevo Movimiento</button>
+    <button (click)="openModal()">+ Nuevo Movimiento</button>
   </div>
 
   <table>
@@ -34,4 +34,59 @@
       </tr>
     </tbody>
   </table>
+</div>
+
+<!-- MODAL -->
+
+<div class="modal-backdrop" *ngIf="showModal">
+  <div class="modal">
+    <h2>Nuevo Movimiento</h2>
+
+    <div class="form-group">
+      <label>Producto</label>
+
+      <select [(ngModel)]="newMovement.productCode">
+        <option value="">Seleccionar producto</option>
+
+        <option *ngFor="let product of products" [value]="product.code">
+          {{ product.name }}
+        </option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label>Tipo</label>
+
+      <select [(ngModel)]="newMovement.type" [disabled]="!newMovement.productCode">
+        <option value="">Seleccionar tipo</option>
+
+        <option value="ENTRADA">ENTRADA</option>
+
+        <option value="SALIDA">SALIDA</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label>Cantidad</label>
+
+      <input
+        type="number"
+        min="1"
+        [(ngModel)]="newMovement.quantity"
+        [disabled]="!newMovement.productCode || !newMovement.type"
+      />
+    </div>
+
+    <div class="modal-actions">
+      <button
+        class="save-btn"
+        (click)="addMovement()"
+        [disabled]="!newMovement.productCode || !newMovement.type || newMovement.quantity <= 0"
+      >
+        Guardar
+      </button>
+
+      <button class="cancel-btn" (click)="closeModal()">Cancelar</button>
+    </div>
+  </div>
 </div>

@@ -15,13 +15,29 @@ import { Product } from '../models/product.model';
   styleUrl: './movements.css',
 })
 export class MovementsComponent {
+  showModal = false;
   movements: Movement[] = [];
   products: Product[] = [];
+
+  selectedProductId = 0;
+
+  movementType: 'ENTRADA' | 'SALIDA' = 'ENTRADA';
+
+  quantity = 1;
+
+  openModal(): void {
+    this.resetForm();
+    this.showModal = true;
+  }
+
+  closeModal(): void {
+    this.showModal = false;
+  }
 
   newMovement: Movement = {
     id: '',
     productCode: '',
-    type: 'ENTRADA',
+    type: '' as any,
     quantity: 0,
     date: new Date(),
   };
@@ -46,7 +62,10 @@ export class MovementsComponent {
     const product = this.products.find((p) => p.code === this.newMovement.productCode);
 
     if (!product) return;
-
+    if (this.newMovement.type === 'SALIDA' && this.newMovement.quantity > product.stock) {
+      alert('No hay stock suficiente para realizar la salida.');
+      return;
+    }
     if (this.newMovement.type === 'ENTRADA') {
       product.stock += this.newMovement.quantity;
     } else {
@@ -54,7 +73,8 @@ export class MovementsComponent {
     }
 
     this.movementService.addMovement({ ...this.newMovement });
-
+    this.movements = this.movementService.getMovements();
+    this.closeModal();
     this.resetForm();
   }
 
