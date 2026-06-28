@@ -165,3 +165,17 @@ tbody tr:hover {
 
   color: white;
 }
+
+.stock-info {
+  margin-bottom: 20px;
+
+  padding: 12px;
+
+  border-radius: 8px;
+
+  background-color: #f1f5f9;
+
+  color: #334155;
+
+  font-size: 14px;
+}

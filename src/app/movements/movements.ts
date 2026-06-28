@@ -54,6 +54,9 @@ export class MovementsComponent {
 
     return product?.name ?? productCode;
   }
+  getSelectedProduct(): Product | undefined {
+    return this.products.find((p) => p.code === this.newMovement.productCode);
+  }
   addMovement(): void {
     if (!this.newMovement.productCode || this.newMovement.quantity <= 0) {
       return;

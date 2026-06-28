@@ -53,6 +53,10 @@
         </option>
       </select>
     </div>
+    <div class="stock-info" *ngIf="getSelectedProduct()">
+      Stock actual:
+      <strong>{{ getSelectedProduct()?.stock }}</strong>
+    </div>
 
     <div class="form-group">
       <label>Tipo</label>
@@ -72,6 +76,7 @@
       <input
         type="number"
         min="1"
+        [max]="newMovement.type === 'SALIDA' ? getSelectedProduct()?.stock || 1 : null"
         [(ngModel)]="newMovement.quantity"
         [disabled]="!newMovement.productCode || !newMovement.type"
       />
