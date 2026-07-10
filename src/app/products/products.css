@@ -240,3 +240,29 @@ tbody tr:hover {
 
   font-weight: 600;
 }
+
+.product-info {
+  margin: 20px 0;
+
+  padding: 15px;
+
+  border-radius: 10px;
+
+  background-color: #f8fafc;
+
+  border: 1px solid #e5e7eb;
+}
+
+.product-info p {
+  margin: 8px 0;
+}
+
+.warning-text {
+  margin: 20px 0;
+
+  text-align: center;
+
+  font-weight: 600;
+
+  color: #dc2626;
+}

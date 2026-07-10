@@ -123,9 +123,16 @@ export class MovementsComponent {
       product.stock -= this.newMovement.quantity;
     }
 
+    // Persistir el nuevo stock del producto
+    const productIndex = this.products.findIndex((p) => p.code === this.newMovement.productCode);
+
+    this.productService.updateProduct(productIndex, product);
+
     this.movementService.addMovement({ ...this.newMovement });
 
     this.movements = this.movementService.getMovements();
+
+    this.products = this.productService.getProducts();
 
     this.showToast('Movimiento registrado correctamente', 'success');
 

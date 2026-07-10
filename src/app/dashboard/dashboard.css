@@ -50,6 +50,16 @@
   border-left: 6px solid #3b82f6;
 }
 
+/* NUEVO */
+.categories-card {
+  border-left: 6px solid #06b6d4;
+}
+
+/* NUEVO */
+.movements-card {
+  border-left: 6px solid #f97316;
+}
+
 .stock-card {
   border-left: 6px solid #f59e0b;
 }
@@ -98,6 +108,7 @@
 .recent-products th {
   font-weight: 600;
 }
+
 .low-stock-products {
   margin-top: 30px;
 

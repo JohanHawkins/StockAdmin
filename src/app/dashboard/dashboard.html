@@ -8,6 +8,18 @@
       <p>Total Productos</p>
     </div>
 
+    <div class="card categories-card">
+      <h2>{{ totalCategories }}</h2>
+
+      <p>Total Categorías</p>
+    </div>
+
+    <div class="card movements-card">
+      <h2>{{ totalMovements }}</h2>
+
+      <p>Total Movimientos</p>
+    </div>
+
     <div class="card stock-card">
       <h2>{{ totalStock }}</h2>
 
@@ -27,6 +39,9 @@
     </div>
   </div>
 </div>
+
+<!-- PRODUCTOS RECIENTES -->
+
 <div class="recent-products">
   <h2>Productos Recientes</h2>
 
@@ -47,9 +62,49 @@
 
         <td>{{ product.stock }}</td>
       </tr>
+
+      <tr *ngIf="recentProducts.length === 0">
+        <td colspan="3" class="empty-message">No hay productos registrados.</td>
+      </tr>
     </tbody>
   </table>
 </div>
+
+<!-- MOVIMIENTOS RECIENTES -->
+
+<div class="recent-products">
+  <h2>Movimientos Recientes</h2>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Código</th>
+        <th>Producto</th>
+        <th>Tipo</th>
+        <th>Cantidad</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr *ngFor="let movement of recentMovements">
+        <td>{{ movement.id }}</td>
+
+        <td>{{ getProductName(movement.productCode) }}</td>
+
+        <td>{{ movement.type }}</td>
+
+        <td>{{ movement.quantity }}</td>
+      </tr>
+
+      <tr *ngIf="recentMovements.length === 0">
+        <td colspan="4" class="empty-message">No hay movimientos registrados.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- STOCK BAJO -->
+
 <div class="low-stock-products">
   <h2>Productos con Stock Bajo</h2>
 

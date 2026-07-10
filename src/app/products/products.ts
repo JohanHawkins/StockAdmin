@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ToastComponent } from '../shared/toast/toast';
 import { ProductService } from '../services/product.service';
+import { MovementService } from '../services/movement.service';
 import { Product } from '../models/product.model';
 
 @Component({
@@ -42,7 +43,10 @@ export class ProductsComponent {
     stock: '',
   };
 
-  constructor(private productService: ProductService) {
+  constructor(
+    private productService: ProductService,
+    private movementService: MovementService,
+  ) {
     this.products = this.productService.getProducts();
   }
 
@@ -99,7 +103,6 @@ export class ProductsComponent {
       return;
     }
 
-    // 🔴 FIX DUPLICADOS (CREAR + EDITAR)
     const nameExists = this.products.some(
       (p, index) =>
         p.name.toLowerCase() === this.newProduct.name.trim().toLowerCase() &&
@@ -127,9 +130,13 @@ export class ProductsComponent {
     const wasEditing = this.isEditing;
 
     if (this.isEditing) {
-      this.productService.updateProduct(this.currentIndex, { ...this.newProduct });
+      this.productService.updateProduct(this.currentIndex, {
+        ...this.newProduct,
+      });
     } else {
-      this.productService.addProduct({ ...this.newProduct });
+      this.productService.addProduct({
+        ...this.newProduct,
+      });
     }
 
     this.resetForm();
@@ -147,8 +154,11 @@ export class ProductsComponent {
   // -------------------------
   editProduct(product: Product, index: number) {
     this.newProduct = { ...product };
+
     this.currentIndex = index;
+
     this.isEditing = true;
+
     this.showModal = true;
   }
 
@@ -157,6 +167,7 @@ export class ProductsComponent {
   // -------------------------
   openDeleteModal(index: number) {
     this.currentIndex = index;
+
     this.showDeleteModal = true;
   }
 
@@ -165,6 +176,20 @@ export class ProductsComponent {
   }
 
   confirmDelete() {
+    const product = this.products[this.currentIndex];
+
+    const hasMovements = this.movementService
+      .getMovements()
+      .some((movement) => movement.productCode === product.code);
+
+    if (hasMovements) {
+      this.showToast('No es posible eliminar un producto con movimientos registrados', 'error');
+
+      this.closeDeleteModal();
+
+      return;
+    }
+
     this.productService.deleteProduct(this.currentIndex);
 
     this.showToast('Producto eliminado correctamente', 'success');
@@ -185,6 +210,7 @@ export class ProductsComponent {
     };
 
     this.currentIndex = -1;
+
     this.isEditing = false;
   }
 
@@ -233,5 +259,13 @@ export class ProductsComponent {
     return this.products.filter((p) =>
       p.name.toLowerCase().includes(this.searchTerm.toLowerCase()),
     );
+  }
+
+  get selectedProduct(): Product | null {
+    if (this.currentIndex < 0) {
+      return null;
+    }
+
+    return this.products[this.currentIndex];
   }
 }

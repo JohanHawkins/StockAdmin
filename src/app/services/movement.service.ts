@@ -26,7 +26,12 @@ export class MovementService {
     const data = localStorage.getItem(this.storageKey);
 
     if (data) {
-      this.movements = JSON.parse(data);
+      const parsedMovements: Movement[] = JSON.parse(data);
+
+      this.movements = parsedMovements.map((movement) => ({
+        ...movement,
+        date: new Date(movement.date),
+      }));
     }
   }
 
@@ -42,6 +47,7 @@ export class MovementService {
 
   addMovement(movement: Movement): void {
     this.movements.push(movement);
+
     this.save();
   }
 
@@ -49,6 +55,7 @@ export class MovementService {
     if (this.movements.length === 0) return 'M001';
 
     const last = this.movements[this.movements.length - 1];
+
     const number = parseInt(last.id.replace('M', ''));
 
     return 'M' + (number + 1).toString().padStart(3, '0');

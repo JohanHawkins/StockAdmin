@@ -1,12 +1,14 @@
 <div class="products-container">
   <div class="products-header">
     <h1>Gestión de Productos</h1>
+
     <input
       type="text"
       placeholder="Buscar producto..."
       [(ngModel)]="searchTerm"
       class="search-input"
     />
+
     <button (click)="openModal()">+ Nuevo Producto</button>
   </div>
 
@@ -25,9 +27,13 @@
     <tbody>
       <tr *ngFor="let product of filteredProducts; let i = index">
         <td>{{ product.code }}</td>
+
         <td>{{ product.name }}</td>
+
         <td>${{ product.price }}</td>
+
         <td>{{ product.stock }}</td>
+
         <td>{{ product.status }}</td>
 
         <td class="actions">
@@ -37,6 +43,7 @@
         </td>
       </tr>
     </tbody>
+
     <tbody *ngIf="filteredProducts.length === 0">
       <tr>
         <td colspan="6" class="empty-message">Producto no encontrado</td>
@@ -87,6 +94,7 @@
         [class.input-error]="formErrors.price"
         (input)="clearPriceError()"
       />
+
       <div class="error-message" *ngIf="formErrors.price">
         {{ formErrors.price }}
       </div>
@@ -101,6 +109,7 @@
         [class.input-error]="formErrors.stock"
         (input)="clearStockError()"
       />
+
       <div class="error-message" *ngIf="formErrors.stock">
         {{ formErrors.stock }}
       </div>
@@ -122,7 +131,31 @@
   <div class="modal delete-modal">
     <h2>Confirmar Eliminación</h2>
 
-    <p>¿Deseas eliminar este producto?</p>
+    <p>¿Estás seguro de eliminar este producto?</p>
+
+    <div class="product-info" *ngIf="selectedProduct">
+      <p>
+        <strong>Nombre:</strong>
+        {{ selectedProduct.name }}
+      </p>
+
+      <p>
+        <strong>Código:</strong>
+        {{ selectedProduct.code }}
+      </p>
+
+      <p>
+        <strong>Stock disponible:</strong>
+        {{ selectedProduct.stock }}
+      </p>
+
+      <p>
+        <strong>Estado:</strong>
+        {{ selectedProduct.status }}
+      </p>
+    </div>
+
+    <p class="warning-text">Esta acción no se puede deshacer.</p>
 
     <div class="modal-actions">
       <button class="cancel-btn" (click)="closeDeleteModal()">Cancelar</button>
