@@ -53,6 +53,7 @@
         </option>
       </select>
     </div>
+
     <div class="stock-info" *ngIf="getSelectedProduct()">
       Stock actual:
       <strong>{{ getSelectedProduct()?.stock }}</strong>
@@ -95,3 +96,7 @@
     </div>
   </div>
 </div>
+
+<!-- TOAST -->
+
+<app-toast [message]="toastMessage" [type]="toastType" [visible]="toastVisible"> </app-toast>

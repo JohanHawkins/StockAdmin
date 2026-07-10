@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { ToastComponent } from '../shared/toast/toast';
 
 import { MovementService } from '../services/movement.service';
 import { ProductService } from '../services/product.service';
@@ -10,29 +11,22 @@ import { Product } from '../models/product.model';
 @Component({
   selector: 'app-movements',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, ToastComponent],
   templateUrl: './movements.html',
   styleUrl: './movements.css',
 })
 export class MovementsComponent {
   showModal = false;
+
+  toastVisible = false;
+
+  toastMessage = '';
+
+  toastType: 'success' | 'error' = 'success';
+
   movements: Movement[] = [];
+
   products: Product[] = [];
-
-  selectedProductId = 0;
-
-  movementType: 'ENTRADA' | 'SALIDA' = 'ENTRADA';
-
-  quantity = 1;
-
-  openModal(): void {
-    this.resetForm();
-    this.showModal = true;
-  }
-
-  closeModal(): void {
-    this.showModal = false;
-  }
 
   newMovement: Movement = {
     id: '',
@@ -49,30 +43,54 @@ export class MovementsComponent {
     this.movements = this.movementService.getMovements();
     this.products = this.productService.getProducts();
   }
+
+  openModal(): void {
+    this.resetForm();
+
+    this.showModal = true;
+  }
+
+  closeModal(): void {
+    this.showModal = false;
+  }
+
   getProductName(productCode: string): string {
     const product = this.products.find((p) => p.code === productCode);
 
     return product?.name ?? productCode;
   }
+
   getSelectedProduct(): Product | undefined {
     return this.products.find((p) => p.code === this.newMovement.productCode);
   }
+
   addMovement(): void {
-    if (!this.newMovement.productCode || this.newMovement.quantity <= 0) {
+    if (!this.newMovement.productCode) {
+      this.showToast('Debe seleccionar un producto', 'error');
+      return;
+    }
+
+    if (this.newMovement.quantity <= 0) {
+      this.showToast('La cantidad debe ser mayor a 0', 'error');
       return;
     }
 
     this.newMovement.id = this.movementService.generateId();
+
     this.newMovement.date = new Date();
 
-    // actualizar stock
     const product = this.products.find((p) => p.code === this.newMovement.productCode);
 
-    if (!product) return;
-    if (this.newMovement.type === 'SALIDA' && this.newMovement.quantity > product.stock) {
-      alert('No hay stock suficiente para realizar la salida.');
+    if (!product) {
+      this.showToast('Producto no encontrado', 'error');
       return;
     }
+
+    if (this.newMovement.type === 'SALIDA' && this.newMovement.quantity > product.stock) {
+      this.showToast('No hay stock suficiente para realizar la salida.', 'error');
+      return;
+    }
+
     if (this.newMovement.type === 'ENTRADA') {
       product.stock += this.newMovement.quantity;
     } else {
@@ -80,8 +98,13 @@ export class MovementsComponent {
     }
 
     this.movementService.addMovement({ ...this.newMovement });
+
     this.movements = this.movementService.getMovements();
+
+    this.showToast('Movimiento registrado correctamente', 'success');
+
     this.closeModal();
+
     this.resetForm();
   }
 
@@ -89,9 +112,21 @@ export class MovementsComponent {
     this.newMovement = {
       id: '',
       productCode: '',
-      type: 'ENTRADA',
+      type: '' as any,
       quantity: 0,
       date: new Date(),
     };
+  }
+
+  showToast(message: string, type: 'success' | 'error' = 'success'): void {
+    this.toastMessage = message;
+
+    this.toastType = type;
+
+    this.toastVisible = true;
+
+    setTimeout(() => {
+      this.toastVisible = false;
+    }, 3000);
   }
 }
