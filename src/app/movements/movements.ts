@@ -24,6 +24,12 @@ export class MovementsComponent {
 
   toastType: 'success' | 'error' = 'success';
 
+  formErrors = {
+    productCode: '',
+    type: '',
+    quantity: '',
+  };
+
   movements: Movement[] = [];
 
   products: Product[] = [];
@@ -65,13 +71,29 @@ export class MovementsComponent {
   }
 
   addMovement(): void {
+    this.clearErrors();
+
     if (!this.newMovement.productCode) {
+      this.formErrors.productCode = 'Debe seleccionar un producto';
+
       this.showToast('Debe seleccionar un producto', 'error');
+
+      return;
+    }
+
+    if (!this.newMovement.type) {
+      this.formErrors.type = 'Debe seleccionar un tipo de movimiento';
+
+      this.showToast('Debe seleccionar un tipo de movimiento', 'error');
+
       return;
     }
 
     if (this.newMovement.quantity <= 0) {
+      this.formErrors.quantity = 'La cantidad debe ser mayor a 0';
+
       this.showToast('La cantidad debe ser mayor a 0', 'error');
+
       return;
     }
 
@@ -83,11 +105,15 @@ export class MovementsComponent {
 
     if (!product) {
       this.showToast('Producto no encontrado', 'error');
+
       return;
     }
 
     if (this.newMovement.type === 'SALIDA' && this.newMovement.quantity > product.stock) {
+      this.formErrors.quantity = 'No hay stock suficiente para realizar la salida.';
+
       this.showToast('No hay stock suficiente para realizar la salida.', 'error');
+
       return;
     }
 
@@ -116,6 +142,8 @@ export class MovementsComponent {
       quantity: 0,
       date: new Date(),
     };
+
+    this.clearErrors();
   }
 
   showToast(message: string, type: 'success' | 'error' = 'success'): void {
@@ -128,5 +156,25 @@ export class MovementsComponent {
     setTimeout(() => {
       this.toastVisible = false;
     }, 3000);
+  }
+
+  clearProductError(): void {
+    this.formErrors.productCode = '';
+  }
+
+  clearTypeError(): void {
+    this.formErrors.type = '';
+  }
+
+  clearQuantityError(): void {
+    this.formErrors.quantity = '';
+  }
+
+  clearErrors(): void {
+    this.formErrors = {
+      productCode: '',
+      type: '',
+      quantity: '',
+    };
   }
 }
