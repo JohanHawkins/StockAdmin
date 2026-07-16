@@ -31,6 +31,10 @@ export class ProductsComponent {
   products: Product[] = [];
   categories: Category[] = [];
 
+  // Paginación
+  currentPage = 1;
+  itemsPerPage = 5;
+
   newProduct: Product = {
     code: '',
     name: '',
@@ -299,9 +303,44 @@ export class ProductsComponent {
   // FILTER
   // -------------------------
   get filteredProducts(): Product[] {
-    return this.products.filter((p) =>
+    const filtered = this.products.filter((p) =>
       p.name.toLowerCase().includes(this.searchTerm.toLowerCase()),
     );
+
+    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+    return filtered.slice(startIndex, startIndex + this.itemsPerPage);
+  }
+
+  get totalFilteredProducts(): number {
+    return this.products.filter((p) =>
+      p.name.toLowerCase().includes(this.searchTerm.toLowerCase()),
+    ).length;
+  }
+
+  get totalPages(): number {
+    return Math.ceil(this.totalFilteredProducts / this.itemsPerPage);
+  }
+
+  goToPage(page: number): void {
+    if (page >= 1 && page <= this.totalPages) {
+      this.currentPage = page;
+    }
+  }
+
+  previousPage(): void {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+    }
+  }
+
+  nextPage(): void {
+    if (this.currentPage < this.totalPages) {
+      this.currentPage++;
+    }
+  }
+
+  resetPagination(): void {
+    this.currentPage = 1;
   }
 
   get selectedProduct(): Product | null {

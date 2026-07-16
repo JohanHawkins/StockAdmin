@@ -266,3 +266,43 @@ tbody tr:hover {
 
   color: #dc2626;
 }
+
+/* PAGINACIÓN */
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+
+  margin-top: 20px;
+  padding: 16px;
+}
+
+.pagination button {
+  padding: 8px 16px;
+
+  border: none;
+  border-radius: 6px;
+
+  background-color: #1976d2;
+  color: white;
+
+  cursor: pointer;
+
+  transition: background-color 0.3s;
+}
+
+.pagination button:hover:not(:disabled) {
+  background-color: #1565c0;
+}
+
+.pagination button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.pagination span {
+  font-size: 14px;
+  color: #666;
+}

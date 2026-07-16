@@ -1,31 +1,41 @@
 <div class="layout-container">
   <!-- Sidebar -->
-  <aside class="sidebar">
-    <h2>StockAdmin</h2>
+  <aside class="sidebar" [class.collapsed]="sidebarCollapsed" [class.mobile-open]="showMobileMenu">
+    <div class="sidebar-header">
+      <h2 *ngIf="!sidebarCollapsed">StockAdmin</h2>
+      <h2 *ngIf="sidebarCollapsed">SA</h2>
+    </div>
 
     <ul>
       <li>
-        <a routerLink="/dashboard" routerLinkActive="active"> Dashboard </a>
+        <a routerLink="/dashboard" routerLinkActive="active" (click)="closeMobileMenu()"> Dashboard </a>
       </li>
 
       <li>
-        <a routerLink="/products" routerLinkActive="active"> Productos </a>
+        <a routerLink="/products" routerLinkActive="active" (click)="closeMobileMenu()"> Productos </a>
       </li>
 
       <li>
-        <a routerLink="/categories" routerLinkActive="active"> Categorías </a>
+        <a routerLink="/categories" routerLinkActive="active" (click)="closeMobileMenu()"> Categorías </a>
       </li>
 
       <li>
-        <a routerLink="/movements" routerLinkActive="active"> Movimientos </a>
+        <a routerLink="/movements" routerLinkActive="active" (click)="closeMobileMenu()"> Movimientos </a>
       </li>
     </ul>
   </aside>
+
+  <!-- Overlay for mobile -->
+  <div class="sidebar-overlay" *ngIf="isMobile && showMobileMenu" (click)="closeMobileMenu()"></div>
 
   <!-- Main -->
   <div class="main-content">
     <!-- Navbar -->
     <header class="navbar">
+      <button class="menu-toggle" (click)="toggleSidebar()">
+        <span class="hamburger" [class.active]="showMobileMenu">☰</span>
+      </button>
+
       <h3>Sistema de Gestión de Inventario</h3>
 
       <div class="navbar-user">

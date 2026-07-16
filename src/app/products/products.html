@@ -43,9 +43,9 @@
         <td>{{ product.status }}</td>
 
         <td class="actions">
-          <button class="edit-btn" (click)="editProduct(product)">Editar</button>
+          <button class="edit-btn" (click)="editProduct(product)" title="Editar producto">Editar</button>
 
-          <button class="delete-btn" (click)="openDeleteModal(product.code)">Eliminar</button>
+          <button class="delete-btn" (click)="openDeleteModal(product.code)" title="Eliminar producto">Eliminar</button>
         </td>
       </tr>
     </tbody>
@@ -56,6 +56,15 @@
       </tr>
     </tbody>
   </table>
+
+  <!-- PAGINACIÓN -->
+  <div class="pagination" *ngIf="totalFilteredProducts > itemsPerPage">
+    <button (click)="previousPage()" [disabled]="currentPage === 1">Anterior</button>
+
+    <span>Página {{ currentPage }} de {{ totalPages }}</span>
+
+    <button (click)="nextPage()" [disabled]="currentPage === totalPages">Siguiente</button>
+  </div>
 </div>
 
 <!-- CREATE / EDIT MODAL -->

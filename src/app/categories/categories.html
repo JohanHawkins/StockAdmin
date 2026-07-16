@@ -29,9 +29,9 @@
         <td>{{ getProductCount(category.code) }}</td>
 
         <td class="actions">
-          <button class="edit-btn" (click)="editCategory(category)">Editar</button>
+          <button class="edit-btn" (click)="editCategory(category)" title="Editar categoría">Editar</button>
 
-          <button class="delete-btn" (click)="openDeleteModal(category.code)">Eliminar</button>
+          <button class="delete-btn" (click)="openDeleteModal(category.code)" title="Eliminar categoría">Eliminar</button>
         </td>
       </tr>
 

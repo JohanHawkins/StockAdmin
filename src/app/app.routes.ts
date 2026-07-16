@@ -6,6 +6,7 @@ import { DashboardComponent } from './dashboard/dashboard';
 import { ProductsComponent } from './products/products';
 import { CategoriesComponent } from './categories/categories';
 import { MovementsComponent } from './movements/movements';
+import { NotFoundComponent } from './not-found/not-found';
 import { authGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
@@ -49,6 +50,6 @@ export const routes: Routes = [
 
   {
     path: '**',
-    redirectTo: 'dashboard',
+    component: NotFoundComponent,
   },
 ];
