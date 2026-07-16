@@ -64,13 +64,21 @@ export class ProductService {
     this.saveToStorage();
   }
 
-  updateProduct(index: number, product: Product): void {
-    this.products[index] = product;
-    this.saveToStorage();
+  updateProduct(code: string, product: Product): void {
+    const index = this.products.findIndex((p) => p.code === code);
+
+    if (index !== -1) {
+      this.products[index] = product;
+      this.saveToStorage();
+    }
   }
 
-  deleteProduct(index: number): void {
-    this.products.splice(index, 1);
-    this.saveToStorage();
+  deleteProduct(code: string): void {
+    const index = this.products.findIndex((p) => p.code === code);
+
+    if (index !== -1) {
+      this.products.splice(index, 1);
+      this.saveToStorage();
+    }
   }
 }

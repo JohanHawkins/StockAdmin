@@ -332,11 +332,11 @@ Corregir problemas que rompen la funcionalidad básica.
 
 | # | Tarea | Módulo | Estado |
 |---|-------|--------|--------|
-| 1 | Completar login (formulario + servicio + guard) | Login | [ ] |
-| 2 | Agregar ruta `/login` y proteger rutas | Routes | [ ] |
-| 3 | Eliminar enlace roto `/users` del sidebar | Layout | [ ] |
-| 4 | Corregir bug de índice en productos (usar code) | Productos | [ ] |
-| 5 | Corregir mensaje de validación de stock | Productos | [ ] |
+| 1 | Completar login (formulario + servicio + guard) | Login | [x] |
+| 2 | Agregar ruta `/login` y proteger rutas | Routes | [x] |
+| 3 | Eliminar enlace roto `/users` del sidebar | Layout | [x] |
+| 4 | Corregir bug de índice en productos (usar code) | Productos | [x] |
+| 5 | Corregir mensaje de validación de stock | Productos | [x] |
 
 ---
 

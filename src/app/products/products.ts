@@ -24,7 +24,7 @@ export class ProductsComponent {
   showDeleteModal = false;
 
   isEditing = false;
-  currentIndex = -1;
+  currentCode = '';
 
   products: Product[] = [];
 
@@ -104,9 +104,9 @@ export class ProductsComponent {
     }
 
     const nameExists = this.products.some(
-      (p, index) =>
+      (p) =>
         p.name.toLowerCase() === this.newProduct.name.trim().toLowerCase() &&
-        index !== this.currentIndex,
+        p.code !== this.currentCode,
     );
 
     if (nameExists) {
@@ -122,15 +122,15 @@ export class ProductsComponent {
     }
 
     if (this.newProduct.stock < 0 || !Number.isInteger(this.newProduct.stock)) {
-      this.formErrors.stock = 'El stock debe ser un valor mayor a 0';
-      this.showToast('El stock debe ser un valor mayor a 0', 'error');
+      this.formErrors.stock = 'El stock debe ser un valor mayor o igual a 0';
+      this.showToast('El stock debe ser un valor mayor o igual a 0', 'error');
       return;
     }
 
     const wasEditing = this.isEditing;
 
     if (this.isEditing) {
-      this.productService.updateProduct(this.currentIndex, {
+      this.productService.updateProduct(this.currentCode, {
         ...this.newProduct,
       });
     } else {
@@ -152,10 +152,10 @@ export class ProductsComponent {
   // -------------------------
   // EDIT
   // -------------------------
-  editProduct(product: Product, index: number) {
+  editProduct(product: Product) {
     this.newProduct = { ...product };
 
-    this.currentIndex = index;
+    this.currentCode = product.code;
 
     this.isEditing = true;
 
@@ -165,8 +165,8 @@ export class ProductsComponent {
   // -------------------------
   // DELETE
   // -------------------------
-  openDeleteModal(index: number) {
-    this.currentIndex = index;
+  openDeleteModal(code: string) {
+    this.currentCode = code;
 
     this.showDeleteModal = true;
   }
@@ -176,7 +176,9 @@ export class ProductsComponent {
   }
 
   confirmDelete() {
-    const product = this.products[this.currentIndex];
+    const product = this.products.find((p) => p.code === this.currentCode);
+
+    if (!product) return;
 
     const hasMovements = this.movementService
       .getMovements()
@@ -190,7 +192,7 @@ export class ProductsComponent {
       return;
     }
 
-    this.productService.deleteProduct(this.currentIndex);
+    this.productService.deleteProduct(this.currentCode);
 
     this.showToast('Producto eliminado correctamente', 'success');
 
@@ -209,7 +211,7 @@ export class ProductsComponent {
       status: 'Activo',
     };
 
-    this.currentIndex = -1;
+    this.currentCode = '';
 
     this.isEditing = false;
   }
@@ -262,10 +264,10 @@ export class ProductsComponent {
   }
 
   get selectedProduct(): Product | null {
-    if (this.currentIndex < 0) {
+    if (!this.currentCode) {
       return null;
     }
 
-    return this.products[this.currentIndex];
+    return this.products.find((p) => p.code === this.currentCode) ?? null;
   }
 }
