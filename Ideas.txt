@@ -346,17 +346,17 @@ Funcionalidades core que el sistema necesita para ser completo.
 
 | # | Tarea | Módulo | Estado |
 |---|-------|--------|--------|
-| 6 | Agregar campo `description` a Product | Modelos | [ ] |
-| 7 | Agregar campo `minStock` a Product | Modelos | [ ] |
-| 8 | Agregar campo `categoryCode` a Product | Modelos | [ ] |
-| 9 | Vincular selector de categoría en formulario de productos | Productos | [ ] |
-| 10 | Agregar campo `observation` a Movement | Modelos | [ ] |
-| 11 | Crear modelo User | Modelos | [ ] |
-| 12 | Dashboard: agregar producto mayor stock | Dashboard | [ ] |
-| 13 | Dashboard: agregar producto más costoso | Dashboard | [ ] |
-| 14 | Dashboard: agregar último movimiento | Dashboard | [ ] |
-| 15 | Categorías: evitar eliminar con productos asociados | Categorías | [ ] |
-| 16 | Categorías: mostrar cantidad de productos | Categorías | [ ] |
+| 6 | Agregar campo `description` a Product | Modelos | [x] |
+| 7 | Agregar campo `minStock` a Product | Modelos | [x] |
+| 8 | Agregar campo `categoryCode` a Product | Modelos | [x] |
+| 9 | Vincular selector de categoría en formulario de productos | Productos | [x] |
+| 10 | Agregar campo `observation` a Movement | Modelos | [x] |
+| 11 | Crear modelo User | Modelos | [x] |
+| 12 | Dashboard: agregar producto mayor stock | Dashboard | [x] |
+| 13 | Dashboard: agregar producto más costoso | Dashboard | [x] |
+| 14 | Dashboard: agregar último movimiento | Dashboard | [x] |
+| 15 | Categorías: evitar eliminar con productos asociados | Categorías | [x] |
+| 16 | Categorías: mostrar cantidad de productos | Categorías | [x] |
 
 ---
 

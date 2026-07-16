@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 import { CategoryService } from '../services/category.service';
+import { ProductService } from '../services/product.service';
 import { Category } from '../models/category.model';
 
 @Component({
@@ -28,7 +29,7 @@ export class CategoriesComponent {
 
   isEditing = false;
 
-  currentIndex = -1;
+  currentCode = '';
 
   showModal = false;
 
@@ -42,7 +43,10 @@ export class CategoriesComponent {
 
   previewCode = '';
 
-  constructor(private categoryService: CategoryService) {
+  constructor(
+    private categoryService: CategoryService,
+    private productService: ProductService,
+  ) {
     this.categories = this.categoryService.getCategories();
   }
 
@@ -56,13 +60,24 @@ export class CategoriesComponent {
   }
 
   // -------------------------
+  // PRODUCT COUNT
+  // -------------------------
+  getProductCount(categoryCode: string): number {
+    return this.productService.getProducts().filter((p) => p.categoryCode === categoryCode).length;
+  }
+
+  hasProducts(categoryCode: string): boolean {
+    return this.getProductCount(categoryCode) > 0;
+  }
+
+  // -------------------------
   // MODAL CREATE
   // -------------------------
   openModal(): void {
     this.showModal = true;
     this.isEditing = false;
     this.newCategory = '';
-    this.currentIndex = -1;
+    this.currentCode = '';
 
     this.previewCode = this.generateCategoryCode();
   }
@@ -74,9 +89,9 @@ export class CategoriesComponent {
   // -------------------------
   // EDIT
   // -------------------------
-  editCategory(category: Category, index: number): void {
+  editCategory(category: Category): void {
     this.newCategory = category.name;
-    this.currentIndex = index;
+    this.currentCode = category.code;
     this.isEditing = true;
     this.showModal = true;
 
@@ -95,10 +110,9 @@ export class CategoriesComponent {
 
     const categoryName = this.newCategory.trim();
 
-    // 🔴 FIX DUPLICADOS (CREAR + EDITAR)
     const nameExists = this.categories.some(
-      (c, index) =>
-        c.name.toLowerCase() === categoryName.toLowerCase() && index !== this.currentIndex,
+      (c) =>
+        c.name.toLowerCase() === categoryName.toLowerCase() && c.code !== this.currentCode,
     );
 
     if (nameExists) {
@@ -108,8 +122,8 @@ export class CategoriesComponent {
     }
 
     if (this.isEditing) {
-      this.categoryService.updateCategory(this.currentIndex, {
-        ...this.categories[this.currentIndex],
+      this.categoryService.updateCategory(this.currentCode, {
+        ...this.categories.find((c) => c.code === this.currentCode)!,
         name: categoryName,
       });
 
@@ -130,8 +144,8 @@ export class CategoriesComponent {
   // -------------------------
   // DELETE
   // -------------------------
-  openDeleteModal(index: number): void {
-    this.currentIndex = index;
+  openDeleteModal(code: string): void {
+    this.currentCode = code;
     this.showDeleteModal = true;
   }
 
@@ -140,7 +154,13 @@ export class CategoriesComponent {
   }
 
   confirmDelete(): void {
-    this.categoryService.deleteCategory(this.currentIndex);
+    if (this.hasProducts(this.currentCode)) {
+      this.showToast('No se puede eliminar una categoría con productos asociados', 'error');
+      this.closeDeleteModal();
+      return;
+    }
+
+    this.categoryService.deleteCategory(this.currentCode);
 
     this.showToast('Categoría eliminada correctamente', 'success');
 
@@ -152,7 +172,7 @@ export class CategoriesComponent {
   // -------------------------
   resetForm(): void {
     this.newCategory = '';
-    this.currentIndex = -1;
+    this.currentCode = '';
     this.isEditing = false;
     this.formErrors.name = '';
   }

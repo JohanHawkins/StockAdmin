@@ -40,6 +40,7 @@ export class MovementsComponent {
     type: '' as any,
     quantity: 0,
     date: new Date(),
+    observation: '',
   };
 
   constructor(
@@ -146,6 +147,7 @@ export class MovementsComponent {
       type: '' as any,
       quantity: 0,
       date: new Date(),
+      observation: '',
     };
 
     this.clearErrors();

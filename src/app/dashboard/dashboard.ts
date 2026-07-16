@@ -68,6 +68,25 @@ export class DashboardComponent {
   }
 
   // ==========================
+  // NUEVOS INDICADORES
+  // ==========================
+
+  get highestStockProduct(): Product | null {
+    if (this.products.length === 0) return null;
+    return this.products.reduce((max, p) => (p.stock > max.stock ? p : max));
+  }
+
+  get mostExpensiveProduct(): Product | null {
+    if (this.products.length === 0) return null;
+    return this.products.reduce((max, p) => (p.price > max.price ? p : max));
+  }
+
+  get lastMovement(): Movement | null {
+    if (this.movements.length === 0) return null;
+    return [...this.movements].sort((a, b) => b.date.getTime() - a.date.getTime())[0];
+  }
+
+  // ==========================
   // LISTADOS
   // ==========================
 
@@ -76,7 +95,7 @@ export class DashboardComponent {
   }
 
   get lowStockProducts(): Product[] {
-    return this.products.filter((product) => product.stock <= 5);
+    return this.products.filter((product) => product.stock <= product.minStock);
   }
 
   get recentMovements(): Movement[] {
@@ -87,5 +106,20 @@ export class DashboardComponent {
     const product = this.products.find((p) => p.code === productCode);
 
     return product?.name ?? productCode;
+  }
+
+  getCategoryName(code: string): string {
+    const category = this.categories.find((c) => c.code === code);
+    return category?.name ?? code;
+  }
+
+  formatDate(date: Date): string {
+    return new Date(date).toLocaleDateString('es-ES', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+    });
   }
 }

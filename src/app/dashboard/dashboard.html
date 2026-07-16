@@ -38,6 +38,26 @@
       <p>Productos Activos</p>
     </div>
   </div>
+
+  <!-- NUEVOS INDICADORES -->
+
+  <div class="cards">
+    <div class="card" *ngIf="highestStockProduct">
+      <h3>{{ highestStockProduct.name }}</h3>
+      <p>Mayor Stock: {{ highestStockProduct.stock }} unidades</p>
+    </div>
+
+    <div class="card" *ngIf="mostExpensiveProduct">
+      <h3>{{ mostExpensiveProduct.name }}</h3>
+      <p>Producto Más Costoso: ${{ mostExpensiveProduct.price }}</p>
+    </div>
+
+    <div class="card" *ngIf="lastMovement">
+      <h3>{{ lastMovement.type }}</h3>
+      <p>Último Movimiento: {{ getProductName(lastMovement.productCode) }}</p>
+      <p>{{ formatDate(lastMovement.date) }}</p>
+    </div>
+  </div>
 </div>
 
 <!-- PRODUCTOS RECIENTES -->
@@ -50,6 +70,7 @@
       <tr>
         <th>Código</th>
         <th>Nombre</th>
+        <th>Categoría</th>
         <th>Stock</th>
       </tr>
     </thead>
@@ -60,11 +81,13 @@
 
         <td>{{ product.name }}</td>
 
+        <td>{{ getCategoryName(product.categoryCode) }}</td>
+
         <td>{{ product.stock }}</td>
       </tr>
 
       <tr *ngIf="recentProducts.length === 0">
-        <td colspan="3" class="empty-message">No hay productos registrados.</td>
+        <td colspan="4" class="empty-message">No hay productos registrados.</td>
       </tr>
     </tbody>
   </table>
@@ -82,6 +105,7 @@
         <th>Producto</th>
         <th>Tipo</th>
         <th>Cantidad</th>
+        <th>Fecha</th>
       </tr>
     </thead>
 
@@ -94,10 +118,12 @@
         <td>{{ movement.type }}</td>
 
         <td>{{ movement.quantity }}</td>
+
+        <td>{{ formatDate(movement.date) }}</td>
       </tr>
 
       <tr *ngIf="recentMovements.length === 0">
-        <td colspan="4" class="empty-message">No hay movimientos registrados.</td>
+        <td colspan="5" class="empty-message">No hay movimientos registrados.</td>
       </tr>
     </tbody>
   </table>
@@ -114,6 +140,7 @@
         <th>Código</th>
         <th>Nombre</th>
         <th>Stock</th>
+        <th>Stock Mín.</th>
       </tr>
     </thead>
 
@@ -124,6 +151,8 @@
         <td>{{ product.name }}</td>
 
         <td>{{ product.stock }}</td>
+
+        <td>{{ product.minStock }}</td>
       </tr>
     </tbody>
   </table>

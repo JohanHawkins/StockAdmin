@@ -4,7 +4,9 @@ import { FormsModule } from '@angular/forms';
 import { ToastComponent } from '../shared/toast/toast';
 import { ProductService } from '../services/product.service';
 import { MovementService } from '../services/movement.service';
+import { CategoryService } from '../services/category.service';
 import { Product } from '../models/product.model';
+import { Category } from '../models/category.model';
 
 @Component({
   selector: 'app-products',
@@ -27,27 +29,36 @@ export class ProductsComponent {
   currentCode = '';
 
   products: Product[] = [];
+  categories: Category[] = [];
 
   newProduct: Product = {
     code: '',
     name: '',
+    description: '',
     price: 0,
     stock: 0,
+    minStock: 0,
+    categoryCode: '',
     status: 'Activo',
   };
 
   formErrors = {
     code: '',
     name: '',
+    description: '',
     price: '',
     stock: '',
+    minStock: '',
+    categoryCode: '',
   };
 
   constructor(
     private productService: ProductService,
     private movementService: MovementService,
+    private categoryService: CategoryService,
   ) {
     this.products = this.productService.getProducts();
+    this.categories = this.categoryService.getCategories();
   }
 
   // -------------------------
@@ -72,8 +83,11 @@ export class ProductsComponent {
     this.newProduct = {
       code: this.generateProductCode(),
       name: '',
+      description: '',
       price: 0,
       stock: 0,
+      minStock: 0,
+      categoryCode: '',
       status: 'Activo',
     };
 
@@ -115,6 +129,12 @@ export class ProductsComponent {
       return;
     }
 
+    if (!this.newProduct.categoryCode) {
+      this.formErrors.categoryCode = 'Debe seleccionar una categoría';
+      this.showToast('Debe seleccionar una categoría', 'error');
+      return;
+    }
+
     if (this.newProduct.price <= 0 || !Number.isInteger(this.newProduct.price)) {
       this.formErrors.price = 'El precio debe ser un valor mayor a 0';
       this.showToast('El precio debe ser un valor mayor a 0', 'error');
@@ -124,6 +144,12 @@ export class ProductsComponent {
     if (this.newProduct.stock < 0 || !Number.isInteger(this.newProduct.stock)) {
       this.formErrors.stock = 'El stock debe ser un valor mayor o igual a 0';
       this.showToast('El stock debe ser un valor mayor o igual a 0', 'error');
+      return;
+    }
+
+    if (this.newProduct.minStock < 0 || !Number.isInteger(this.newProduct.minStock)) {
+      this.formErrors.minStock = 'El stock mínimo debe ser un valor mayor o igual a 0';
+      this.showToast('El stock mínimo debe ser un valor mayor o igual a 0', 'error');
       return;
     }
 
@@ -206,8 +232,11 @@ export class ProductsComponent {
     this.newProduct = {
       code: '',
       name: '',
+      description: '',
       price: 0,
       stock: 0,
+      minStock: 0,
+      categoryCode: '',
       status: 'Activo',
     };
 
@@ -220,8 +249,11 @@ export class ProductsComponent {
     this.formErrors = {
       code: '',
       name: '',
+      description: '',
       price: '',
       stock: '',
+      minStock: '',
+      categoryCode: '',
     };
   }
 
@@ -235,6 +267,15 @@ export class ProductsComponent {
 
   clearStockError() {
     this.formErrors.stock = '';
+  }
+
+  clearMinStockError() {
+    this.formErrors.minStock = '';
+  }
+
+  getCategoryName(code: string): string {
+    const category = this.categories.find((c) => c.code === code);
+    return category?.name ?? code;
   }
 
   // -------------------------

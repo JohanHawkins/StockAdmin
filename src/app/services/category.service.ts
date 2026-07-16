@@ -62,15 +62,21 @@ export class CategoryService {
     this.saveToStorage();
   }
 
-  updateCategory(index: number, category: Category): void {
-    this.categories[index] = category;
+  updateCategory(code: string, category: Category): void {
+    const index = this.categories.findIndex((c) => c.code === code);
 
-    this.saveToStorage();
+    if (index !== -1) {
+      this.categories[index] = category;
+      this.saveToStorage();
+    }
   }
 
-  deleteCategory(index: number): void {
-    this.categories.splice(index, 1);
+  deleteCategory(code: string): void {
+    const index = this.categories.findIndex((c) => c.code === code);
 
-    this.saveToStorage();
+    if (index !== -1) {
+      this.categories.splice(index, 1);
+      this.saveToStorage();
+    }
   }
 }

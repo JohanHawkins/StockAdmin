@@ -4,4 +4,5 @@ export interface Movement {
   type: 'ENTRADA' | 'SALIDA';
   quantity: number;
   date: Date;
+  observation: string;
 }

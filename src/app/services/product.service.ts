@@ -32,15 +32,21 @@ export class ProductService {
         {
           code: 'P001',
           name: 'Mouse Gamer',
+          description: 'Mouse gamer con RGB y 12000 DPI',
           price: 80,
           stock: 10,
+          minStock: 3,
+          categoryCode: 'C001',
           status: 'Activo',
         },
         {
           code: 'P002',
           name: 'Teclado Mecánico',
+          description: 'Teclado mecánico switches Blue',
           price: 150,
           stock: 5,
+          minStock: 2,
+          categoryCode: 'C001',
           status: 'Activo',
         },
       ];

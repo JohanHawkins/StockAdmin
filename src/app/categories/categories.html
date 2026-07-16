@@ -17,24 +17,26 @@
       <tr>
         <th>Código</th>
         <th>Nombre</th>
+        <th>Productos</th>
         <th>Acciones</th>
       </tr>
     </thead>
 
     <tbody>
-      <tr *ngFor="let category of filteredCategories; let i = index">
+      <tr *ngFor="let category of filteredCategories">
         <td>{{ category.code }}</td>
         <td>{{ category.name }}</td>
+        <td>{{ getProductCount(category.code) }}</td>
 
         <td class="actions">
-          <button class="edit-btn" (click)="editCategory(category, i)">Editar</button>
+          <button class="edit-btn" (click)="editCategory(category)">Editar</button>
 
-          <button class="delete-btn" (click)="openDeleteModal(i)">Eliminar</button>
+          <button class="delete-btn" (click)="openDeleteModal(category.code)">Eliminar</button>
         </td>
       </tr>
 
       <tr *ngIf="filteredCategories.length === 0">
-        <td colspan="3" class="empty-message">Categoría no encontrada</td>
+        <td colspan="4" class="empty-message">Categoría no encontrada</td>
       </tr>
     </tbody>
   </table>
@@ -85,10 +87,14 @@
 
     <p>¿Deseas eliminar esta categoría?</p>
 
+    <p class="warning-text" *ngIf="hasProducts(currentCode)">
+      Esta categoría tiene productos asociados y no se puede eliminar.
+    </p>
+
     <div class="modal-actions">
       <button class="cancel-btn" (click)="closeDeleteModal()">Cancelar</button>
 
-      <button class="delete-btn" (click)="confirmDelete()">Eliminar</button>
+      <button class="delete-btn" (click)="confirmDelete()" [disabled]="hasProducts(currentCode)">Eliminar</button>
     </div>
   </div>
 </div>

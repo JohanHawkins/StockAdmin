@@ -12,6 +12,7 @@
         <th>Producto</th>
         <th>Tipo</th>
         <th>Cantidad</th>
+        <th>Observación</th>
         <th>Fecha</th>
       </tr>
     </thead>
@@ -26,11 +27,13 @@
 
         <td>{{ movement.quantity }}</td>
 
+        <td>{{ movement.observation || '-' }}</td>
+
         <td>{{ movement.date | date: 'dd/MM/yyyy HH:mm' }}</td>
       </tr>
 
       <tr *ngIf="movements.length === 0">
-        <td colspan="5" class="empty-message">No hay movimientos registrados</td>
+        <td colspan="6" class="empty-message">No hay movimientos registrados</td>
       </tr>
     </tbody>
   </table>
@@ -101,6 +104,17 @@
       <div class="error-message" *ngIf="formErrors.quantity">
         {{ formErrors.quantity }}
       </div>
+    </div>
+
+    <!-- OBSERVACIÓN -->
+    <div class="form-group">
+      <label>Observación (opcional)</label>
+
+      <textarea
+        [(ngModel)]="newMovement.observation"
+        rows="3"
+        placeholder="Ingrese una observación..."
+      ></textarea>
     </div>
 
     <div class="modal-actions">
