@@ -198,34 +198,37 @@
 
 /* Status Toggle Button */
 .status-btn {
-  padding: 6px 14px;
   border: none;
-  border-radius: var(--radius-md);
-  font-size: 0.8125rem;
-  font-weight: 600;
+  padding: 8px 14px;
+  border-radius: var(--radius-sm);
   cursor: pointer;
+  font-weight: 500;
+  color: var(--text-on-primary);
   transition: all var(--transition-fast);
-  color: white;
 }
 
 .status-btn.deactivate {
-  background: linear-gradient(135deg, #f59e0b, #d97706);
+  background-color: var(--accent-warning);
 }
 
 .status-btn.deactivate:hover {
-  background: linear-gradient(135deg, #d97706, #b45309);
+  background-color: var(--accent-warning-hover);
   transform: translateY(-1px);
-  box-shadow: var(--shadow-md);
+  box-shadow: var(--shadow-sm);
 }
 
 .status-btn.activate {
-  background: linear-gradient(135deg, #10b981, #059669);
+  background-color: var(--accent-success);
 }
 
 .status-btn.activate:hover {
-  background: linear-gradient(135deg, #059669, #047857);
+  background-color: var(--accent-success-hover);
   transform: translateY(-1px);
-  box-shadow: var(--shadow-md);
+  box-shadow: var(--shadow-sm);
+}
+
+.status-btn:active {
+  transform: translateY(0);
 }
 
 /* Responsive */
