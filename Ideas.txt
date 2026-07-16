@@ -59,12 +59,12 @@ Leyenda de estados:
 
 ## 1. Login
 
-- [ ] Formulario de login (email + contraseña)
-- [ ] Servicio de autenticación
-- [ ] Validación de credenciales
-- [ ] Guard de rutas protegidas
-- [ ] Botón de cerrar sesión
-- [ ] Redirección al dashboard tras login
+- [x] Formulario de login (email + contraseña)
+- [x] Servicio de autenticación
+- [x] Validación de credenciales
+- [x] Guard de rutas protegidas
+- [x] Botón de cerrar sesión
+- [x] Redirección al dashboard tras login
 
 ---
 
@@ -79,10 +79,9 @@ Leyenda de estados:
 - [x] Tabla de productos recientes
 - [x] Tabla de productos con stock bajo
 - [x] Tabla de movimientos recientes
-- [ ] Producto con mayor stock
-- [ ] Producto más costoso
-- [ ] Último movimiento registrado
-- [ ] Indicadores visuales (colores, íconos)
+- [x] Producto con mayor stock
+- [x] Producto más costoso
+- [x] Último movimiento registrado
 
 ---
 
@@ -95,31 +94,33 @@ Leyenda de estados:
 - [x] Listar productos
 - [x] Código automático (P001, P002...)
 - [x] Búsqueda por nombre
+- [x] Cambiar estado (Activar/Desactivar)
 
 ### Campos
 - [x] Código
 - [x] Nombre
-- [ ] Descripción
+- [x] Descripción
 - [x] Precio
 - [x] Stock
-- [ ] Stock mínimo
-- [ ] Categoría (relación)
+- [x] Stock mínimo
+- [x] Categoría (relación)
 - [x] Estado (Activo/Inactivo)
 
 ### Validaciones
 - [x] Campos obligatorios
 - [x] Precio mayor a 0
 - [x] Stock mayor o igual a 0
+- [x] Stock mínimo mayor o igual a 0
 - [x] Nombre único (no duplicados)
 
 ### Extras
 - [x] Toasts de notificación
 - [x] Modal de eliminar con info del producto
+- [x] Modal de cambiar estado
+- [x] Badge de estado con colores
 - [ ] Exportar a CSV
 - [ ] Importar desde CSV
-- [ ] Ordenamiento de columnas
 - [ ] Filtros avanzados
-- [ ] Paginación
 
 ---
 
@@ -139,8 +140,8 @@ Leyenda de estados:
 
 ### Extras
 - [x] Toasts de notificación
-- [ ] Evitar eliminar categoría con productos asociados
-- [ ] Mostrar cantidad de productos por categoría
+- [x] Evitar eliminar categoría con productos asociados
+- [x] Mostrar cantidad de productos por categoría
 
 ---
 
@@ -161,13 +162,13 @@ Leyenda de estados:
 - [x] Tipo de movimiento (entrada/salida)
 - [x] Cantidad
 - [x] Fecha
-- [ ] Observación
+- [x] Observación
 
 ### Extras
 - [x] Toasts de notificación
-- [ ] Filtros por fecha
-- [ ] Filtros por tipo
-- [ ] Filtro por producto
+- [x] Filtros por fecha
+- [x] Filtros por tipo
+- [x] Filtro por producto
 - [ ] Exportación del historial
 
 ---
@@ -190,6 +191,9 @@ Leyenda de estados:
 - [x] Cards mejoradas con gradientes
 - [x] Tablas modernizadas
 - [x] Login con efecto glassmorphism
+- [x] Loading states
+- [x] Manejo de errores global
+- [x] Página 404
 
 ---
 
@@ -198,12 +202,12 @@ Leyenda de estados:
 ### Product
 - [x] code
 - [x] name
+- [x] description
 - [x] price
 - [x] stock
+- [x] minStock
+- [x] categoryCode
 - [x] status
-- [ ] description
-- [ ] minStock
-- [ ] categoryCode
 
 ### Category
 - [x] code
@@ -215,13 +219,13 @@ Leyenda de estados:
 - [x] type
 - [x] quantity
 - [x] date
-- [ ] observation
+- [x] observation
 
 ### User
-- [ ] id
-- [ ] nombre
-- [ ] email
-- [ ] password
+- [x] id
+- [x] nombre
+- [x] email
+- [x] password
 
 ---
 
@@ -231,80 +235,6 @@ Leyenda de estados:
 - [ ] Deploy (GitHub Pages / Vercel)
 - [ ] Pruebas unitarias
 - [ ] Pruebas de integración
-- [ ] Manejo de errores global
-- [ ] Loading states
-- [ ] 404 page
-
----
-
-# Entidades Principales
-
-## users
-
-Guarda los usuarios del sistema.
-
-| Campo | Tipo |
-|---|---|
-| id | int |
-| nombre | string |
-| email | string |
-| password | string |
-
----
-
-## products
-
-Guarda los productos.
-
-| Campo | Tipo |
-|---|---|
-| id | int |
-| código | string |
-| nombre | string |
-| descripción | string |
-| precio | decimal |
-| stock | int |
-| stock_mínimo | int |
-| categoría | relation |
-| estado | string |
-
----
-
-## categories
-
-Guarda las categorías.
-
-| Campo | Tipo |
-|---|---|
-| id | int |
-| código | string |
-| nombre | string |
-
----
-
-## movements
-
-Guarda entradas y salidas de inventario.
-
-| Campo | Tipo |
-|---|---|
-| id | int |
-| código | string |
-| producto | relation |
-| tipo | entrada/salida |
-| cantidad | int |
-| fecha | datetime |
-| observación | string |
-
----
-
-# Flujo Básico del Sistema
-
-1. Usuario inicia sesión
-2. Ingresa al dashboard
-3. Administra productos
-4. Registra entradas o salidas
-5. El sistema actualiza el stock automáticamente
 
 ---
 
@@ -312,118 +242,55 @@ Guarda entradas y salidas de inventario.
 
 | Categoría | Completado | Total | Porcentaje |
 |-----------|------------|-------|------------|
-| Login | 0 | 6 | 0% |
-| Dashboard | 9 | 13 | 69% |
-| Productos | 10 | 18 | 56% |
-| Categorías | 6 | 9 | 67% |
-| Movimientos | 8 | 13 | 62% |
-| UI/UX | 12 | 12 | 100% |
-| Modelos | 7 | 12 | 58% |
-| Infraestructura | 0 | 7 | 0% |
-| **TOTAL** | **52** | **86** | **60%** |
+| Login | 6 | 6 | 100% |
+| Dashboard | 12 | 12 | 100% |
+| Productos | 17 | 20 | 85% |
+| Categorías | 8 | 8 | 100% |
+| Movimientos | 12 | 13 | 92% |
+| UI/UX | 18 | 18 | 100% |
+| Modelos | 12 | 12 | 100% |
+| Infraestructura | 0 | 4 | 0% |
+| **TOTAL** | **85** | **93** | **91%** |
 
 ---
 
-# Plan de Desarrollo por Prioridades
+# Pendientes
 
-Leyenda de prioridades:
-- P0 - Crítico (bugs, funcionalidad rota)
-- P1 - Alto (funcionalidades core necesarias)
-- P2 - Medio (mejoras importantes)
-- P3 - Bajo (extras y polish)
+Funcionalidades restantes para completar el proyecto:
 
----
-
-## P0 - Crítico
-
-Corregir problemas que rompen la funcionalidad básica.
-
-| # | Tarea | Módulo | Estado |
-|---|-------|--------|--------|
-| 1 | Completar login (formulario + servicio + guard) | Login | [x] |
-| 2 | Agregar ruta `/login` y proteger rutas | Routes | [x] |
-| 3 | Eliminar enlace roto `/users` del sidebar | Layout | [x] |
-| 4 | Corregir bug de índice en productos (usar code) | Productos | [x] |
-| 5 | Corregir mensaje de validación de stock | Productos | [x] |
+| # | Tarea | Módulo | Prioridad |
+|---|-------|--------|-----------|
+| 1 | Exportar productos a CSV | Productos | P3 |
+| 2 | Importar productos desde CSV | Productos | P3 |
+| 3 | Filtros avanzados de productos | Productos | P3 |
+| 4 | Exportar historial de movimientos | Movimientos | P3 |
+| 5 | Pruebas unitarias | Infraestructura | P3 |
+| 6 | Pruebas de integración | Infraestructura | P3 |
+| 7 | README profesional con imágenes | Infraestructura | P3 |
+| 8 | Deploy (GitHub Pages / Vercel) | Infraestructura | P3 |
 
 ---
 
-## P1 - Alto
+# Últimos Cambios
 
-Funcionalidades core que el sistema necesita para ser completo.
+### Toggle de Estado de Productos (sin commit)
+- Botón "Activar/Desactivar" en tabla de productos
+- Modal de confirmación para cambiar estado
+- Badge de estado con colores (verde=Activo, rojo=Inactivo)
+- Método `toggleStatus()` en ProductService
+- Estilos CSS para botones y badge de estado
 
-| # | Tarea | Módulo | Estado |
-|---|-------|--------|--------|
-| 6 | Agregar campo `description` a Product | Modelos | [x] |
-| 7 | Agregar campo `minStock` a Product | Modelos | [x] |
-| 8 | Agregar campo `categoryCode` a Product | Modelos | [x] |
-| 9 | Vincular selector de categoría en formulario de productos | Productos | [x] |
-| 10 | Agregar campo `observation` a Movement | Modelos | [x] |
-| 11 | Crear modelo User | Modelos | [x] |
-| 12 | Dashboard: agregar producto mayor stock | Dashboard | [x] |
-| 13 | Dashboard: agregar producto más costoso | Dashboard | [x] |
-| 14 | Dashboard: agregar último movimiento | Dashboard | [x] |
-| 15 | Categorías: evitar eliminar con productos asociados | Categorías | [x] |
-| 16 | Categorías: mostrar cantidad de productos | Categorías | [x] |
+### Configuración del Servidor
+- Habilitado `trustProxyHeaders` para tunnels
+- Agregado host permitido para desarrollo remoto
 
 ---
 
-## P2 - Medio
+# Flujo Básico del Sistema
 
-Mejoras que elevan la calidad del proyecto.
-
-| # | Tarea | Módulo | Estado |
-|---|-------|--------|--------|
-| 17 | Responsive design (móvil) | UI/UX | [x] |
-| 18 | Sidebar colapsable | UI/UX | [x] |
-| 19 | Botón de logout funcional | Layout | [x] |
-| 20 | Tooltips en botones de acción | UI/UX | [x] |
-| 21 | Indicador de ruta activa mejorado | UI/UX | [x] |
-| 22 | Paginación en tablas | Productos | [x] |
-| 23 | Ordenamiento de columnas | Productos | [x] |
-| 24 | Movimientos: filtros por fecha/tipo/producto | Movimientos | [x] |
-| 25 | Toast con auto-hide integrado | Shared | [x] |
-| 26 | Loading states | Global | [x] |
-| 27 | Manejo de errores global | UI/UX | [x] |
-| 28 | Página 404 | UI/UX | [x] |
-| 29 | Variables CSS globales para temas | UI/UX | [x] |
-| 30 | Modo oscuro con toggle en navbar | UI/UX | [x] |
-| 31 | Persistencia de tema en localStorage | UI/UX | [x] |
-| 32 | Animaciones y transiciones mejoradas | UI/UX | [x] |
-| 33 | Iconos en sidebar y dashboard | UI/UX | [x] |
-| 34 | Cards del dashboard con gradientes | UI/UX | [x] |
-| 35 | Tablas modernizadas con hover | UI/UX | [x] |
-| 36 | Login con efecto glassmorphism | UI/UX | [x] |
-| 37 | Scrollbar personalizada | UI/UX | [x] |
-| 38 | Selección de texto personalizada | UI/UX | [x] |
-
----
-
-## P3 - Bajo
-
-Extras para portafolio y pulido final.
-
-| # | Tarea | Módulo | Estado |
-|---|-------|--------|--------|
-| 39 | Exportar productos a CSV | Productos | [ ] |
-| 40 | Importar productos desde CSV | Productos | [ ] |
-| 41 | Filtros avanzados de productos | Productos | [ ] |
-| 42 | Exportar historial de movimientos | Movimientos | [ ] |
-| 43 | Pruebas unitarias | Infraestructura | [ ] |
-| 44 | Pruebas de integración | Infraestructura | [ ] |
-| 45 | README profesional con imágenes | Infraestructura | [ ] |
-| 46 | Deploy (GitHub Pages / Vercel) | Infraestructura | [ ] |
-
----
-
-## Orden de Ejecución Sugerido
-
-```
-Fase 1 (P0): Tareas 1-5
-    ↓
-Fase 2 (P1): Tareas 6-16
-    ↓
-Fase 3 (P2): Tareas 17-38
-    ↓
-Fase 4 (P3): Tareas 39-46
-```
+1. Usuario inicia sesión
+2. Ingresa al dashboard
+3. Administra productos (crear, editar, activar/desactivar, eliminar)
+4. Registra entradas o salidas
+5. El sistema actualiza el stock automáticamente
+6. Visualiza estadísticas en el dashboard

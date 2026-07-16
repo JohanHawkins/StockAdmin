@@ -24,6 +24,7 @@ export class ProductsComponent {
 
   showModal = false;
   showDeleteModal = false;
+  showStatusModal = false;
 
   isEditing = false;
   currentCode = '';
@@ -177,6 +178,25 @@ export class ProductsComponent {
 
   closeDeleteModal() {
     this.showDeleteModal = false;
+  }
+
+  openStatusModal(code: string) {
+    this.currentCode = code;
+    this.showStatusModal = true;
+  }
+
+  closeStatusModal() {
+    this.showStatusModal = false;
+  }
+
+  confirmToggleStatus() {
+    const product = this.products.find((p) => p.code === this.currentCode);
+    if (!product) return;
+
+    const newStatus = product.status === 'Activo' ? 'Inactivo' : 'Activo';
+    this.productService.toggleStatus(this.currentCode);
+    this.showToast(`Producto cambiado a ${newStatus}`, 'success');
+    this.closeStatusModal();
   }
 
   confirmDelete() {

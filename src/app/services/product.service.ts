@@ -79,4 +79,12 @@ export class ProductService {
       this.saveToStorage();
     }
   }
+
+  toggleStatus(code: string): void {
+    const product = this.products.find((p) => p.code === code);
+    if (product) {
+      product.status = product.status === 'Activo' ? 'Inactivo' : 'Activo';
+      this.saveToStorage();
+    }
+  }
 }

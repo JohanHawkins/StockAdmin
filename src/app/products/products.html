@@ -40,10 +40,18 @@
 
         <td>{{ product.minStock }}</td>
 
-        <td>{{ product.status }}</td>
+        <td>
+          <span class="status-badge" [class.active]="product.status === 'Activo'" [class.inactive]="product.status === 'Inactivo'">
+            {{ product.status }}
+          </span>
+        </td>
 
         <td class="actions">
           <button class="edit-btn" (click)="editProduct(product)" title="Editar producto">Editar</button>
+
+          <button class="status-btn" [class.deactivate]="product.status === 'Activo'" [class.activate]="product.status === 'Inactivo'" (click)="openStatusModal(product.code)" [title]="product.status === 'Activo' ? 'Desactivar producto' : 'Activar producto'">
+            {{ product.status === 'Activo' ? 'Desactivar' : 'Activar' }}
+          </button>
 
           <button class="delete-btn" (click)="openDeleteModal(product.code)" title="Eliminar producto">Eliminar</button>
         </td>
@@ -218,6 +226,25 @@
       <button class="cancel-btn" (click)="closeDeleteModal()">Cancelar</button>
 
       <button class="delete-btn" (click)="confirmDelete()">Eliminar</button>
+    </div>
+  </div>
+</div>
+
+<!-- STATUS MODAL -->
+
+<div class="modal-backdrop" *ngIf="showStatusModal">
+  <div class="modal status-modal">
+    <h2>Cambiar Estado</h2>
+
+    <p *ngIf="selectedProduct">
+      ¿Desea cambiar el estado de <strong>{{ selectedProduct.name }}</strong> a
+      <strong>{{ selectedProduct.status === 'Activo' ? 'Inactivo' : 'Activo' }}</strong>?
+    </p>
+
+    <div class="modal-actions">
+      <button class="cancel-btn" (click)="closeStatusModal()">Cancelar</button>
+
+      <button class="save-btn" (click)="confirmToggleStatus()">Confirmar</button>
     </div>
   </div>
 </div>
