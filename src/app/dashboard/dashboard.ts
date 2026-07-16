@@ -142,6 +142,13 @@ export class DashboardComponent implements OnInit {
     });
   }
 
+  formatCurrency(value: number): string {
+    return value.toLocaleString('es-ES', {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    });
+  }
+
   trackByProductCode(index: number, product: Product): string {
     return product.code;
   }

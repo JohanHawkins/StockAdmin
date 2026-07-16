@@ -40,7 +40,7 @@
       <div class="card-header">
         <div class="card-icon">💰</div>
       </div>
-      <h2>${{ inventoryValue }}</h2>
+      <h2>${{ formatCurrency(inventoryValue) }}</h2>
       <p>Valor Inventario</p>
     </div>
 
@@ -67,7 +67,7 @@
         <div class="card-icon">💎</div>
       </div>
       <h3>{{ mostExpensiveProduct.name }}</h3>
-      <p>Producto Más Costoso: ${{ mostExpensiveProduct.price }}</p>
+      <p>Producto Más Costoso: ${{ formatCurrency(mostExpensiveProduct.price) }}</p>
     </div>
 
     <div class="card movements-card" *ngIf="lastMovement">

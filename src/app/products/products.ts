@@ -339,4 +339,11 @@ export class ProductsComponent {
     if (!this.currentCode) return null;
     return this.products.find((p) => p.code === this.currentCode) ?? null;
   }
+
+  formatCurrency(value: number): string {
+    return value.toLocaleString('es-ES', {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    });
+  }
 }
