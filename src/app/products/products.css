@@ -53,6 +53,16 @@ td {
   text-align: left;
 }
 
+.sortable {
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.2s;
+}
+
+.sortable:hover {
+  background-color: #334155;
+}
+
 tbody tr {
   border-bottom: 1px solid #eee;
 }

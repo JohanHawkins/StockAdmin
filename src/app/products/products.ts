@@ -35,6 +35,10 @@ export class ProductsComponent {
   currentPage = 1;
   itemsPerPage = 5;
 
+  // Ordenamiento
+  sortColumn: keyof Product = 'code';
+  sortDirection: 'asc' | 'desc' = 'asc';
+
   newProduct: Product = {
     code: '',
     name: '',
@@ -300,12 +304,43 @@ export class ProductsComponent {
   }
 
   // -------------------------
-  // FILTER
+  // FILTER + SORT
   // -------------------------
+  sortBy(column: keyof Product): void {
+    if (this.sortColumn === column) {
+      this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
+    } else {
+      this.sortColumn = column;
+      this.sortDirection = 'asc';
+    }
+  }
+
+  getSortIcon(column: keyof Product): string {
+    if (this.sortColumn !== column) return '';
+    return this.sortDirection === 'asc' ? '↑' : '↓';
+  }
+
   get filteredProducts(): Product[] {
     const filtered = this.products.filter((p) =>
       p.name.toLowerCase().includes(this.searchTerm.toLowerCase()),
     );
+
+    filtered.sort((a, b) => {
+      const aVal = a[this.sortColumn];
+      const bVal = b[this.sortColumn];
+
+      if (typeof aVal === 'string' && typeof bVal === 'string') {
+        return this.sortDirection === 'asc'
+          ? aVal.localeCompare(bVal)
+          : bVal.localeCompare(aVal);
+      }
+
+      if (typeof aVal === 'number' && typeof bVal === 'number') {
+        return this.sortDirection === 'asc' ? aVal - bVal : bVal - aVal;
+      }
+
+      return 0;
+    });
 
     const startIndex = (this.currentPage - 1) * this.itemsPerPage;
     return filtered.slice(startIndex, startIndex + this.itemsPerPage);

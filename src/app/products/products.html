@@ -15,12 +15,12 @@
   <table>
     <thead>
       <tr>
-        <th>Código</th>
-        <th>Nombre</th>
-        <th>Categoría</th>
-        <th>Precio</th>
-        <th>Stock</th>
-        <th>Stock Mín.</th>
+        <th class="sortable" (click)="sortBy('code')">Código {{ getSortIcon('code') }}</th>
+        <th class="sortable" (click)="sortBy('name')">Nombre {{ getSortIcon('name') }}</th>
+        <th class="sortable" (click)="sortBy('categoryCode')">Categoría {{ getSortIcon('categoryCode') }}</th>
+        <th class="sortable" (click)="sortBy('price')">Precio {{ getSortIcon('price') }}</th>
+        <th class="sortable" (click)="sortBy('stock')">Stock {{ getSortIcon('stock') }}</th>
+        <th class="sortable" (click)="sortBy('minStock')">Stock Mín. {{ getSortIcon('minStock') }}</th>
         <th>Estado</th>
         <th>Acciones</th>
       </tr>

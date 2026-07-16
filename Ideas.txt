@@ -372,11 +372,11 @@ Mejoras que elevan la calidad del proyecto.
 | 20 | Tooltips en botones de acción | UI/UX | [x] |
 | 21 | Indicador de ruta activa mejorado | UI/UX | [x] |
 | 22 | Paginación en tablas | Productos | [x] |
-| 23 | Ordenamiento de columnas | Productos | [ ] |
-| 24 | Movimientos: filtros por fecha/tipo/producto | Movimientos | [ ] |
+| 23 | Ordenamiento de columnas | Productos | [x] |
+| 24 | Movimientos: filtros por fecha/tipo/producto | Movimientos | [x] |
 | 25 | Toast con auto-hide integrado | Shared | [x] |
-| 26 | Loading states | Global | [ ] |
-| 27 | Manejo de errores global | Global | [ ] |
+| 26 | Loading states | Global | [x] |
+| 27 | Manejo de errores global | Global | [x] |
 | 28 | Página 404 | Routes | [x] |
 
 ---

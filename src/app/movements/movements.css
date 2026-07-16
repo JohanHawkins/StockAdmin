@@ -187,3 +187,55 @@ tbody tr:hover {
 
   font-size: 14px;
 }
+
+/* FILTROS */
+
+.filters {
+  display: flex;
+  gap: 16px;
+  align-items: flex-end;
+  flex-wrap: wrap;
+
+  margin-bottom: 20px;
+  padding: 20px;
+
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.filter-group label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #666;
+}
+
+.filter-group select,
+.filter-group input {
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+  min-width: 150px;
+}
+
+.clear-filters-btn {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  background-color: #64748b;
+  color: white;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s;
+}
+
+.clear-filters-btn:hover {
+  background-color: #475569;
+}

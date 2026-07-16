@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { ProductService } from '../services/product.service';
@@ -8,31 +8,34 @@ import { MovementService } from '../services/movement.service';
 import { Product } from '../models/product.model';
 import { Category } from '../models/category.model';
 import { Movement } from '../models/movement.model';
+import { SpinnerComponent } from '../shared/spinner/spinner';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, SpinnerComponent],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css',
 })
-export class DashboardComponent {
+export class DashboardComponent implements OnInit {
   products: Product[] = [];
-
   categories: Category[] = [];
-
   movements: Movement[] = [];
+  isLoading = true;
 
   constructor(
     private productService: ProductService,
     private categoryService: CategoryService,
     private movementService: MovementService,
-  ) {
-    this.products = this.productService.getProducts();
+  ) {}
 
-    this.categories = this.categoryService.getCategories();
-
-    this.movements = this.movementService.getMovements();
+  ngOnInit(): void {
+    setTimeout(() => {
+      this.products = this.productService.getProducts();
+      this.categories = this.categoryService.getCategories();
+      this.movements = this.movementService.getMovements();
+      this.isLoading = false;
+    }, 500);
   }
 
   // ==========================

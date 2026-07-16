@@ -34,6 +34,12 @@ export class MovementsComponent {
 
   products: Product[] = [];
 
+  // Filtros
+  filterType = '';
+  filterProductCode = '';
+  filterDateFrom = '';
+  filterDateTo = '';
+
   newMovement: Movement = {
     id: '',
     productCode: '',
@@ -183,5 +189,38 @@ export class MovementsComponent {
       type: '',
       quantity: '',
     };
+  }
+
+  // -------------------------
+  // FILTROS
+  // -------------------------
+  get filteredMovements(): Movement[] {
+    return this.movements.filter((m) => {
+      if (this.filterType && m.type !== this.filterType) return false;
+
+      if (this.filterProductCode && m.productCode !== this.filterProductCode) return false;
+
+      const movementDate = new Date(m.date);
+
+      if (this.filterDateFrom) {
+        const from = new Date(this.filterDateFrom);
+        if (movementDate < from) return false;
+      }
+
+      if (this.filterDateTo) {
+        const to = new Date(this.filterDateTo);
+        to.setHours(23, 59, 59, 999);
+        if (movementDate > to) return false;
+      }
+
+      return true;
+    });
+  }
+
+  clearFilters(): void {
+    this.filterType = '';
+    this.filterProductCode = '';
+    this.filterDateFrom = '';
+    this.filterDateTo = '';
   }
 }

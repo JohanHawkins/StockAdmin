@@ -5,6 +5,40 @@
     <button (click)="openModal()">+ Nuevo Movimiento</button>
   </div>
 
+  <!-- FILTROS -->
+  <div class="filters">
+    <div class="filter-group">
+      <label>Tipo</label>
+      <select [(ngModel)]="filterType">
+        <option value="">Todos</option>
+        <option value="ENTRADA">Entrada</option>
+        <option value="SALIDA">Salida</option>
+      </select>
+    </div>
+
+    <div class="filter-group">
+      <label>Producto</label>
+      <select [(ngModel)]="filterProductCode">
+        <option value="">Todos</option>
+        <option *ngFor="let product of products" [value]="product.code">
+          {{ product.name }}
+        </option>
+      </select>
+    </div>
+
+    <div class="filter-group">
+      <label>Desde</label>
+      <input type="date" [(ngModel)]="filterDateFrom" />
+    </div>
+
+    <div class="filter-group">
+      <label>Hasta</label>
+      <input type="date" [(ngModel)]="filterDateTo" />
+    </div>
+
+    <button class="clear-filters-btn" (click)="clearFilters()">Limpiar Filtros</button>
+  </div>
+
   <table>
     <thead>
       <tr>
@@ -18,7 +52,7 @@
     </thead>
 
     <tbody>
-      <tr *ngFor="let movement of movements">
+      <tr *ngFor="let movement of filteredMovements">
         <td>{{ movement.id }}</td>
 
         <td>{{ getProductName(movement.productCode) }}</td>
@@ -32,7 +66,7 @@
         <td>{{ movement.date | date: 'dd/MM/yyyy HH:mm' }}</td>
       </tr>
 
-      <tr *ngIf="movements.length === 0">
+      <tr *ngIf="filteredMovements.length === 0">
         <td colspan="6" class="empty-message">No hay movimientos registrados</td>
       </tr>
     </tbody>
