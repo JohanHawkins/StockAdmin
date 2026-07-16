@@ -95,7 +95,7 @@
     </thead>
 
     <tbody>
-      <tr *ngFor="let product of recentProducts">
+      <tr *ngFor="let product of recentProducts; trackBy: trackByProductCode">
         <td>{{ product.code }}</td>
         <td>{{ product.name }}</td>
         <td>{{ getCategoryName(product.categoryCode) }}</td>
@@ -124,7 +124,7 @@
     </thead>
 
     <tbody>
-      <tr *ngFor="let movement of recentMovements">
+      <tr *ngFor="let movement of recentMovements; trackBy: trackByMovementId">
         <td>{{ movement.id }}</td>
         <td>{{ getProductName(movement.productCode) }}</td>
         <td>{{ movement.type }}</td>
@@ -153,7 +153,7 @@
     </thead>
 
     <tbody>
-      <tr *ngFor="let product of lowStockProducts">
+      <tr *ngFor="let product of lowStockProducts; trackBy: trackByProductCode">
         <td>{{ product.code }}</td>
         <td>{{ product.name }}</td>
         <td>{{ product.stock }}</td>

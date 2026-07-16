@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ProductService } from '../services/product.service';
 import { CategoryService } from '../services/category.service';
@@ -14,6 +14,7 @@ import { SpinnerComponent } from '../shared/spinner/spinner';
   imports: [CommonModule, SpinnerComponent],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DashboardComponent implements OnInit {
   products: Product[] = [];
@@ -21,80 +22,114 @@ export class DashboardComponent implements OnInit {
   movements: Movement[] = [];
   isLoading = true;
 
+  totalProducts = 0;
+  totalCategories = 0;
+  totalMovements = 0;
+  totalStock = 0;
+  inventoryValue = 0;
+  activeProducts = 0;
+  highestStockProduct: Product | null = null;
+  mostExpensiveProduct: Product | null = null;
+  lastMovement: Movement | null = null;
+  recentProducts: Product[] = [];
+  lowStockProducts: Product[] = [];
+  recentMovements: Movement[] = [];
+
+  private productsMap = new Map<string, string>();
+  private categoriesMap = new Map<string, string>();
+
   constructor(
     private productService: ProductService,
     private categoryService: CategoryService,
     private movementService: MovementService,
+    private cdr: ChangeDetectorRef,
   ) {}
 
   ngOnInit(): void {
-    setTimeout(() => {
-      this.products = this.productService.getProducts();
-      this.categories = this.categoryService.getCategories();
-      this.movements = this.movementService.getMovements();
-      this.isLoading = false;
-    }, 500);
+    this.loadData();
   }
 
-  get totalProducts(): number {
-    return this.products.length;
+  loadData(): void {
+    this.products = this.productService.getProducts();
+    this.categories = this.categoryService.getCategories();
+    this.movements = this.movementService.getMovements();
+
+    this.buildMaps();
+    this.calculateStats();
+
+    this.isLoading = false;
+    this.cdr.markForCheck();
   }
 
-  get totalCategories(): number {
-    return this.categories.length;
+  private buildMaps(): void {
+    this.productsMap.clear();
+    this.categoriesMap.clear();
+
+    for (const product of this.products) {
+      this.productsMap.set(product.code, product.name);
+    }
+
+    for (const category of this.categories) {
+      this.categoriesMap.set(category.code, category.name);
+    }
   }
 
-  get totalMovements(): number {
-    return this.movements.length;
-  }
+  private calculateStats(): void {
+    this.totalProducts = this.products.length;
+    this.totalCategories = this.categories.length;
+    this.totalMovements = this.movements.length;
 
-  get totalStock(): number {
-    return this.products.reduce((total, product) => total + product.stock, 0);
-  }
+    this.totalStock = 0;
+    this.inventoryValue = 0;
+    this.activeProducts = 0;
 
-  get inventoryValue(): number {
-    return this.products.reduce((total, product) => total + product.price * product.stock, 0);
-  }
+    let maxStockProduct: Product | null = null;
+    let maxPriceProduct: Product | null = null;
 
-  get activeProducts(): number {
-    return this.products.filter((product) => product.status === 'Activo').length;
-  }
+    for (const product of this.products) {
+      this.totalStock += product.stock;
+      this.inventoryValue += product.price * product.stock;
 
-  get highestStockProduct(): Product | null {
-    if (this.products.length === 0) return null;
-    return this.products.reduce((max, p) => (p.stock > max.stock ? p : max));
-  }
+      if (product.status === 'Activo') {
+        this.activeProducts++;
+      }
 
-  get mostExpensiveProduct(): Product | null {
-    if (this.products.length === 0) return null;
-    return this.products.reduce((max, p) => (p.price > max.price ? p : max));
-  }
+      if (!maxStockProduct || product.stock > maxStockProduct.stock) {
+        maxStockProduct = product;
+      }
 
-  get lastMovement(): Movement | null {
-    if (this.movements.length === 0) return null;
-    return [...this.movements].sort((a, b) => b.date.getTime() - a.date.getTime())[0];
-  }
+      if (!maxPriceProduct || product.price > maxPriceProduct.price) {
+        maxPriceProduct = product;
+      }
+    }
 
-  get recentProducts(): Product[] {
-    return [...this.products].slice(-5).reverse();
-  }
+    this.highestStockProduct = maxStockProduct;
+    this.mostExpensiveProduct = maxPriceProduct;
 
-  get lowStockProducts(): Product[] {
-    return this.products.filter((product) => product.stock <= product.minStock);
-  }
+    if (this.movements.length > 0) {
+      this.lastMovement = [...this.movements].sort(
+        (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
+      )[0];
+    } else {
+      this.lastMovement = null;
+    }
 
-  get recentMovements(): Movement[] {
-    return [...this.movements].sort((a, b) => b.date.getTime() - a.date.getTime()).slice(0, 5);
+    this.recentProducts = this.products.slice(-5).reverse();
+    this.lowStockProducts = this.products.filter(
+      (product) => product.stock <= product.minStock,
+    );
+
+    this.recentMovements = [...this.movements]
+      .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+      .slice(0, 5);
   }
 
   getProductName(productCode: string): string {
-    const product = this.products.find((p) => p.code === productCode);
-    return product?.name ?? productCode;
+    return this.productsMap.get(productCode) ?? productCode;
   }
 
   getCategoryName(code: string): string {
-    const category = this.categories.find((c) => c.code === code);
-    return category?.name ?? code;
+    return this.categoriesMap.get(code) ?? code;
   }
 
   formatDate(date: Date): string {
@@ -105,5 +140,13 @@ export class DashboardComponent implements OnInit {
       hour: '2-digit',
       minute: '2-digit',
     });
+  }
+
+  trackByProductCode(index: number, product: Product): string {
+    return product.code;
+  }
+
+  trackByMovementId(index: number, movement: Movement): string {
+    return movement.id;
   }
 }
