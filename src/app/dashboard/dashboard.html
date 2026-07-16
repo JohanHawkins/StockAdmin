@@ -5,48 +5,75 @@
 
   <div class="cards">
     <div class="card products-card">
+      <div class="card-header">
+        <div class="card-icon">📦</div>
+      </div>
       <h2>{{ totalProducts }}</h2>
       <p>Total Productos</p>
     </div>
 
     <div class="card categories-card">
+      <div class="card-header">
+        <div class="card-icon">🏷️</div>
+      </div>
       <h2>{{ totalCategories }}</h2>
       <p>Total Categorías</p>
     </div>
 
     <div class="card movements-card">
+      <div class="card-header">
+        <div class="card-icon">🔄</div>
+      </div>
       <h2>{{ totalMovements }}</h2>
       <p>Total Movimientos</p>
     </div>
 
     <div class="card stock-card">
+      <div class="card-header">
+        <div class="card-icon">📊</div>
+      </div>
       <h2>{{ totalStock }}</h2>
       <p>Stock Total</p>
     </div>
 
     <div class="card value-card">
+      <div class="card-header">
+        <div class="card-icon">💰</div>
+      </div>
       <h2>${{ inventoryValue }}</h2>
       <p>Valor Inventario</p>
     </div>
 
     <div class="card active-card">
+      <div class="card-header">
+        <div class="card-icon">✅</div>
+      </div>
       <h2>{{ activeProducts }}</h2>
       <p>Productos Activos</p>
     </div>
   </div>
 
-  <div class="cards">
-    <div class="card" *ngIf="highestStockProduct">
+  <div class="cards" *ngIf="highestStockProduct || mostExpensiveProduct || lastMovement">
+    <div class="card products-card" *ngIf="highestStockProduct">
+      <div class="card-header">
+        <div class="card-icon">📈</div>
+      </div>
       <h3>{{ highestStockProduct.name }}</h3>
       <p>Mayor Stock: {{ highestStockProduct.stock }} unidades</p>
     </div>
 
-    <div class="card" *ngIf="mostExpensiveProduct">
+    <div class="card value-card" *ngIf="mostExpensiveProduct">
+      <div class="card-header">
+        <div class="card-icon">💎</div>
+      </div>
       <h3>{{ mostExpensiveProduct.name }}</h3>
       <p>Producto Más Costoso: ${{ mostExpensiveProduct.price }}</p>
     </div>
 
-    <div class="card" *ngIf="lastMovement">
+    <div class="card movements-card" *ngIf="lastMovement">
+      <div class="card-header">
+        <div class="card-icon">🕐</div>
+      </div>
       <h3>{{ lastMovement.type }}</h3>
       <p>Último Movimiento: {{ getProductName(lastMovement.productCode) }}</p>
       <p>{{ formatDate(lastMovement.date) }}</p>
@@ -54,7 +81,7 @@
   </div>
 </div>
 
-<div class="recent-products">
+<div class="section-panel recent-products" *ngIf="!isLoading">
   <h2>Productos Recientes</h2>
 
   <table>
@@ -82,7 +109,7 @@
   </table>
 </div>
 
-<div class="recent-products">
+<div class="section-panel recent-movements" *ngIf="!isLoading">
   <h2>Movimientos Recientes</h2>
 
   <table>
@@ -112,7 +139,7 @@
   </table>
 </div>
 
-<div class="low-stock-products">
+<div class="section-panel low-stock-products" *ngIf="!isLoading">
   <h2>Productos con Stock Bajo</h2>
 
   <table *ngIf="lowStockProducts.length > 0">

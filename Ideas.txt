@@ -178,10 +178,18 @@ Leyenda de estados:
 - [x] Modales reutilizados
 - [x] Toast reutilizable
 - [x] Diseño consistente
-- [ ] Responsive (móvil)
-- [ ] Sidebar colapsable
-- [ ] Tooltips en botones
-- [ ] Indicador de ruta activa mejorado
+- [x] Responsive (móvil)
+- [x] Sidebar colapsable
+- [x] Tooltips en botones
+- [x] Indicador de ruta activa mejorado
+- [x] Variables CSS globales
+- [x] Modo oscuro con toggle
+- [x] Persistencia de tema en localStorage
+- [x] Animaciones y transiciones mejoradas
+- [x] Iconos en sidebar y dashboard
+- [x] Cards mejoradas con gradientes
+- [x] Tablas modernizadas
+- [x] Login con efecto glassmorphism
 
 ---
 
@@ -309,10 +317,10 @@ Guarda entradas y salidas de inventario.
 | Productos | 10 | 18 | 56% |
 | Categorías | 6 | 9 | 67% |
 | Movimientos | 8 | 13 | 62% |
-| UI/UX | 4 | 8 | 50% |
+| UI/UX | 12 | 12 | 100% |
 | Modelos | 7 | 12 | 58% |
 | Infraestructura | 0 | 7 | 0% |
-| **TOTAL** | **44** | **86** | **51%** |
+| **TOTAL** | **52** | **86** | **60%** |
 
 ---
 
@@ -376,8 +384,18 @@ Mejoras que elevan la calidad del proyecto.
 | 24 | Movimientos: filtros por fecha/tipo/producto | Movimientos | [x] |
 | 25 | Toast con auto-hide integrado | Shared | [x] |
 | 26 | Loading states | Global | [x] |
-| 27 | Manejo de errores global | Global | [x] |
-| 28 | Página 404 | Routes | [x] |
+| 27 | Manejo de errores global | UI/UX | [x] |
+| 28 | Página 404 | UI/UX | [x] |
+| 29 | Variables CSS globales para temas | UI/UX | [x] |
+| 30 | Modo oscuro con toggle en navbar | UI/UX | [x] |
+| 31 | Persistencia de tema en localStorage | UI/UX | [x] |
+| 32 | Animaciones y transiciones mejoradas | UI/UX | [x] |
+| 33 | Iconos en sidebar y dashboard | UI/UX | [x] |
+| 34 | Cards del dashboard con gradientes | UI/UX | [x] |
+| 35 | Tablas modernizadas con hover | UI/UX | [x] |
+| 36 | Login con efecto glassmorphism | UI/UX | [x] |
+| 37 | Scrollbar personalizada | UI/UX | [x] |
+| 38 | Selección de texto personalizada | UI/UX | [x] |
 
 ---
 
@@ -387,15 +405,14 @@ Extras para portafolio y pulido final.
 
 | # | Tarea | Módulo | Estado |
 |---|-------|--------|--------|
-| 29 | Exportar productos a CSV | Productos | [ ] |
-| 30 | Importar productos desde CSV | Productos | [ ] |
-| 31 | Filtros avanzados de productos | Productos | [ ] |
-| 32 | Exportar historial de movimientos | Movimientos | [ ] |
-| 33 | Indicadores visuales en dashboard (colores, íconos) | Dashboard | [ ] |
-| 34 | Pruebas unitarias | Infraestructura | [ ] |
-| 35 | Pruebas de integración | Infraestructura | [ ] |
-| 36 | README profesional con imágenes | Infraestructura | [ ] |
-| 37 | Deploy (GitHub Pages / Vercel) | Infraestructura | [ ] |
+| 39 | Exportar productos a CSV | Productos | [ ] |
+| 40 | Importar productos desde CSV | Productos | [ ] |
+| 41 | Filtros avanzados de productos | Productos | [ ] |
+| 42 | Exportar historial de movimientos | Movimientos | [ ] |
+| 43 | Pruebas unitarias | Infraestructura | [ ] |
+| 44 | Pruebas de integración | Infraestructura | [ ] |
+| 45 | README profesional con imágenes | Infraestructura | [ ] |
+| 46 | Deploy (GitHub Pages / Vercel) | Infraestructura | [ ] |
 
 ---
 
@@ -406,7 +423,7 @@ Fase 1 (P0): Tareas 1-5
     ↓
 Fase 2 (P1): Tareas 6-16
     ↓
-Fase 3 (P2): Tareas 17-28
+Fase 3 (P2): Tareas 17-38
     ↓
-Fase 4 (P3): Tareas 29-37
+Fase 4 (P3): Tareas 39-46
 ```

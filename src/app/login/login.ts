@@ -15,6 +15,7 @@ export class LoginComponent {
   email = '';
   password = '';
   errorMessage = '';
+  isLoading = false;
 
   constructor(
     private authService: AuthService,
@@ -29,12 +30,17 @@ export class LoginComponent {
       return;
     }
 
-    const success = this.authService.login(this.email, this.password);
+    this.isLoading = true;
 
-    if (success) {
-      this.router.navigate(['/dashboard']);
-    } else {
-      this.errorMessage = 'Email o contraseña incorrectos';
-    }
+    setTimeout(() => {
+      const success = this.authService.login(this.email, this.password);
+
+      if (success) {
+        this.router.navigate(['/dashboard']);
+      } else {
+        this.errorMessage = 'Email o contraseña incorrectos';
+        this.isLoading = false;
+      }
+    }, 800);
   }
 }

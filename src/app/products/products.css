@@ -6,74 +6,216 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 30px;
+  margin-bottom: 32px;
+  flex-wrap: wrap;
+  gap: 16px;
 }
 
 .products-header h1 {
-  color: #333;
+  color: var(--text-primary);
+  font-weight: 700;
 }
 
 .products-header button {
-  padding: 12px 20px;
+  padding: 12px 24px;
   border: none;
-  border-radius: 8px;
-  background-color: #1976d2;
-  color: white;
-  font-weight: bold;
+  border-radius: var(--radius-md);
+  background: linear-gradient(135deg, var(--accent-primary) 0%, #2563eb 100%);
+  color: var(--text-on-primary);
+  font-weight: 600;
+  font-size: 0.9375rem;
   cursor: pointer;
+  transition: all var(--transition-fast);
+  box-shadow: var(--shadow-sm);
 }
 
+.products-header button:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.products-header button:active {
+  transform: translateY(0);
+}
+
+/* Search Bar */
+.search-bar {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+/* Sortable Headers */
 .sortable {
   cursor: pointer;
   user-select: none;
-  transition: background-color 0.2s;
+  transition: background-color var(--transition-fast);
+  position: relative;
+  padding-right: 24px !important;
+}
+
+.sortable::after {
+  content: '↕';
+  position: absolute;
+  right: 8px;
+  opacity: 0.4;
+  font-size: 0.75rem;
 }
 
 .sortable:hover {
-  background-color: #334155;
+  background-color: var(--bg-hover);
 }
 
+.sortable.sort-asc::after {
+  content: '↑';
+  opacity: 1;
+  color: var(--accent-primary);
+}
+
+.sortable.sort-desc::after {
+  content: '↓';
+  opacity: 1;
+  color: var(--accent-primary);
+}
+
+/* Product Info Panel */
 .product-info {
-  margin: 20px 0;
-  padding: 15px;
-  border-radius: 10px;
-  background-color: #f8fafc;
-  border: 1px solid #e5e7eb;
+  margin: 24px 0;
+  padding: 20px 24px;
+  border-radius: var(--radius-lg);
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-sm);
+  transition: background-color var(--transition-normal), border-color var(--transition-normal);
 }
 
 .product-info p {
   margin: 8px 0;
+  color: var(--text-primary);
+  font-size: 0.9375rem;
 }
 
+.product-info strong {
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+
+/* Pagination */
 .pagination {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 16px;
-  margin-top: 20px;
-  padding: 16px;
+  gap: 12px;
+  margin-top: 28px;
+  padding: 20px;
+  background-color: var(--bg-card);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-color);
 }
 
 .pagination button {
-  padding: 8px 16px;
+  padding: 10px 20px;
   border: none;
-  border-radius: 6px;
-  background-color: #1976d2;
-  color: white;
+  border-radius: var(--radius-md);
+  background: linear-gradient(135deg, var(--accent-primary) 0%, #2563eb 100%);
+  color: var(--text-on-primary);
+  font-weight: 600;
+  font-size: 0.875rem;
   cursor: pointer;
-  transition: background-color 0.3s;
+  transition: all var(--transition-fast);
+  box-shadow: var(--shadow-sm);
 }
 
 .pagination button:hover:not(:disabled) {
-  background-color: #1565c0;
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+.pagination button:active:not(:disabled) {
+  transform: translateY(0);
 }
 
 .pagination button:disabled {
-  background-color: #ccc;
+  background-color: var(--text-muted);
   cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
 }
 
 .pagination span {
-  font-size: 14px;
-  color: #666;
+  font-size: 0.9375rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+/* Status Badge */
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+}
+
+.status-badge.active {
+  background-color: rgba(16, 185, 129, 0.1);
+  color: #10b981;
+}
+
+.status-badge.inactive {
+  background-color: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+}
+
+/* Stock Badge */
+.stock-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+}
+
+.stock-badge.high {
+  background-color: rgba(16, 185, 129, 0.1);
+  color: #10b981;
+}
+
+.stock-badge.medium {
+  background-color: rgba(245, 158, 11, 0.1);
+  color: #f59e0b;
+}
+
+.stock-badge.low {
+  background-color: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .products-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .products-header button {
+    width: 100%;
+  }
+
+  .search-bar {
+    flex-direction: column;
+  }
+
+  .search-input {
+    width: 100%;
+  }
+
+  .pagination {
+    flex-wrap: wrap;
+  }
 }

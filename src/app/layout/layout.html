@@ -8,19 +8,31 @@
 
     <ul>
       <li>
-        <a routerLink="/dashboard" routerLinkActive="active" (click)="closeMobileMenu()"> Dashboard </a>
+        <a routerLink="/dashboard" routerLinkActive="active" (click)="closeMobileMenu()">
+          <span class="nav-icon">📊</span>
+          <span class="nav-text">Dashboard</span>
+        </a>
       </li>
 
       <li>
-        <a routerLink="/products" routerLinkActive="active" (click)="closeMobileMenu()"> Productos </a>
+        <a routerLink="/products" routerLinkActive="active" (click)="closeMobileMenu()">
+          <span class="nav-icon">📦</span>
+          <span class="nav-text">Productos</span>
+        </a>
       </li>
 
       <li>
-        <a routerLink="/categories" routerLinkActive="active" (click)="closeMobileMenu()"> Categorías </a>
+        <a routerLink="/categories" routerLinkActive="active" (click)="closeMobileMenu()">
+          <span class="nav-icon">🏷️</span>
+          <span class="nav-text">Categorías</span>
+        </a>
       </li>
 
       <li>
-        <a routerLink="/movements" routerLinkActive="active" (click)="closeMobileMenu()"> Movimientos </a>
+        <a routerLink="/movements" routerLinkActive="active" (click)="closeMobileMenu()">
+          <span class="nav-icon">🔄</span>
+          <span class="nav-text">Movimientos</span>
+        </a>
       </li>
     </ul>
   </aside>
@@ -39,6 +51,10 @@
       <h3>Sistema de Gestión de Inventario</h3>
 
       <div class="navbar-user">
+        <button class="theme-toggle" (click)="toggleTheme()" [title]="isDarkMode ? 'Modo claro' : 'Modo oscuro'">
+          {{ isDarkMode ? '☀️' : '🌙' }}
+        </button>
+
         <span>{{ authService.getCurrentUser()?.nombre }}</span>
 
         <button class="btn-logout" (click)="logout()">Cerrar sesión</button>
