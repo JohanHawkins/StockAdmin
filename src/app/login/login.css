@@ -61,3 +61,15 @@ button {
 
   cursor: pointer;
 }
+
+.error-message {
+  color: #d32f2f;
+  background-color: #fdecea;
+  padding: 10px;
+
+  border-radius: 8px;
+  margin-bottom: 16px;
+
+  text-align: center;
+  font-size: 14px;
+}

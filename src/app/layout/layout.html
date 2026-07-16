@@ -19,10 +19,6 @@
       <li>
         <a routerLink="/movements" routerLinkActive="active"> Movimientos </a>
       </li>
-
-      <li>
-        <a routerLink="/users" routerLinkActive="active"> Usuarios </a>
-      </li>
     </ul>
   </aside>
 
@@ -32,7 +28,11 @@
     <header class="navbar">
       <h3>Sistema de Gestión de Inventario</h3>
 
-      <span>Administrador</span>
+      <div class="navbar-user">
+        <span>{{ authService.getCurrentUser()?.nombre }}</span>
+
+        <button class="btn-logout" (click)="logout()">Cerrar sesión</button>
+      </div>
     </header>
 
     <!-- Dynamic Content -->
