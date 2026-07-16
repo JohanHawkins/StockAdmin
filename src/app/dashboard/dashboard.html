@@ -6,42 +6,34 @@
   <div class="cards">
     <div class="card products-card">
       <h2>{{ totalProducts }}</h2>
-
       <p>Total Productos</p>
     </div>
 
     <div class="card categories-card">
       <h2>{{ totalCategories }}</h2>
-
       <p>Total Categorías</p>
     </div>
 
     <div class="card movements-card">
       <h2>{{ totalMovements }}</h2>
-
       <p>Total Movimientos</p>
     </div>
 
     <div class="card stock-card">
       <h2>{{ totalStock }}</h2>
-
       <p>Stock Total</p>
     </div>
 
     <div class="card value-card">
       <h2>${{ inventoryValue }}</h2>
-
       <p>Valor Inventario</p>
     </div>
 
     <div class="card active-card">
       <h2>{{ activeProducts }}</h2>
-
       <p>Productos Activos</p>
     </div>
   </div>
-
-  <!-- NUEVOS INDICADORES -->
 
   <div class="cards">
     <div class="card" *ngIf="highestStockProduct">
@@ -62,8 +54,6 @@
   </div>
 </div>
 
-<!-- PRODUCTOS RECIENTES -->
-
 <div class="recent-products">
   <h2>Productos Recientes</h2>
 
@@ -80,11 +70,8 @@
     <tbody>
       <tr *ngFor="let product of recentProducts">
         <td>{{ product.code }}</td>
-
         <td>{{ product.name }}</td>
-
         <td>{{ getCategoryName(product.categoryCode) }}</td>
-
         <td>{{ product.stock }}</td>
       </tr>
 
@@ -94,8 +81,6 @@
     </tbody>
   </table>
 </div>
-
-<!-- MOVIMIENTOS RECIENTES -->
 
 <div class="recent-products">
   <h2>Movimientos Recientes</h2>
@@ -114,13 +99,9 @@
     <tbody>
       <tr *ngFor="let movement of recentMovements">
         <td>{{ movement.id }}</td>
-
         <td>{{ getProductName(movement.productCode) }}</td>
-
         <td>{{ movement.type }}</td>
-
         <td>{{ movement.quantity }}</td>
-
         <td>{{ formatDate(movement.date) }}</td>
       </tr>
 
@@ -130,8 +111,6 @@
     </tbody>
   </table>
 </div>
-
-<!-- STOCK BAJO -->
 
 <div class="low-stock-products">
   <h2>Productos con Stock Bajo</h2>
@@ -149,11 +128,8 @@
     <tbody>
       <tr *ngFor="let product of lowStockProducts">
         <td>{{ product.code }}</td>
-
         <td>{{ product.name }}</td>
-
         <td>{{ product.stock }}</td>
-
         <td>{{ product.minStock }}</td>
       </tr>
     </tbody>

@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-
+import { ToastComponent } from '../shared/toast/toast';
 import { CategoryService } from '../services/category.service';
 import { ProductService } from '../services/product.service';
 import { Category } from '../models/category.model';
@@ -9,36 +9,25 @@ import { Category } from '../models/category.model';
 @Component({
   selector: 'app-categories',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, ToastComponent],
   templateUrl: './categories.html',
   styleUrl: './categories.css',
 })
 export class CategoriesComponent {
-  // -------------------------
-  // STATE
-  // -------------------------
-  formErrors = {
-    name: '',
-  };
+  formErrors = { name: '' };
 
   searchTerm = '';
-
   categories: Category[] = [];
-
   newCategory = '';
 
   isEditing = false;
-
   currentCode = '';
 
   showModal = false;
-
   showDeleteModal = false;
 
   toastVisible = false;
-
   toastMessage = '';
-
   toastType: 'success' | 'error' = 'success';
 
   previewCode = '';
@@ -50,18 +39,12 @@ export class CategoriesComponent {
     this.categories = this.categoryService.getCategories();
   }
 
-  // -------------------------
-  // SEARCH
-  // -------------------------
   get filteredCategories(): Category[] {
     return this.categories.filter((c) =>
       c.name.toLowerCase().includes(this.searchTerm.toLowerCase()),
     );
   }
 
-  // -------------------------
-  // PRODUCT COUNT
-  // -------------------------
   getProductCount(categoryCode: string): number {
     return this.productService.getProducts().filter((p) => p.categoryCode === categoryCode).length;
   }
@@ -70,15 +53,11 @@ export class CategoriesComponent {
     return this.getProductCount(categoryCode) > 0;
   }
 
-  // -------------------------
-  // MODAL CREATE
-  // -------------------------
   openModal(): void {
     this.showModal = true;
     this.isEditing = false;
     this.newCategory = '';
     this.currentCode = '';
-
     this.previewCode = this.generateCategoryCode();
   }
 
@@ -86,21 +65,14 @@ export class CategoriesComponent {
     this.showModal = false;
   }
 
-  // -------------------------
-  // EDIT
-  // -------------------------
   editCategory(category: Category): void {
     this.newCategory = category.name;
     this.currentCode = category.code;
     this.isEditing = true;
     this.showModal = true;
-
     this.previewCode = category.code;
   }
 
-  // -------------------------
-  // SAVE (CREATE / UPDATE)
-  // -------------------------
   addCategory(): void {
     if (!this.newCategory.trim()) {
       this.formErrors.name = 'El nombre es obligatorio';
@@ -126,14 +98,9 @@ export class CategoriesComponent {
         ...this.categories.find((c) => c.code === this.currentCode)!,
         name: categoryName,
       });
-
       this.showToast('Categoría actualizada correctamente', 'success');
     } else {
-      this.categoryService.addCategory({
-        code: this.previewCode,
-        name: categoryName,
-      });
-
+      this.categoryService.addCategory({ code: this.previewCode, name: categoryName });
       this.showToast('Categoría creada correctamente', 'success');
     }
 
@@ -141,9 +108,6 @@ export class CategoriesComponent {
     this.closeModal();
   }
 
-  // -------------------------
-  // DELETE
-  // -------------------------
   openDeleteModal(code: string): void {
     this.currentCode = code;
     this.showDeleteModal = true;
@@ -161,15 +125,10 @@ export class CategoriesComponent {
     }
 
     this.categoryService.deleteCategory(this.currentCode);
-
     this.showToast('Categoría eliminada correctamente', 'success');
-
     this.closeDeleteModal();
   }
 
-  // -------------------------
-  // UTIL
-  // -------------------------
   resetForm(): void {
     this.newCategory = '';
     this.currentCode = '';
@@ -191,17 +150,11 @@ export class CategoriesComponent {
     this.formErrors.name = '';
   }
 
-  // -------------------------
-  // CODE GENERATOR
-  // -------------------------
   generateCategoryCode(): string {
-    if (this.categories.length === 0) {
-      return 'C001';
-    }
+    if (this.categories.length === 0) return 'C001';
 
     const last = this.categories[this.categories.length - 1];
     const number = parseInt(last.code.replace('C', ''));
-
     return 'C' + (number + 1).toString().padStart(3, '0');
   }
 }

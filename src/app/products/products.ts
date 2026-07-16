@@ -31,11 +31,9 @@ export class ProductsComponent {
   products: Product[] = [];
   categories: Category[] = [];
 
-  // Paginación
   currentPage = 1;
   itemsPerPage = 5;
 
-  // Ordenamiento
   sortColumn: keyof Product = 'code';
   sortDirection: 'asc' | 'desc' = 'asc';
 
@@ -53,7 +51,6 @@ export class ProductsComponent {
   formErrors = {
     code: '',
     name: '',
-    description: '',
     price: '',
     stock: '',
     minStock: '',
@@ -69,9 +66,6 @@ export class ProductsComponent {
     this.categories = this.categoryService.getCategories();
   }
 
-  // -------------------------
-  // TOAST
-  // -------------------------
   showToast(message: string, type: 'success' | 'error' = 'success') {
     this.toastMessage = message;
     this.toastType = type;
@@ -82,12 +76,8 @@ export class ProductsComponent {
     }, 3000);
   }
 
-  // -------------------------
-  // MODAL
-  // -------------------------
   openModal() {
     this.clearErrors();
-
     this.newProduct = {
       code: this.generateProductCode(),
       name: '',
@@ -98,7 +88,6 @@ export class ProductsComponent {
       categoryCode: '',
       status: 'Activo',
     };
-
     this.isEditing = false;
     this.showModal = true;
   }
@@ -107,9 +96,6 @@ export class ProductsComponent {
     this.showModal = false;
   }
 
-  // -------------------------
-  // VALIDATION + SAVE
-  // -------------------------
   saveProduct() {
     this.clearErrors();
 
@@ -164,44 +150,28 @@ export class ProductsComponent {
     const wasEditing = this.isEditing;
 
     if (this.isEditing) {
-      this.productService.updateProduct(this.currentCode, {
-        ...this.newProduct,
-      });
+      this.productService.updateProduct(this.currentCode, { ...this.newProduct });
     } else {
-      this.productService.addProduct({
-        ...this.newProduct,
-      });
+      this.productService.addProduct({ ...this.newProduct });
     }
 
     this.resetForm();
-
     this.showToast(
       wasEditing ? 'Producto actualizado correctamente' : 'Producto creado correctamente',
       'success',
     );
-
     this.closeModal();
   }
 
-  // -------------------------
-  // EDIT
-  // -------------------------
   editProduct(product: Product) {
     this.newProduct = { ...product };
-
     this.currentCode = product.code;
-
     this.isEditing = true;
-
     this.showModal = true;
   }
 
-  // -------------------------
-  // DELETE
-  // -------------------------
   openDeleteModal(code: string) {
     this.currentCode = code;
-
     this.showDeleteModal = true;
   }
 
@@ -211,7 +181,6 @@ export class ProductsComponent {
 
   confirmDelete() {
     const product = this.products.find((p) => p.code === this.currentCode);
-
     if (!product) return;
 
     const hasMovements = this.movementService
@@ -220,22 +189,15 @@ export class ProductsComponent {
 
     if (hasMovements) {
       this.showToast('No es posible eliminar un producto con movimientos registrados', 'error');
-
       this.closeDeleteModal();
-
       return;
     }
 
     this.productService.deleteProduct(this.currentCode);
-
     this.showToast('Producto eliminado correctamente', 'success');
-
     this.closeDeleteModal();
   }
 
-  // -------------------------
-  // UTILS
-  // -------------------------
   resetForm() {
     this.newProduct = {
       code: '',
@@ -247,9 +209,7 @@ export class ProductsComponent {
       categoryCode: '',
       status: 'Activo',
     };
-
     this.currentCode = '';
-
     this.isEditing = false;
   }
 
@@ -257,7 +217,6 @@ export class ProductsComponent {
     this.formErrors = {
       code: '',
       name: '',
-      description: '',
       price: '',
       stock: '',
       minStock: '',
@@ -286,26 +245,14 @@ export class ProductsComponent {
     return category?.name ?? code;
   }
 
-  // -------------------------
-  // CODE GENERATOR
-  // -------------------------
   generateProductCode(): string {
-    if (this.products.length === 0) {
-      return 'P001';
-    }
+    if (this.products.length === 0) return 'P001';
 
     const lastProduct = this.products[this.products.length - 1];
-
     const lastCodeNumber = parseInt(lastProduct.code.replace('P', ''));
-
-    const nextNumber = lastCodeNumber + 1;
-
-    return 'P' + nextNumber.toString().padStart(3, '0');
+    return 'P' + (lastCodeNumber + 1).toString().padStart(3, '0');
   }
 
-  // -------------------------
-  // FILTER + SORT
-  // -------------------------
   sortBy(column: keyof Product): void {
     if (this.sortColumn === column) {
       this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
@@ -317,7 +264,7 @@ export class ProductsComponent {
 
   getSortIcon(column: keyof Product): string {
     if (this.sortColumn !== column) return '';
-    return this.sortDirection === 'asc' ? '↑' : '↓';
+    return this.sortDirection === 'asc' ? '\u2191' : '\u2193';
   }
 
   get filteredProducts(): Product[] {
@@ -356,12 +303,6 @@ export class ProductsComponent {
     return Math.ceil(this.totalFilteredProducts / this.itemsPerPage);
   }
 
-  goToPage(page: number): void {
-    if (page >= 1 && page <= this.totalPages) {
-      this.currentPage = page;
-    }
-  }
-
   previousPage(): void {
     if (this.currentPage > 1) {
       this.currentPage--;
@@ -374,15 +315,8 @@ export class ProductsComponent {
     }
   }
 
-  resetPagination(): void {
-    this.currentPage = 1;
-  }
-
   get selectedProduct(): Product | null {
-    if (!this.currentCode) {
-      return null;
-    }
-
+    if (!this.currentCode) return null;
     return this.products.find((p) => p.code === this.currentCode) ?? null;
   }
 }

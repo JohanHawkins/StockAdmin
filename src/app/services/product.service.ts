@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { PlatformService } from './platform.service';
 import { Product } from '../models/product.model';
 
 @Injectable({
@@ -6,19 +7,14 @@ import { Product } from '../models/product.model';
 })
 export class ProductService {
   private storageKey = 'products';
-
   private products: Product[] = [];
 
-  constructor() {
+  constructor(private platform: PlatformService) {
     this.loadFromStorage();
   }
 
-  private isBrowser(): boolean {
-    return typeof window !== 'undefined';
-  }
-
   private loadFromStorage(): void {
-    if (!this.isBrowser()) {
+    if (!this.platform.isBrowser()) {
       this.products = [];
       return;
     }
@@ -50,14 +46,12 @@ export class ProductService {
           status: 'Activo',
         },
       ];
-
       this.saveToStorage();
     }
   }
 
   private saveToStorage(): void {
-    if (!this.isBrowser()) return;
-
+    if (!this.platform.isBrowser()) return;
     localStorage.setItem(this.storageKey, JSON.stringify(this.products));
   }
 
@@ -72,7 +66,6 @@ export class ProductService {
 
   updateProduct(code: string, product: Product): void {
     const index = this.products.findIndex((p) => p.code === code);
-
     if (index !== -1) {
       this.products[index] = product;
       this.saveToStorage();
@@ -81,7 +74,6 @@ export class ProductService {
 
   deleteProduct(code: string): void {
     const index = this.products.findIndex((p) => p.code === code);
-
     if (index !== -1) {
       this.products.splice(index, 1);
       this.saveToStorage();

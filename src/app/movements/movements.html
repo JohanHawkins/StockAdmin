@@ -1,11 +1,9 @@
 <div class="movements-container">
   <div class="movements-header">
     <h1>Gestión de Movimientos</h1>
-
     <button (click)="openModal()">+ Nuevo Movimiento</button>
   </div>
 
-  <!-- FILTROS -->
   <div class="filters">
     <div class="filter-group">
       <label>Tipo</label>
@@ -54,15 +52,10 @@
     <tbody>
       <tr *ngFor="let movement of filteredMovements">
         <td>{{ movement.id }}</td>
-
         <td>{{ getProductName(movement.productCode) }}</td>
-
         <td>{{ movement.type }}</td>
-
         <td>{{ movement.quantity }}</td>
-
         <td>{{ movement.observation || '-' }}</td>
-
         <td>{{ movement.date | date: 'dd/MM/yyyy HH:mm' }}</td>
       </tr>
 
@@ -73,59 +66,41 @@
   </table>
 </div>
 
-<!-- MODAL -->
-
 <div class="modal-backdrop" *ngIf="showModal">
   <div class="modal">
     <h2>Nuevo Movimiento</h2>
 
-    <!-- PRODUCTO -->
     <div class="form-group">
       <label>Producto</label>
-
       <select [(ngModel)]="newMovement.productCode" (change)="clearProductError()">
         <option value="">Seleccionar producto</option>
-
         <option *ngFor="let product of products" [value]="product.code">
           {{ product.name }}
         </option>
       </select>
-
-      <div class="error-message" *ngIf="formErrors.productCode">
-        {{ formErrors.productCode }}
-      </div>
+      <div class="error-message" *ngIf="formErrors.productCode">{{ formErrors.productCode }}</div>
     </div>
 
     <div class="stock-info" *ngIf="getSelectedProduct()">
-      Stock actual:
-      <strong>{{ getSelectedProduct()?.stock }}</strong>
+      Stock actual: <strong>{{ getSelectedProduct()?.stock }}</strong>
     </div>
 
-    <!-- TIPO -->
     <div class="form-group">
       <label>Tipo</label>
-
       <select
         [(ngModel)]="newMovement.type"
         [disabled]="!newMovement.productCode"
         (change)="clearTypeError()"
       >
         <option value="">Seleccionar tipo</option>
-
         <option value="ENTRADA">ENTRADA</option>
-
         <option value="SALIDA">SALIDA</option>
       </select>
-
-      <div class="error-message" *ngIf="formErrors.type">
-        {{ formErrors.type }}
-      </div>
+      <div class="error-message" *ngIf="formErrors.type">{{ formErrors.type }}</div>
     </div>
 
-    <!-- CANTIDAD -->
     <div class="form-group">
       <label>Cantidad</label>
-
       <input
         type="number"
         min="1"
@@ -134,16 +109,11 @@
         [disabled]="!newMovement.productCode || !newMovement.type"
         (input)="clearQuantityError()"
       />
-
-      <div class="error-message" *ngIf="formErrors.quantity">
-        {{ formErrors.quantity }}
-      </div>
+      <div class="error-message" *ngIf="formErrors.quantity">{{ formErrors.quantity }}</div>
     </div>
 
-    <!-- OBSERVACIÓN -->
     <div class="form-group">
       <label>Observación (opcional)</label>
-
       <textarea
         [(ngModel)]="newMovement.observation"
         rows="3"
@@ -153,12 +123,9 @@
 
     <div class="modal-actions">
       <button class="save-btn" (click)="addMovement()">Guardar</button>
-
       <button class="cancel-btn" (click)="closeModal()">Cancelar</button>
     </div>
   </div>
 </div>
 
-<!-- TOAST -->
-
-<app-toast [message]="toastMessage" [type]="toastType" [visible]="toastVisible"> </app-toast>
+<app-toast [message]="toastMessage" [type]="toastType" [visible]="toastVisible"></app-toast>

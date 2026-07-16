@@ -8,41 +8,31 @@
 
 .cards {
   display: grid;
-
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-
   gap: 20px;
 }
 
 .card {
   background: white;
-
   padding: 25px;
-
   border-radius: 16px;
-
   box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.08);
-
   transition: all 0.3s ease;
 }
 
 .card:hover {
   transform: translateY(-5px);
-
   box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.15);
 }
 
 .card h2 {
   font-size: 36px;
-
   margin-bottom: 10px;
 }
 
 .card p {
   font-size: 15px;
-
   color: #666;
-
   margin: 0;
 }
 
@@ -50,12 +40,10 @@
   border-left: 6px solid #3b82f6;
 }
 
-/* NUEVO */
 .categories-card {
   border-left: 6px solid #06b6d4;
 }
 
-/* NUEVO */
 .movements-card {
   border-left: 6px solid #f97316;
 }
@@ -74,15 +62,10 @@
 
 .recent-products {
   margin-top: 30px;
-
   background: white;
-
   padding: 25px;
-
   border-radius: 16px;
-
   box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.08);
-
   border-left: 6px solid #4b5563;
 }
 
@@ -92,16 +75,13 @@
 
 .recent-products table {
   width: 100%;
-
   border-collapse: collapse;
 }
 
 .recent-products th,
 .recent-products td {
   padding: 12px;
-
   text-align: left;
-
   border-bottom: 1px solid #e5e7eb;
 }
 
@@ -111,15 +91,10 @@
 
 .low-stock-products {
   margin-top: 30px;
-
   background: white;
-
   padding: 25px;
-
   border-radius: 16px;
-
   box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.08);
-
   border-left: 6px solid #ef4444;
 }
 
@@ -129,21 +104,17 @@
 
 .low-stock-products table {
   width: 100%;
-
   border-collapse: collapse;
 }
 
 .low-stock-products th,
 .low-stock-products td {
   padding: 12px;
-
   text-align: left;
-
   border-bottom: 1px solid #e5e7eb;
 }
 
 .empty-message {
   color: #666;
-
   font-style: italic;
 }

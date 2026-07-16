@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { PlatformService } from './platform.service';
 import { Movement } from '../models/movement.model';
 
 @Injectable({
@@ -6,19 +7,14 @@ import { Movement } from '../models/movement.model';
 })
 export class MovementService {
   private storageKey = 'movements';
-
   private movements: Movement[] = [];
 
-  constructor() {
+  constructor(private platform: PlatformService) {
     this.load();
   }
 
-  private isBrowser(): boolean {
-    return typeof window !== 'undefined';
-  }
-
   private load(): void {
-    if (!this.isBrowser()) {
+    if (!this.platform.isBrowser()) {
       this.movements = [];
       return;
     }
@@ -27,7 +23,6 @@ export class MovementService {
 
     if (data) {
       const parsedMovements: Movement[] = JSON.parse(data);
-
       this.movements = parsedMovements.map((movement) => ({
         ...movement,
         date: new Date(movement.date),
@@ -36,8 +31,7 @@ export class MovementService {
   }
 
   private save(): void {
-    if (!this.isBrowser()) return;
-
+    if (!this.platform.isBrowser()) return;
     localStorage.setItem(this.storageKey, JSON.stringify(this.movements));
   }
 
@@ -47,7 +41,6 @@ export class MovementService {
 
   addMovement(movement: Movement): void {
     this.movements.push(movement);
-
     this.save();
   }
 
@@ -55,9 +48,7 @@ export class MovementService {
     if (this.movements.length === 0) return 'M001';
 
     const last = this.movements[this.movements.length - 1];
-
     const number = parseInt(last.id.replace('M', ''));
-
     return 'M' + (number + 1).toString().padStart(3, '0');
   }
 }

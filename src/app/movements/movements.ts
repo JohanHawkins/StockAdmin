@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ToastComponent } from '../shared/toast/toast';
-
 import { MovementService } from '../services/movement.service';
 import { ProductService } from '../services/product.service';
 import { Movement } from '../models/movement.model';
@@ -19,9 +18,7 @@ export class MovementsComponent {
   showModal = false;
 
   toastVisible = false;
-
   toastMessage = '';
-
   toastType: 'success' | 'error' = 'success';
 
   formErrors = {
@@ -31,10 +28,8 @@ export class MovementsComponent {
   };
 
   movements: Movement[] = [];
-
   products: Product[] = [];
 
-  // Filtros
   filterType = '';
   filterProductCode = '';
   filterDateFrom = '';
@@ -59,7 +54,6 @@ export class MovementsComponent {
 
   openModal(): void {
     this.resetForm();
-
     this.showModal = true;
   }
 
@@ -69,7 +63,6 @@ export class MovementsComponent {
 
   getProductName(productCode: string): string {
     const product = this.products.find((p) => p.code === productCode);
-
     return product?.name ?? productCode;
   }
 
@@ -82,45 +75,35 @@ export class MovementsComponent {
 
     if (!this.newMovement.productCode) {
       this.formErrors.productCode = 'Debe seleccionar un producto';
-
       this.showToast('Debe seleccionar un producto', 'error');
-
       return;
     }
 
     if (!this.newMovement.type) {
       this.formErrors.type = 'Debe seleccionar un tipo de movimiento';
-
       this.showToast('Debe seleccionar un tipo de movimiento', 'error');
-
       return;
     }
 
     if (this.newMovement.quantity <= 0) {
       this.formErrors.quantity = 'La cantidad debe ser mayor a 0';
-
       this.showToast('La cantidad debe ser mayor a 0', 'error');
-
       return;
     }
 
     this.newMovement.id = this.movementService.generateId();
-
     this.newMovement.date = new Date();
 
     const product = this.products.find((p) => p.code === this.newMovement.productCode);
 
     if (!product) {
       this.showToast('Producto no encontrado', 'error');
-
       return;
     }
 
     if (this.newMovement.type === 'SALIDA' && this.newMovement.quantity > product.stock) {
       this.formErrors.quantity = 'No hay stock suficiente para realizar la salida.';
-
       this.showToast('No hay stock suficiente para realizar la salida.', 'error');
-
       return;
     }
 
@@ -130,19 +113,13 @@ export class MovementsComponent {
       product.stock -= this.newMovement.quantity;
     }
 
-    // Persistir el nuevo stock del producto
     this.productService.updateProduct(this.newMovement.productCode, product);
-
     this.movementService.addMovement({ ...this.newMovement });
-
     this.movements = this.movementService.getMovements();
-
     this.products = this.productService.getProducts();
 
     this.showToast('Movimiento registrado correctamente', 'success');
-
     this.closeModal();
-
     this.resetForm();
   }
 
@@ -155,15 +132,12 @@ export class MovementsComponent {
       date: new Date(),
       observation: '',
     };
-
     this.clearErrors();
   }
 
   showToast(message: string, type: 'success' | 'error' = 'success'): void {
     this.toastMessage = message;
-
     this.toastType = type;
-
     this.toastVisible = true;
 
     setTimeout(() => {
@@ -191,13 +165,9 @@ export class MovementsComponent {
     };
   }
 
-  // -------------------------
-  // FILTROS
-  // -------------------------
   get filteredMovements(): Movement[] {
     return this.movements.filter((m) => {
       if (this.filterType && m.type !== this.filterType) return false;
-
       if (this.filterProductCode && m.productCode !== this.filterProductCode) return false;
 
       const movementDate = new Date(m.date);

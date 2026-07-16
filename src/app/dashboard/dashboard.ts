@@ -1,10 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
 import { ProductService } from '../services/product.service';
 import { CategoryService } from '../services/category.service';
 import { MovementService } from '../services/movement.service';
-
 import { Product } from '../models/product.model';
 import { Category } from '../models/category.model';
 import { Movement } from '../models/movement.model';
@@ -38,10 +36,6 @@ export class DashboardComponent implements OnInit {
     }, 500);
   }
 
-  // ==========================
-  // TARJETAS PRINCIPALES
-  // ==========================
-
   get totalProducts(): number {
     return this.products.length;
   }
@@ -58,10 +52,6 @@ export class DashboardComponent implements OnInit {
     return this.products.reduce((total, product) => total + product.stock, 0);
   }
 
-  // ==========================
-  // INDICADORES
-  // ==========================
-
   get inventoryValue(): number {
     return this.products.reduce((total, product) => total + product.price * product.stock, 0);
   }
@@ -69,10 +59,6 @@ export class DashboardComponent implements OnInit {
   get activeProducts(): number {
     return this.products.filter((product) => product.status === 'Activo').length;
   }
-
-  // ==========================
-  // NUEVOS INDICADORES
-  // ==========================
 
   get highestStockProduct(): Product | null {
     if (this.products.length === 0) return null;
@@ -89,10 +75,6 @@ export class DashboardComponent implements OnInit {
     return [...this.movements].sort((a, b) => b.date.getTime() - a.date.getTime())[0];
   }
 
-  // ==========================
-  // LISTADOS
-  // ==========================
-
   get recentProducts(): Product[] {
     return [...this.products].slice(-5).reverse();
   }
@@ -107,7 +89,6 @@ export class DashboardComponent implements OnInit {
 
   getProductName(productCode: string): string {
     const product = this.products.find((p) => p.code === productCode);
-
     return product?.name ?? productCode;
   }
 
