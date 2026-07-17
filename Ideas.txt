@@ -1,296 +1,116 @@
 # Sistema de Gestión de Inventario Web
 
+## Cuentas de Prueba
+
+| Rol | Email | Contraseña |
+|-----|-------|------------|
+| Admin | admin@admin.com | 123456 |
+| Usuario | user@user.com | 123456 |
+
+---
+
 ## Objetivo del Proyecto
 
 Construir una aplicación web moderna para administrar inventario de manera sencilla y profesional.
 
-El sistema permitirá:
-- Iniciar sesión
-- Administrar productos
-- Controlar stock
+---
+
+# Tecnologías
+
+- **Frontend:** Angular
+- **Backend:** ASP.NET Core (futuro)
+- **Base de Datos:** PostgreSQL (futuro)
+
+---
+
+# Permisos por Rol
+
+| Funcionalidad | Admin | Usuario |
+|---------------|-------|---------|
+| Dashboard | CRUD completo | Solo lectura |
+| Productos | Crear, Editar, Eliminar, Activar/Desactivar | Solo lectura |
+| Categorías | Crear, Editar, Eliminar | Solo lectura |
+| Movimientos | Crear, Filtros | Crear, Filtros |
+
+---
+
+# Estado del Proyecto
+
+## Completado (91%)
+
+### Login ✅
+- Formulario de login (email + contraseña)
+- Servicio de autenticación con roles
+- Guard de rutas protegidas
+- Redirección al dashboard tras login
+
+### Dashboard ✅
+- Total de productos, categorías, movimientos
+- Stock total y valor del inventario
+- Producto con mayor stock y más costoso
+- Último movimiento registrado
+- Tablas de productos recientes, stock bajo y movimientos
+
+### Productos ✅
+- CRUD completo (crear, editar, eliminar)
+- Código automático (P001, P002...)
+- Búsqueda por nombre
+- Cambiar estado (Activar/Desactivar)
+- Campos: código, nombre, descripción, precio, stock, stock mínimo, categoría, estado
+- Validaciones completas
+- Formato de moneda con separadores
+
+### Categorías ✅
+- CRUD completo
+- Código automático (C001, C002...)
+- Evitar eliminar categoría con productos asociados
+- Mostrar cantidad de productos por categoría
+
+### Movimientos ✅
 - Registrar entradas y salidas
-- Visualizar información básica del inventario
+- Actualización automática del stock
+- Validación de stock para salidas
+- Filtros por fecha, tipo y producto
+- Campo de observación
+
+### UI/UX ✅
+- Layout con sidebar colapsable y navbar
+- Modo oscuro con toggle y persistencia
+- Responsive (móvil)
+- Variables CSS globales
+- Animaciones y transiciones
+- Login con efecto glassmorphism
+- Loading states y manejo de errores
+- Página 404
+
+### Modelos de Datos ✅
+- Product: code, name, description, price, stock, minStock, categoryCode, status
+- Category: code, name
+- Movement: id, productCode, type, quantity, date, observation
+- User: id, nombre, email, password, role
 
 ---
 
-# Tecnologías del Proyecto
+## Pendientes
 
-## Frontend
-Angular
-
-Responsable de:
-- Interfaces visuales
-- Formularios
-- Dashboard
-- Consumo de API
-
----
-
-## Backend
-ASP.NET Core
-
-Responsable de:
-- Lógica del negocio
-- Validaciones
-- API REST
-- Autenticación
+| # | Tarea | Módulo |
+|---|-------|--------|
+| 1 | Exportar productos a CSV | Productos |
+| 2 | Importar productos desde CSV | Productos |
+| 3 | Filtros avanzados de productos | Productos |
+| 4 | Exportar historial de movimientos | Movimientos |
+| 5 | Pruebas unitarias | Infraestructura |
+| 6 | Pruebas de integración | Infraestructura |
+| 7 | README profesional con imágenes | Infraestructura |
+| 8 | Deploy (GitHub Pages / Vercel) | Infraestructura |
 
 ---
 
-## Base de Datos
-PostgreSQL
+# Flujo del Sistema
 
-Responsable de:
-- Almacenar usuarios
-- Productos
-- Movimientos
-- Categorías
-
----
-
-# Checklist de Funcionalidades
-
-Leyenda de estados:
-- [x] Completo
-- [~] En proceso
-- [ ] Sin realizar
-
----
-
-## 1. Login
-
-- [x] Formulario de login (email + contraseña)
-- [x] Servicio de autenticación
-- [x] Validación de credenciales
-- [x] Guard de rutas protegidas
-- [x] Botón de cerrar sesión
-- [x] Redirección al dashboard tras login
-
----
-
-## 2. Dashboard
-
-- [x] Total de productos
-- [x] Total de categorías
-- [x] Total de movimientos
-- [x] Stock total
-- [x] Valor del inventario
-- [x] Productos activos
-- [x] Tabla de productos recientes
-- [x] Tabla de productos con stock bajo
-- [x] Tabla de movimientos recientes
-- [x] Producto con mayor stock
-- [x] Producto más costoso
-- [x] Último movimiento registrado
-
----
-
-## 3. Gestión de Productos
-
-### CRUD
-- [x] Crear producto
-- [x] Editar producto
-- [x] Eliminar producto (con confirmación)
-- [x] Listar productos
-- [x] Código automático (P001, P002...)
-- [x] Búsqueda por nombre
-- [x] Cambiar estado (Activar/Desactivar)
-
-### Campos
-- [x] Código
-- [x] Nombre
-- [x] Descripción
-- [x] Precio
-- [x] Stock
-- [x] Stock mínimo
-- [x] Categoría (relación)
-- [x] Estado (Activo/Inactivo)
-
-### Validaciones
-- [x] Campos obligatorios
-- [x] Precio mayor a 0
-- [x] Stock mayor o igual a 0
-- [x] Stock mínimo mayor o igual a 0
-- [x] Nombre único (no duplicados)
-
-### Extras
-- [x] Toasts de notificación
-- [x] Modal de eliminar con info del producto
-- [x] Modal de cambiar estado
-- [x] Badge de estado con colores
-- [ ] Exportar a CSV
-- [ ] Importar desde CSV
-- [ ] Filtros avanzados
-
----
-
-## 4. Gestión de Categorías
-
-### CRUD
-- [x] Crear categoría
-- [x] Editar categoría
-- [x] Eliminar categoría
-- [x] Listar categorías
-- [x] Código automático (C001, C002...)
-- [x] Búsqueda por nombre
-
-### Validaciones
-- [x] Campos obligatorios
-- [x] Nombre único (no duplicados)
-
-### Extras
-- [x] Toasts de notificación
-- [x] Evitar eliminar categoría con productos asociados
-- [x] Mostrar cantidad de productos por categoría
-
----
-
-## 5. Movimientos de Inventario
-
-### Funcionalidad
-- [x] Registrar entradas
-- [x] Registrar salidas
-- [x] Código automático (M001, M002...)
-- [x] Actualización automática del stock
-- [x] Validación de stock para salidas
-- [x] Flujo guiado (producto → tipo → cantidad)
-- [x] Visualización de stock actual
-- [x] Historial de movimientos
-
-### Campos
-- [x] Producto (relación)
-- [x] Tipo de movimiento (entrada/salida)
-- [x] Cantidad
-- [x] Fecha
-- [x] Observación
-
-### Extras
-- [x] Toasts de notificación
-- [x] Filtros por fecha
-- [x] Filtros por tipo
-- [x] Filtro por producto
-- [ ] Exportación del historial
-
----
-
-## 6. UI/UX
-
-- [x] Layout base (sidebar + navbar)
-- [x] Modales reutilizados
-- [x] Toast reutilizable
-- [x] Diseño consistente
-- [x] Responsive (móvil)
-- [x] Sidebar colapsable
-- [x] Tooltips en botones
-- [x] Indicador de ruta activa mejorado
-- [x] Variables CSS globales
-- [x] Modo oscuro con toggle
-- [x] Persistencia de tema en localStorage
-- [x] Animaciones y transiciones mejoradas
-- [x] Iconos en sidebar y dashboard
-- [x] Cards mejoradas con gradientes
-- [x] Tablas modernizadas
-- [x] Login con efecto glassmorphism
-- [x] Loading states
-- [x] Manejo de errores global
-- [x] Página 404
-
----
-
-## 7. Modelos de Datos
-
-### Product
-- [x] code
-- [x] name
-- [x] description
-- [x] price
-- [x] stock
-- [x] minStock
-- [x] categoryCode
-- [x] status
-
-### Category
-- [x] code
-- [x] name
-
-### Movement
-- [x] id
-- [x] productCode
-- [x] type
-- [x] quantity
-- [x] date
-- [x] observation
-
-### User
-- [x] id
-- [x] nombre
-- [x] email
-- [x] password
-
----
-
-## 8. Infraestructura
-
-- [ ] README profesional con imágenes
-- [ ] Deploy (GitHub Pages / Vercel)
-- [ ] Pruebas unitarias
-- [ ] Pruebas de integración
-
----
-
-# Resumen de Estado
-
-| Categoría | Completado | Total | Porcentaje |
-|-----------|------------|-------|------------|
-| Login | 6 | 6 | 100% |
-| Dashboard | 12 | 12 | 100% |
-| Productos | 17 | 20 | 85% |
-| Categorías | 8 | 8 | 100% |
-| Movimientos | 12 | 13 | 92% |
-| UI/UX | 18 | 18 | 100% |
-| Modelos | 12 | 12 | 100% |
-| Infraestructura | 0 | 4 | 0% |
-| **TOTAL** | **85** | **93** | **91%** |
-
----
-
-# Pendientes
-
-Funcionalidades restantes para completar el proyecto:
-
-| # | Tarea | Módulo | Prioridad |
-|---|-------|--------|-----------|
-| 1 | Exportar productos a CSV | Productos | P3 |
-| 2 | Importar productos desde CSV | Productos | P3 |
-| 3 | Filtros avanzados de productos | Productos | P3 |
-| 4 | Exportar historial de movimientos | Movimientos | P3 |
-| 5 | Pruebas unitarias | Infraestructura | P3 |
-| 6 | Pruebas de integración | Infraestructura | P3 |
-| 7 | README profesional con imágenes | Infraestructura | P3 |
-| 8 | Deploy (GitHub Pages / Vercel) | Infraestructura | P3 |
-
----
-
-# Últimos Cambios
-
-### Toggle de Estado de Productos (sin commit)
-- Botón "Activar/Desactivar" en tabla de productos
-- Modal de confirmación para cambiar estado
-- Badge de estado con colores (verde=Activo, rojo=Inactivo)
-- Método `toggleStatus()` en ProductService
-- Estilos CSS para botones y badge de estado
-
-### Configuración del Servidor
-- Habilitado `trustProxyHeaders` para tunnels
-- Agregado host permitido para desarrollo remoto
-
----
-
-# Flujo Básico del Sistema
-
-1. Usuario inicia sesión
-2. Ingresa al dashboard
-3. Administra productos (crear, editar, activar/desactivar, eliminar)
+1. Usuario inicia sesión (admin o usuario)
+2. Ingresa al dashboard según su rol
+3. Administra productos (según permisos)
 4. Registra entradas o salidas
 5. El sistema actualiza el stock automáticamente
 6. Visualiza estadísticas en el dashboard
