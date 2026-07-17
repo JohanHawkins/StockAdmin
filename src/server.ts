@@ -13,7 +13,7 @@ const browserDistFolder = join(import.meta.dirname, '../browser');
 const app = express();
 const angularApp = new AngularNodeAppEngine({
   trustProxyHeaders: true,
-  allowedHosts: ['kw8bg4b6-4200.use2.devtunnels.ms'],
+  allowedHosts: ['localhost', '127.0.0.1', 'kw8bg4b6-4200.use2.devtunnels.ms'],
 });
 
 // Body parser

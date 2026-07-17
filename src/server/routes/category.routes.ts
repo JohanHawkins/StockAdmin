@@ -4,7 +4,7 @@ import { query } from '../db';
 const router = Router();
 
 // GET /api/categories
-router.get('/', async (_req, res) => {
+router.get('/', async (_req, res): Promise<void> => {
   try {
     const result = await query(`
       SELECT 
@@ -25,7 +25,7 @@ router.get('/', async (_req, res) => {
 });
 
 // GET /api/categories/:code
-router.get('/:code', async (req, res) => {
+router.get('/:code', async (req, res): Promise<void> => {
   try {
     const { code } = req.params;
     const result = await query(`
@@ -40,7 +40,8 @@ router.get('/:code', async (req, res) => {
     `, [code]);
 
     if (result.rows.length === 0) {
-      return res.status(404).json({ error: 'Categoría no encontrada' });
+      res.status(404).json({ error: 'Categoría no encontrada' });
+      return;
     }
 
     res.json(result.rows[0]);
@@ -51,12 +52,13 @@ router.get('/:code', async (req, res) => {
 });
 
 // POST /api/categories
-router.post('/', async (req, res) => {
+router.post('/', async (req, res): Promise<void> => {
   try {
     const { code, name } = req.body;
 
     if (!code || !name) {
-      return res.status(400).json({ error: 'Código y nombre son obligatorios' });
+      res.status(400).json({ error: 'Código y nombre son obligatorios' });
+      return;
     }
 
     const result = await query(`
@@ -73,13 +75,14 @@ router.post('/', async (req, res) => {
 });
 
 // PUT /api/categories/:code
-router.put('/:code', async (req, res) => {
+router.put('/:code', async (req, res): Promise<void> => {
   try {
     const { code } = req.params;
     const { name } = req.body;
 
     if (!name) {
-      return res.status(400).json({ error: 'El nombre es obligatorio' });
+      res.status(400).json({ error: 'El nombre es obligatorio' });
+      return;
     }
 
     const result = await query(`
@@ -90,7 +93,8 @@ router.put('/:code', async (req, res) => {
     `, [name, code]);
 
     if (result.rows.length === 0) {
-      return res.status(404).json({ error: 'Categoría no encontrada' });
+      res.status(404).json({ error: 'Categoría no encontrada' });
+      return;
     }
 
     res.json(result.rows[0]);
@@ -101,7 +105,7 @@ router.put('/:code', async (req, res) => {
 });
 
 // DELETE /api/categories/:code
-router.delete('/:code', async (req, res) => {
+router.delete('/:code', async (req, res): Promise<void> => {
   try {
     const { code } = req.params;
 
@@ -112,13 +116,15 @@ router.delete('/:code', async (req, res) => {
     );
 
     if (parseInt(prodResult.rows[0].count) > 0) {
-      return res.status(400).json({ error: 'No se puede eliminar una categoría con productos asociados' });
+      res.status(400).json({ error: 'No se puede eliminar una categoría con productos asociados' });
+      return;
     }
 
     const result = await query('DELETE FROM categories WHERE code = $1 RETURNING code', [code]);
 
     if (result.rows.length === 0) {
-      return res.status(404).json({ error: 'Categoría no encontrada' });
+      res.status(404).json({ error: 'Categoría no encontrada' });
+      return;
     }
 
     res.json({ message: 'Categoría eliminada correctamente', code: result.rows[0].code });

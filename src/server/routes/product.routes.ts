@@ -4,7 +4,7 @@ import { query } from '../db';
 const router = Router();
 
 // GET /api/products
-router.get('/', async (_req, res) => {
+router.get('/', async (_req, res): Promise<void> => {
   try {
     const result = await query(`
       SELECT 
@@ -32,7 +32,7 @@ router.get('/', async (_req, res) => {
 });
 
 // GET /api/products/:code
-router.get('/:code', async (req, res) => {
+router.get('/:code', async (req, res): Promise<void> => {
   try {
     const { code } = req.params;
     const result = await query(`
@@ -55,7 +55,8 @@ router.get('/:code', async (req, res) => {
     `, [code]);
 
     if (result.rows.length === 0) {
-      return res.status(404).json({ error: 'Producto no encontrado' });
+      res.status(404).json({ error: 'Producto no encontrado' });
+      return;
     }
 
     res.json(result.rows[0]);
@@ -66,18 +67,20 @@ router.get('/:code', async (req, res) => {
 });
 
 // POST /api/products
-router.post('/', async (req, res) => {
+router.post('/', async (req, res): Promise<void> => {
   try {
     const { code, name, description, price, stock, minStock, categoryCode, status } = req.body;
 
     if (!code || !name || !price || !categoryCode) {
-      return res.status(400).json({ error: 'Código, nombre, precio y categoría son obligatorios' });
+      res.status(400).json({ error: 'Código, nombre, precio y categoría son obligatorios' });
+      return;
     }
 
     // Obtener category_id desde categoryCode
     const catResult = await query('SELECT id FROM categories WHERE code = $1', [categoryCode]);
     if (catResult.rows.length === 0) {
-      return res.status(400).json({ error: 'Categoría no válida' });
+      res.status(400).json({ error: 'Categoría no válida' });
+      return;
     }
     const categoryId = catResult.rows[0].id;
 
@@ -95,7 +98,7 @@ router.post('/', async (req, res) => {
 });
 
 // PUT /api/products/:code
-router.put('/:code', async (req, res) => {
+router.put('/:code', async (req, res): Promise<void> => {
   try {
     const { code } = req.params;
     const { name, description, price, stock, minStock, categoryCode, status } = req.body;
@@ -124,7 +127,8 @@ router.put('/:code', async (req, res) => {
     `, [name, description, price, stock, minStock, categoryId, status, code]);
 
     if (result.rows.length === 0) {
-      return res.status(404).json({ error: 'Producto no encontrado' });
+      res.status(404).json({ error: 'Producto no encontrado' });
+      return;
     }
 
     res.json(result.rows[0]);
@@ -135,7 +139,7 @@ router.put('/:code', async (req, res) => {
 });
 
 // DELETE /api/products/:code
-router.delete('/:code', async (req, res) => {
+router.delete('/:code', async (req, res): Promise<void> => {
   try {
     const { code } = req.params;
 
@@ -146,13 +150,15 @@ router.delete('/:code', async (req, res) => {
     );
 
     if (parseInt(movResult.rows[0].count) > 0) {
-      return res.status(400).json({ error: 'No se puede eliminar un producto con movimientos registrados' });
+      res.status(400).json({ error: 'No se puede eliminar un producto con movimientos registrados' });
+      return;
     }
 
     const result = await query('DELETE FROM products WHERE code = $1 RETURNING code', [code]);
 
     if (result.rows.length === 0) {
-      return res.status(404).json({ error: 'Producto no encontrado' });
+      res.status(404).json({ error: 'Producto no encontrado' });
+      return;
     }
 
     res.json({ message: 'Producto eliminado correctamente', code: result.rows[0].code });
@@ -163,7 +169,7 @@ router.delete('/:code', async (req, res) => {
 });
 
 // PATCH /api/products/:code/toggle-status
-router.patch('/:code/toggle-status', async (req, res) => {
+router.patch('/:code/toggle-status', async (req, res): Promise<void> => {
   try {
     const { code } = req.params;
 
@@ -176,7 +182,8 @@ router.patch('/:code/toggle-status', async (req, res) => {
     `, [code]);
 
     if (result.rows.length === 0) {
-      return res.status(404).json({ error: 'Producto no encontrado' });
+      res.status(404).json({ error: 'Producto no encontrado' });
+      return;
     }
 
     res.json(result.rows[0]);

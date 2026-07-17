@@ -4,12 +4,13 @@ import { query } from '../db';
 const router = Router();
 
 // POST /api/auth/login
-router.post('/login', async (req, res) => {
+router.post('/login', async (req, res): Promise<void> => {
   try {
     const { email, password } = req.body;
 
     if (!email || !password) {
-      return res.status(400).json({ error: 'Email y contraseña son obligatorios' });
+      res.status(400).json({ error: 'Email y contraseña son obligatorios' });
+      return;
     }
 
     const result = await query(
@@ -18,7 +19,8 @@ router.post('/login', async (req, res) => {
     );
 
     if (result.rows.length === 0) {
-      return res.status(401).json({ error: 'Credenciales incorrectas' });
+      res.status(401).json({ error: 'Credenciales incorrectas' });
+      return;
     }
 
     const user = result.rows[0];
@@ -35,7 +37,7 @@ router.post('/login', async (req, res) => {
 });
 
 // GET /api/auth/users
-router.get('/users', async (_req, res) => {
+router.get('/users', async (_req, res): Promise<void> => {
   try {
     const result = await query('SELECT id, nombre, email, role FROM users ORDER BY id');
     res.json(result.rows);

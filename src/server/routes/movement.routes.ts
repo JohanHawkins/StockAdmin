@@ -4,7 +4,7 @@ import { query, getClient } from '../db';
 const router = Router();
 
 // GET /api/movements
-router.get('/', async (_req, res) => {
+router.get('/', async (_req, res): Promise<void> => {
   try {
     const result = await query(`
       SELECT 
@@ -29,8 +29,29 @@ router.get('/', async (_req, res) => {
   }
 });
 
+// GET /api/movements/generate-code
+router.get('/generate-code', async (_req, res): Promise<void> => {
+  try {
+    const result = await query('SELECT code FROM movements ORDER BY id DESC LIMIT 1');
+
+    if (result.rows.length === 0) {
+      res.json({ code: 'M001' });
+      return;
+    }
+
+    const lastCode = result.rows[0].code;
+    const lastNumber = parseInt(lastCode.replace('M', ''));
+    const newCode = 'M' + (lastNumber + 1).toString().padStart(3, '0');
+
+    res.json({ code: newCode });
+  } catch (error) {
+    console.error('Error al generar código:', error);
+    res.status(500).json({ error: 'Error interno del servidor' });
+  }
+});
+
 // GET /api/movements/:code
-router.get('/:code', async (req, res) => {
+router.get('/:code', async (req, res): Promise<void> => {
   try {
     const { code } = req.params;
     const result = await query(`
@@ -51,7 +72,8 @@ router.get('/:code', async (req, res) => {
     `, [code]);
 
     if (result.rows.length === 0) {
-      return res.status(404).json({ error: 'Movimiento no encontrado' });
+      res.status(404).json({ error: 'Movimiento no encontrado' });
+      return;
     }
 
     res.json(result.rows[0]);
@@ -62,14 +84,15 @@ router.get('/:code', async (req, res) => {
 });
 
 // POST /api/movements
-router.post('/', async (req, res) => {
+router.post('/', async (req, res): Promise<void> => {
   const client = await getClient();
 
   try {
     const { code, productCode, type, quantity, observation, userId } = req.body;
 
     if (!code || !productCode || !type || !quantity) {
-      return res.status(400).json({ error: 'Código, producto, tipo y cantidad son obligatorios' });
+      res.status(400).json({ error: 'Código, producto, tipo y cantidad son obligatorios' });
+      return;
     }
 
     await client.query('BEGIN');
@@ -78,7 +101,8 @@ router.post('/', async (req, res) => {
     const prodResult = await client.query('SELECT id, stock FROM products WHERE code = $1', [productCode]);
     if (prodResult.rows.length === 0) {
       await client.query('ROLLBACK');
-      return res.status(400).json({ error: 'Producto no válido' });
+      res.status(400).json({ error: 'Producto no válido' });
+      return;
     }
 
     const product = prodResult.rows[0];
@@ -86,7 +110,8 @@ router.post('/', async (req, res) => {
     // Validar stock para salidas
     if (type === 'SALIDA' && quantity > product.stock) {
       await client.query('ROLLBACK');
-      return res.status(400).json({ error: 'No hay stock suficiente para realizar la salida' });
+      res.status(400).json({ error: 'No hay stock suficiente para realizar la salida' });
+      return;
     }
 
     // Actualizar stock
@@ -115,26 +140,6 @@ router.post('/', async (req, res) => {
     res.status(500).json({ error: 'Error interno del servidor' });
   } finally {
     client.release();
-  }
-});
-
-// GET /api/movements/generate-code
-router.get('/generate-code', async (_req, res) => {
-  try {
-    const result = await query('SELECT code FROM movements ORDER BY id DESC LIMIT 1');
-
-    if (result.rows.length === 0) {
-      return res.json({ code: 'M001' });
-    }
-
-    const lastCode = result.rows[0].code;
-    const lastNumber = parseInt(lastCode.replace('M', ''));
-    const newCode = 'M' + (lastNumber + 1).toString().padStart(3, '0');
-
-    res.json({ code: newCode });
-  } catch (error) {
-    console.error('Error al generar código:', error);
-    res.status(500).json({ error: 'Error interno del servidor' });
   }
 });
 
