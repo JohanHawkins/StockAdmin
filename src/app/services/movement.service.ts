@@ -1,54 +1,42 @@
 import { Injectable } from '@angular/core';
-import { PlatformService } from './platform.service';
+import { HttpClient } from '@angular/common/http';
+import { Observable, tap } from 'rxjs';
 import { Movement } from '../models/movement.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class MovementService {
-  private storageKey = 'movements';
+  private readonly API_URL = '/api/movements';
   private movements: Movement[] = [];
 
-  constructor(private platform: PlatformService) {
-    this.load();
+  constructor(private http: HttpClient) {}
+
+  getMovements(): Observable<Movement[]> {
+    return this.http.get<Movement[]>(this.API_URL).pipe(
+      tap((movements) => {
+        this.movements = movements;
+      }),
+    );
   }
 
-  private load(): void {
-    if (!this.platform.isBrowser()) {
-      this.movements = [];
-      return;
-    }
-
-    const data = localStorage.getItem(this.storageKey);
-
-    if (data) {
-      const parsedMovements: Movement[] = JSON.parse(data);
-      this.movements = parsedMovements.map((movement) => ({
-        ...movement,
-        date: new Date(movement.date),
-      }));
-    }
+  getMovement(code: string): Observable<Movement> {
+    return this.http.get<Movement>(`${this.API_URL}/${code}`);
   }
 
-  private save(): void {
-    if (!this.platform.isBrowser()) return;
-    localStorage.setItem(this.storageKey, JSON.stringify(this.movements));
+  addMovement(movement: Movement): Observable<Movement> {
+    return this.http.post<Movement>(this.API_URL, movement).pipe(
+      tap((newMovement) => {
+        this.movements.unshift(newMovement);
+      }),
+    );
   }
 
-  getMovements(): Movement[] {
+  generateCode(): Observable<{ code: string }> {
+    return this.http.get<{ code: string }>(`${this.API_URL}/generate-code`);
+  }
+
+  getLocalMovements(): Movement[] {
     return this.movements;
-  }
-
-  addMovement(movement: Movement): void {
-    this.movements.push(movement);
-    this.save();
-  }
-
-  generateId(): string {
-    if (this.movements.length === 0) return 'M001';
-
-    const last = this.movements[this.movements.length - 1];
-    const number = parseInt(last.id.replace('M', ''));
-    return 'M' + (number + 1).toString().padStart(3, '0');
   }
 }

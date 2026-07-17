@@ -1,7 +1,8 @@
-import { Injectable, PLATFORM_ID, Inject } from '@angular/core';
+import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
+import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { User } from '../models/user.model';
+import { Observable, tap, map, catchError, of } from 'rxjs';
 
 export interface SessionUser {
   id: number;
@@ -14,102 +15,66 @@ export interface SessionUser {
   providedIn: 'root',
 })
 export class AuthService {
-  private readonly USERS_KEY = 'stockadmin_users';
   private readonly SESSION_KEY = 'stockadmin_session';
+  private readonly API_URL = '/api/auth';
 
-  private defaultUsers: User[] = [
-    {
-      id: 1,
-      nombre: 'Administrador',
-      email: 'admin@admin.com',
-      password: '123456',
-      role: 'admin',
-    },
-    {
-      id: 2,
-      nombre: 'Usuario',
-      email: 'user@user.com',
-      password: '123456',
-      role: 'user',
-    },
-  ];
+  private currentUser: SessionUser | null = null;
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
     private router: Router,
+    private http: HttpClient,
   ) {
-    this.initUsers();
+    this.loadSession();
   }
 
   private isBrowser(): boolean {
     return isPlatformBrowser(this.platformId);
   }
 
-  private initUsers(): void {
+  private loadSession(): void {
     if (!this.isBrowser()) return;
 
-    const users = localStorage.getItem(this.USERS_KEY);
-
-    if (!users) {
-      localStorage.setItem(this.USERS_KEY, JSON.stringify(this.defaultUsers));
+    const session = localStorage.getItem(this.SESSION_KEY);
+    if (session) {
+      this.currentUser = JSON.parse(session);
     }
   }
 
-  login(email: string, password: string): boolean {
-    if (!this.isBrowser()) return false;
-
-    const users = this.getUsers();
-    const user = users.find(
-      (u) => u.email === email && u.password === password,
+  login(email: string, password: string): Observable<boolean> {
+    return this.http.post<SessionUser>(`${this.API_URL}/login`, { email, password }).pipe(
+      tap((user) => {
+        this.currentUser = user;
+        if (this.isBrowser()) {
+          localStorage.setItem(this.SESSION_KEY, JSON.stringify(user));
+        }
+      }),
+      map(() => true),
+      catchError(() => of(false)),
     );
-
-    if (user) {
-      localStorage.setItem(
-        this.SESSION_KEY,
-        JSON.stringify({ id: user.id, nombre: user.nombre, email: user.email, role: user.role }),
-      );
-      return true;
-    }
-
-    return false;
   }
 
   logout(): void {
-    if (!this.isBrowser()) return;
-
-    localStorage.removeItem(this.SESSION_KEY);
+    this.currentUser = null;
+    if (this.isBrowser()) {
+      localStorage.removeItem(this.SESSION_KEY);
+    }
     this.router.navigate(['/login']);
   }
 
   isLoggedIn(): boolean {
-    if (!this.isBrowser()) return false;
-
-    return localStorage.getItem(this.SESSION_KEY) !== null;
+    return this.currentUser !== null;
   }
 
   getCurrentUser(): SessionUser | null {
-    if (!this.isBrowser()) return null;
-
-    const session = localStorage.getItem(this.SESSION_KEY);
-
-    return session ? JSON.parse(session) : null;
+    return this.currentUser;
   }
 
   isAdmin(): boolean {
-    const user = this.getCurrentUser();
-    return user?.role === 'admin';
+    return this.currentUser?.role === 'admin';
   }
 
   isUser(): boolean {
-    const user = this.getCurrentUser();
-    return user?.role === 'user';
-  }
-
-  private getUsers(): User[] {
-    if (!this.isBrowser()) return this.defaultUsers;
-
-    const users = localStorage.getItem(this.USERS_KEY);
-
-    return users ? JSON.parse(users) : this.defaultUsers;
+    return this.currentUser?.role === 'user';
   }
 }

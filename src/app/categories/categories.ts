@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ToastComponent } from '../shared/toast/toast';
@@ -14,7 +14,7 @@ import { Category } from '../models/category.model';
   templateUrl: './categories.html',
   styleUrl: './categories.css',
 })
-export class CategoriesComponent {
+export class CategoriesComponent implements OnInit {
   formErrors = { name: '' };
 
   searchTerm = '';
@@ -37,8 +37,16 @@ export class CategoriesComponent {
     private categoryService: CategoryService,
     private productService: ProductService,
     public authService: AuthService,
-  ) {
-    this.categories = this.categoryService.getCategories();
+  ) {}
+
+  ngOnInit(): void {
+    this.loadData();
+  }
+
+  loadData(): void {
+    this.categoryService.getCategories().subscribe((categories) => {
+      this.categories = categories;
+    });
   }
 
   get filteredCategories(): Category[] {
@@ -48,7 +56,8 @@ export class CategoriesComponent {
   }
 
   getProductCount(categoryCode: string): number {
-    return this.productService.getProducts().filter((p) => p.categoryCode === categoryCode).length;
+    const category = this.categories.find((c) => c.code === categoryCode);
+    return (category as any)?.productCount ?? 0;
   }
 
   hasProducts(categoryCode: string): boolean {
@@ -99,15 +108,30 @@ export class CategoriesComponent {
       this.categoryService.updateCategory(this.currentCode, {
         ...this.categories.find((c) => c.code === this.currentCode)!,
         name: categoryName,
+      }).subscribe({
+        next: () => {
+          this.showToast('Categoría actualizada correctamente', 'success');
+          this.resetForm();
+          this.closeModal();
+          this.loadData();
+        },
+        error: () => {
+          this.showToast('Error al actualizar categoría', 'error');
+        },
       });
-      this.showToast('Categoría actualizada correctamente', 'success');
     } else {
-      this.categoryService.addCategory({ code: this.previewCode, name: categoryName });
-      this.showToast('Categoría creada correctamente', 'success');
+      this.categoryService.addCategory({ code: this.previewCode, name: categoryName }).subscribe({
+        next: () => {
+          this.showToast('Categoría creada correctamente', 'success');
+          this.resetForm();
+          this.closeModal();
+          this.loadData();
+        },
+        error: () => {
+          this.showToast('Error al crear categoría', 'error');
+        },
+      });
     }
-
-    this.resetForm();
-    this.closeModal();
   }
 
   openDeleteModal(code: string): void {
@@ -120,15 +144,17 @@ export class CategoriesComponent {
   }
 
   confirmDelete(): void {
-    if (this.hasProducts(this.currentCode)) {
-      this.showToast('No se puede eliminar una categoría con productos asociados', 'error');
-      this.closeDeleteModal();
-      return;
-    }
-
-    this.categoryService.deleteCategory(this.currentCode);
-    this.showToast('Categoría eliminada correctamente', 'success');
-    this.closeDeleteModal();
+    this.categoryService.deleteCategory(this.currentCode).subscribe({
+      next: () => {
+        this.showToast('Categoría eliminada correctamente', 'success');
+        this.closeDeleteModal();
+        this.loadData();
+      },
+      error: (error) => {
+        this.showToast(error.error?.error || 'Error al eliminar categoría', 'error');
+        this.closeDeleteModal();
+      },
+    });
   }
 
   resetForm(): void {

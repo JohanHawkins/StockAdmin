@@ -32,15 +32,19 @@ export class LoginComponent {
 
     this.isLoading = true;
 
-    setTimeout(() => {
-      const success = this.authService.login(this.email, this.password);
-
-      if (success) {
-        this.router.navigate(['/dashboard']);
-      } else {
-        this.errorMessage = 'Email o contraseña incorrectos';
+    this.authService.login(this.email, this.password).subscribe({
+      next: (success) => {
+        if (success) {
+          this.router.navigate(['/dashboard']);
+        } else {
+          this.errorMessage = 'Email o contraseña incorrectos';
+          this.isLoading = false;
+        }
+      },
+      error: () => {
+        this.errorMessage = 'Error de conexión con el servidor';
         this.isLoading = false;
-      }
-    }, 800);
+      },
+    });
   }
 }

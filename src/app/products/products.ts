@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ToastComponent } from '../shared/toast/toast';
@@ -16,7 +16,7 @@ import { Category } from '../models/category.model';
   templateUrl: './products.html',
   styleUrl: './products.css',
 })
-export class ProductsComponent {
+export class ProductsComponent implements OnInit {
   searchTerm = '';
 
   toastVisible = false;
@@ -64,9 +64,19 @@ export class ProductsComponent {
     private movementService: MovementService,
     private categoryService: CategoryService,
     public authService: AuthService,
-  ) {
-    this.products = this.productService.getProducts();
-    this.categories = this.categoryService.getCategories();
+  ) {}
+
+  ngOnInit(): void {
+    this.loadData();
+  }
+
+  loadData(): void {
+    this.productService.getProducts().subscribe((products) => {
+      this.products = products;
+    });
+    this.categoryService.getCategories().subscribe((categories) => {
+      this.categories = categories;
+    });
   }
 
   showToast(message: string, type: 'success' | 'error' = 'success') {
@@ -153,17 +163,30 @@ export class ProductsComponent {
     const wasEditing = this.isEditing;
 
     if (this.isEditing) {
-      this.productService.updateProduct(this.currentCode, { ...this.newProduct });
+      this.productService.updateProduct(this.currentCode, { ...this.newProduct }).subscribe({
+        next: () => {
+          this.resetForm();
+          this.showToast('Producto actualizado correctamente', 'success');
+          this.closeModal();
+          this.loadData();
+        },
+        error: () => {
+          this.showToast('Error al actualizar producto', 'error');
+        },
+      });
     } else {
-      this.productService.addProduct({ ...this.newProduct });
+      this.productService.addProduct({ ...this.newProduct }).subscribe({
+        next: () => {
+          this.resetForm();
+          this.showToast('Producto creado correctamente', 'success');
+          this.closeModal();
+          this.loadData();
+        },
+        error: () => {
+          this.showToast('Error al crear producto', 'error');
+        },
+      });
     }
-
-    this.resetForm();
-    this.showToast(
-      wasEditing ? 'Producto actualizado correctamente' : 'Producto creado correctamente',
-      'success',
-    );
-    this.closeModal();
   }
 
   editProduct(product: Product) {
@@ -192,32 +215,30 @@ export class ProductsComponent {
   }
 
   confirmToggleStatus() {
-    const product = this.products.find((p) => p.code === this.currentCode);
-    if (!product) return;
-
-    const newStatus = product.status === 'Activo' ? 'Inactivo' : 'Activo';
-    this.productService.toggleStatus(this.currentCode);
-    this.showToast(`Producto cambiado a ${newStatus}`, 'success');
-    this.closeStatusModal();
+    this.productService.toggleStatus(this.currentCode).subscribe({
+      next: (updatedProduct) => {
+        this.showToast(`Producto cambiado a ${updatedProduct.status}`, 'success');
+        this.closeStatusModal();
+        this.loadData();
+      },
+      error: () => {
+        this.showToast('Error al cambiar estado', 'error');
+      },
+    });
   }
 
   confirmDelete() {
-    const product = this.products.find((p) => p.code === this.currentCode);
-    if (!product) return;
-
-    const hasMovements = this.movementService
-      .getMovements()
-      .some((movement) => movement.productCode === product.code);
-
-    if (hasMovements) {
-      this.showToast('No es posible eliminar un producto con movimientos registrados', 'error');
-      this.closeDeleteModal();
-      return;
-    }
-
-    this.productService.deleteProduct(this.currentCode);
-    this.showToast('Producto eliminado correctamente', 'success');
-    this.closeDeleteModal();
+    this.productService.deleteProduct(this.currentCode).subscribe({
+      next: () => {
+        this.showToast('Producto eliminado correctamente', 'success');
+        this.closeDeleteModal();
+        this.loadData();
+      },
+      error: (error) => {
+        this.showToast(error.error?.error || 'Error al eliminar producto', 'error');
+        this.closeDeleteModal();
+      },
+    });
   }
 
   resetForm() {

@@ -6,6 +6,7 @@ import {
 } from '@angular/ssr/node';
 import express from 'express';
 import { join } from 'node:path';
+import apiRoutes from './server/routes/index';
 
 const browserDistFolder = join(import.meta.dirname, '../browser');
 
@@ -15,17 +16,12 @@ const angularApp = new AngularNodeAppEngine({
   allowedHosts: ['kw8bg4b6-4200.use2.devtunnels.ms'],
 });
 
-/**
- * Example Express Rest API endpoints can be defined here.
- * Uncomment and define endpoints as necessary.
- *
- * Example:
- * ```ts
- * app.get('/api/{*splat}', (req, res) => {
- *   // Handle API request
- * });
- * ```
- */
+// Body parser
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// API Routes
+app.use('/api', apiRoutes);
 
 /**
  * Serve static files from /browser

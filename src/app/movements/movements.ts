@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ToastComponent } from '../shared/toast/toast';
@@ -15,7 +15,7 @@ import { Product } from '../models/product.model';
   templateUrl: './movements.html',
   styleUrl: './movements.css',
 })
-export class MovementsComponent {
+export class MovementsComponent implements OnInit {
   showModal = false;
 
   toastVisible = false;
@@ -49,18 +49,37 @@ export class MovementsComponent {
     private movementService: MovementService,
     private productService: ProductService,
     public authService: AuthService,
-  ) {
-    this.movements = this.movementService.getMovements();
-    this.products = this.productService.getProducts();
+  ) {}
+
+  ngOnInit(): void {
+    this.loadData();
+  }
+
+  loadData(): void {
+    this.movementService.getMovements().subscribe((movements) => {
+      this.movements = movements;
+    });
+    this.productService.getProducts().subscribe((products) => {
+      this.products = products;
+    });
   }
 
   openModal(): void {
     this.resetForm();
+    this.generateNewCode();
     this.showModal = true;
   }
 
   closeModal(): void {
     this.showModal = false;
+  }
+
+  generateNewCode(): void {
+    this.movementService.generateCode().subscribe({
+      next: (response) => {
+        this.newMovement.id = response.code;
+      },
+    });
   }
 
   getProductName(productCode: string): string {
@@ -93,36 +112,19 @@ export class MovementsComponent {
       return;
     }
 
-    this.newMovement.id = this.movementService.generateId();
     this.newMovement.date = new Date();
 
-    const product = this.products.find((p) => p.code === this.newMovement.productCode);
-
-    if (!product) {
-      this.showToast('Producto no encontrado', 'error');
-      return;
-    }
-
-    if (this.newMovement.type === 'SALIDA' && this.newMovement.quantity > product.stock) {
-      this.formErrors.quantity = 'No hay stock suficiente para realizar la salida.';
-      this.showToast('No hay stock suficiente para realizar la salida.', 'error');
-      return;
-    }
-
-    if (this.newMovement.type === 'ENTRADA') {
-      product.stock += this.newMovement.quantity;
-    } else {
-      product.stock -= this.newMovement.quantity;
-    }
-
-    this.productService.updateProduct(this.newMovement.productCode, product);
-    this.movementService.addMovement({ ...this.newMovement });
-    this.movements = this.movementService.getMovements();
-    this.products = this.productService.getProducts();
-
-    this.showToast('Movimiento registrado correctamente', 'success');
-    this.closeModal();
-    this.resetForm();
+    this.movementService.addMovement(this.newMovement).subscribe({
+      next: () => {
+        this.showToast('Movimiento registrado correctamente', 'success');
+        this.closeModal();
+        this.resetForm();
+        this.loadData();
+      },
+      error: (error) => {
+        this.showToast(error.error?.error || 'Error al registrar movimiento', 'error');
+      },
+    });
   }
 
   resetForm(): void {

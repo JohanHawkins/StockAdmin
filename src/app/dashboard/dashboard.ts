@@ -50,15 +50,19 @@ export class DashboardComponent implements OnInit {
   }
 
   loadData(): void {
-    this.products = this.productService.getProducts();
-    this.categories = this.categoryService.getCategories();
-    this.movements = this.movementService.getMovements();
-
-    this.buildMaps();
-    this.calculateStats();
-
-    this.isLoading = false;
-    this.cdr.markForCheck();
+    this.productService.getProducts().subscribe((products) => {
+      this.products = products;
+      this.categoryService.getCategories().subscribe((categories) => {
+        this.categories = categories;
+        this.movementService.getMovements().subscribe((movements) => {
+          this.movements = movements;
+          this.buildMaps();
+          this.calculateStats();
+          this.isLoading = false;
+          this.cdr.markForCheck();
+        });
+      });
+    });
   }
 
   private buildMaps(): void {

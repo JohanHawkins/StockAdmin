@@ -1,64 +1,57 @@
 import { Injectable } from '@angular/core';
-import { PlatformService } from './platform.service';
+import { HttpClient } from '@angular/common/http';
+import { Observable, tap } from 'rxjs';
 import { Category } from '../models/category.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CategoryService {
-  private storageKey = 'categories';
+  private readonly API_URL = '/api/categories';
   private categories: Category[] = [];
 
-  constructor(private platform: PlatformService) {
-    this.loadFromStorage();
+  constructor(private http: HttpClient) {}
+
+  getCategories(): Observable<Category[]> {
+    return this.http.get<Category[]>(this.API_URL).pipe(
+      tap((categories) => {
+        this.categories = categories;
+      }),
+    );
   }
 
-  private loadFromStorage(): void {
-    if (!this.platform.isBrowser()) {
-      this.categories = [];
-      return;
-    }
-
-    const data = localStorage.getItem(this.storageKey);
-
-    if (data) {
-      this.categories = JSON.parse(data);
-    } else {
-      this.categories = [
-        { code: 'C001', name: 'Tecnología' },
-        { code: 'C002', name: 'Accesorios' },
-      ];
-      this.saveToStorage();
-    }
+  getCategory(code: string): Observable<Category> {
+    return this.http.get<Category>(`${this.API_URL}/${code}`);
   }
 
-  private saveToStorage(): void {
-    if (!this.platform.isBrowser()) return;
-    localStorage.setItem(this.storageKey, JSON.stringify(this.categories));
+  addCategory(category: Category): Observable<Category> {
+    return this.http.post<Category>(this.API_URL, category).pipe(
+      tap((newCategory) => {
+        this.categories.push(newCategory);
+      }),
+    );
   }
 
-  getCategories(): Category[] {
+  updateCategory(code: string, category: Category): Observable<Category> {
+    return this.http.put<Category>(`${this.API_URL}/${code}`, category).pipe(
+      tap((updatedCategory) => {
+        const index = this.categories.findIndex((c) => c.code === code);
+        if (index !== -1) {
+          this.categories[index] = updatedCategory;
+        }
+      }),
+    );
+  }
+
+  deleteCategory(code: string): Observable<void> {
+    return this.http.delete<void>(`${this.API_URL}/${code}`).pipe(
+      tap(() => {
+        this.categories = this.categories.filter((c) => c.code !== code);
+      }),
+    );
+  }
+
+  getLocalCategories(): Category[] {
     return this.categories;
-  }
-
-  addCategory(category: Category): void {
-    this.categories.push(category);
-    this.saveToStorage();
-  }
-
-  updateCategory(code: string, category: Category): void {
-    const index = this.categories.findIndex((c) => c.code === code);
-    if (index !== -1) {
-      this.categories[index] = category;
-      this.saveToStorage();
-    }
-  }
-
-  deleteCategory(code: string): void {
-    const index = this.categories.findIndex((c) => c.code === code);
-    if (index !== -1) {
-      this.categories.splice(index, 1);
-      this.saveToStorage();
-    }
   }
 }
