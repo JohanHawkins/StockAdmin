@@ -17,9 +17,10 @@ Construir una aplicación web moderna para administrar inventario de manera senc
 
 # Tecnologías
 
-- **Frontend:** Angular
-- **Backend:** ASP.NET Core (futuro)
+- **Frontend:** Angular 21 (SSR)
+- **Backend:** Node.js + Express (integrado en Angular SSR)
 - **Base de Datos:** PostgreSQL
+- **Paquetes:** pg (node-postgres)
 
 ---
 
@@ -36,13 +37,14 @@ Construir una aplicación web moderna para administrar inventario de manera senc
 
 # Estado del Proyecto
 
-## Completado (91%)
+## Completado (95%)
 
 ### Login ✅
 - Formulario de login (email + contraseña)
 - Servicio de autenticación con roles
 - Guard de rutas protegidas
 - Redirección al dashboard tras login
+- Conexión a PostgreSQL para validación de credenciales
 
 ### Dashboard ✅
 - Total de productos, categorías, movimientos
@@ -89,6 +91,20 @@ Construir una aplicación web moderna para administrar inventario de manera senc
 - Movement: id, productCode, type, quantity, date, observation
 - User: id, nombre, email, password, role
 
+### Backend API REST ✅
+- Express integrado en Angular SSR (server.ts)
+- Rutas: /api/auth, /api/products, /api/categories, /api/movements
+- Pool de conexiones PostgreSQL con pg (máx 20 conexiones)
+- Queries parametrizadas (prevención SQL injection)
+- Transacciones para movimientos (BEGIN/COMMIT/ROLLBACK)
+- Seed data: 2 usuarios, 2 categorías, 2 productos
+
+### Base de Datos PostgreSQL ✅
+- Esquema completo: users, categories, products, movements
+- Índices optimizados para búsquedas frecuentes
+- Constraints de integridad referencial
+- Datos iniciales (seed) incluidos
+
 ---
 
 ## Pendientes
@@ -103,6 +119,7 @@ Construir una aplicación web moderna para administrar inventario de manera senc
 | 6 | Pruebas de integración | Infraestructura |
 | 7 | README profesional con imágenes | Infraestructura |
 | 8 | Deploy (GitHub Pages / Vercel) | Infraestructura |
+| 9 | Variables de entorno (.env) para producción | Infraestructura |
 
 ---
 
@@ -114,6 +131,45 @@ Construir una aplicación web moderna para administrar inventario de manera senc
 4. Registra entradas o salidas
 5. El sistema actualiza el stock automáticamente
 6. Visualiza estadísticas en el dashboard
+
+---
+
+# Cómo Ejecutar
+
+## Requisitos
+- Node.js 18+
+- PostgreSQL 12+ (agregado al PATH)
+
+## Instalación de BD
+```bash
+# Crear la base de datos
+psql -U postgres -c "CREATE DATABASE stockadmin;"
+
+# Ejecutar el esquema (desde la raíz del proyecto)
+psql -U postgres -d stockadmin -f src/server/schema.sql
+```
+
+## Variables de Entorno (opcional)
+Copiar `.env.example` como `.env` y ajustar los valores:
+```
+DB_HOST=localhost
+DB_PORT=5432
+DB_NAME=stockadmin
+DB_USER=postgres
+DB_PASSWORD=postgres
+```
+
+## Ejecución
+```bash
+# Instalar dependencias
+npm install
+
+# Compilar el proyecto
+npm run build
+
+# Arrancar el servidor (puerto 4000)
+npm run serve:ssr:StockAdmin
+```
 
 ---
 
@@ -228,4 +284,9 @@ VALUES ('Usuario', 'user@user.com', '123456', 'user');
 -- Categorías iniciales
 INSERT INTO categories (code, name) VALUES ('C001', 'Tecnología');
 INSERT INTO categories (code, name) VALUES ('C002', 'Accesorios');
+
+-- Productos iniciales
+INSERT INTO products (code, name, description, price, stock, min_stock, category_id, status) VALUES 
+('P001', 'Mouse Gamer', 'Mouse gamer con RGB y 12000 DPI', 80.00, 10, 3, 1, 'Activo'),
+('P002', 'Teclado Mecánico', 'Teclado mecánico switches Blue', 150.00, 5, 2, 1, 'Activo');
 ```
