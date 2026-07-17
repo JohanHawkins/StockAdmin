@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { ToastComponent } from '../shared/toast/toast';
 import { CategoryService } from '../services/category.service';
 import { ProductService } from '../services/product.service';
+import { AuthService } from '../services/auth.service';
 import { Category } from '../models/category.model';
 
 @Component({
@@ -35,6 +36,7 @@ export class CategoriesComponent {
   constructor(
     private categoryService: CategoryService,
     private productService: ProductService,
+    public authService: AuthService,
   ) {
     this.categories = this.categoryService.getCategories();
   }

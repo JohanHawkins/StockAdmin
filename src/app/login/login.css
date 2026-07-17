@@ -242,6 +242,26 @@
   color: #94a3b8;
 }
 
+.test-accounts {
+  margin-top: 16px;
+  padding: 12px;
+  background-color: rgba(59, 130, 246, 0.05);
+  border-radius: var(--radius-md);
+  font-size: 0.75rem;
+}
+
+[data-theme="dark"] .test-accounts {
+  background-color: rgba(59, 130, 246, 0.1);
+}
+
+.test-accounts p {
+  margin: 4px 0;
+}
+
+.test-accounts strong {
+  color: #3b82f6;
+}
+
 /* Responsive */
 @media (max-width: 480px) {
   .login-card {

@@ -9,7 +9,7 @@
       class="search-input"
     />
 
-    <button (click)="openModal()">+ Nuevo Producto</button>
+    <button (click)="openModal()" *ngIf="authService.isAdmin()">+ Nuevo Producto</button>
   </div>
 
   <table>
@@ -46,7 +46,7 @@
           </span>
         </td>
 
-        <td class="actions">
+        <td class="actions" *ngIf="authService.isAdmin()">
           <button class="edit-btn" (click)="editProduct(product)" title="Editar producto">Editar</button>
 
           <button class="delete-btn" (click)="openDeleteModal(product.code)" title="Eliminar producto">Eliminar</button>

@@ -3,6 +3,13 @@ import { isPlatformBrowser } from '@angular/common';
 import { Router } from '@angular/router';
 import { User } from '../models/user.model';
 
+export interface SessionUser {
+  id: number;
+  nombre: string;
+  email: string;
+  role: 'admin' | 'user';
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -16,6 +23,14 @@ export class AuthService {
       nombre: 'Administrador',
       email: 'admin@admin.com',
       password: '123456',
+      role: 'admin',
+    },
+    {
+      id: 2,
+      nombre: 'Usuario',
+      email: 'user@user.com',
+      password: '123456',
+      role: 'user',
     },
   ];
 
@@ -51,7 +66,7 @@ export class AuthService {
     if (user) {
       localStorage.setItem(
         this.SESSION_KEY,
-        JSON.stringify({ id: user.id, nombre: user.nombre, email: user.email }),
+        JSON.stringify({ id: user.id, nombre: user.nombre, email: user.email, role: user.role }),
       );
       return true;
     }
@@ -72,12 +87,22 @@ export class AuthService {
     return localStorage.getItem(this.SESSION_KEY) !== null;
   }
 
-  getCurrentUser(): { id: number; nombre: string; email: string } | null {
+  getCurrentUser(): SessionUser | null {
     if (!this.isBrowser()) return null;
 
     const session = localStorage.getItem(this.SESSION_KEY);
 
     return session ? JSON.parse(session) : null;
+  }
+
+  isAdmin(): boolean {
+    const user = this.getCurrentUser();
+    return user?.role === 'admin';
+  }
+
+  isUser(): boolean {
+    const user = this.getCurrentUser();
+    return user?.role === 'user';
   }
 
   private getUsers(): User[] {

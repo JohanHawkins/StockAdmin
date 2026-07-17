@@ -21,7 +21,7 @@
         </a>
       </li>
 
-      <li>
+      <li *ngIf="authService.isAdmin()">
         <a routerLink="/categories" routerLinkActive="active" (click)="closeMobileMenu()">
           <span class="nav-icon">🏷️</span>
           <span class="nav-text">Categorías</span>
@@ -54,6 +54,8 @@
         <button class="theme-toggle" (click)="toggleTheme()" [title]="isDarkMode ? 'Modo claro' : 'Modo oscuro'">
           {{ isDarkMode ? '☀️' : '🌙' }}
         </button>
+
+        <span class="role-badge" [class.admin]="authService.isAdmin()">{{ authService.getCurrentUser()?.role === 'admin' ? 'Admin' : 'Usuario' }}</span>
 
         <span>{{ authService.getCurrentUser()?.nombre }}</span>
 

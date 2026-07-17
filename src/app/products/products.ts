@@ -5,6 +5,7 @@ import { ToastComponent } from '../shared/toast/toast';
 import { ProductService } from '../services/product.service';
 import { MovementService } from '../services/movement.service';
 import { CategoryService } from '../services/category.service';
+import { AuthService } from '../services/auth.service';
 import { Product } from '../models/product.model';
 import { Category } from '../models/category.model';
 
@@ -62,6 +63,7 @@ export class ProductsComponent {
     private productService: ProductService,
     private movementService: MovementService,
     private categoryService: CategoryService,
+    public authService: AuthService,
   ) {
     this.products = this.productService.getProducts();
     this.categories = this.categoryService.getCategories();

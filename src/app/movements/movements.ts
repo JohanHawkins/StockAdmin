@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { ToastComponent } from '../shared/toast/toast';
 import { MovementService } from '../services/movement.service';
 import { ProductService } from '../services/product.service';
+import { AuthService } from '../services/auth.service';
 import { Movement } from '../models/movement.model';
 import { Product } from '../models/product.model';
 
@@ -47,6 +48,7 @@ export class MovementsComponent {
   constructor(
     private movementService: MovementService,
     private productService: ProductService,
+    public authService: AuthService,
   ) {
     this.movements = this.movementService.getMovements();
     this.products = this.productService.getProducts();

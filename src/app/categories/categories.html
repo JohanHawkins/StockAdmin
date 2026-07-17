@@ -9,7 +9,7 @@
       class="search-input"
     />
 
-    <button (click)="openModal()">+ Nueva Categoría</button>
+    <button (click)="openModal()" *ngIf="authService.isAdmin()">+ Nueva Categoría</button>
   </div>
 
   <table>
@@ -18,7 +18,7 @@
         <th>Código</th>
         <th>Nombre</th>
         <th>Productos</th>
-        <th>Acciones</th>
+        <th *ngIf="authService.isAdmin()">Acciones</th>
       </tr>
     </thead>
 
@@ -27,14 +27,14 @@
         <td>{{ category.code }}</td>
         <td>{{ category.name }}</td>
         <td>{{ getProductCount(category.code) }}</td>
-        <td class="actions">
+        <td class="actions" *ngIf="authService.isAdmin()">
           <button class="edit-btn" (click)="editCategory(category)" title="Editar categoría">Editar</button>
           <button class="delete-btn" (click)="openDeleteModal(category.code)" title="Eliminar categoría">Eliminar</button>
         </td>
       </tr>
 
       <tr *ngIf="filteredCategories.length === 0">
-        <td colspan="4" class="empty-message">Categoría no encontrada</td>
+        <td [attr.colspan]="authService.isAdmin() ? 4 : 3" class="empty-message">Categoría no encontrada</td>
       </tr>
     </tbody>
   </table>
