@@ -55,7 +55,7 @@
           {{ isDarkMode ? '☀️' : '🌙' }}
         </button>
 
-        <span class="role-badge" [class.admin]="authService.isAdmin()">{{ authService.getCurrentUser()?.role === 'admin' ? 'Admin' : 'Usuario' }}</span>
+        <span class="role-badge" [class.admin]="authService.isAdmin()">{{ authService.getCurrentUser()?.role === 'admin' ? 'Admin' : 'Empleado' }}</span>
 
         <span>{{ authService.getCurrentUser()?.nombre }}</span>
 
@@ -69,3 +69,5 @@
     </section>
   </div>
 </div>
+
+<app-spinner [visible]="isNavigating"></app-spinner>

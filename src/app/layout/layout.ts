@@ -1,27 +1,42 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router, NavigationStart, NavigationEnd } from '@angular/router';
 import { AuthService } from '../services/auth.service';
+import { Subscription } from 'rxjs';
+import { filter } from 'rxjs/operators';
+import { SpinnerComponent } from '../shared/spinner/spinner';
 
 @Component({
   selector: 'app-layout',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, SpinnerComponent],
   templateUrl: './layout.html',
   styleUrl: './layout.css',
 })
-export class LayoutComponent implements OnInit {
+export class LayoutComponent implements OnInit, OnDestroy {
   sidebarCollapsed = false;
   isMobile = false;
   showMobileMenu = false;
   isDarkMode = false;
+  isNavigating = false;
 
-  constructor(public authService: AuthService) {
+  private routerSub!: Subscription;
+
+  constructor(public authService: AuthService, private router: Router) {
     this.checkScreenSize();
   }
 
   ngOnInit(): void {
     this.loadTheme();
+    this.routerSub = this.router.events.pipe(
+      filter(e => e instanceof NavigationStart || e instanceof NavigationEnd),
+    ).subscribe(e => {
+      this.isNavigating = e instanceof NavigationStart;
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.routerSub.unsubscribe();
   }
 
   @HostListener('window:resize')
