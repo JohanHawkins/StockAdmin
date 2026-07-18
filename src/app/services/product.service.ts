@@ -15,13 +15,24 @@ export class ProductService {
   getProducts(): Observable<Product[]> {
     return this.http.get<Product[]>(this.API_URL).pipe(
       tap((products) => {
-        this.products = products;
+        this.products = products.map((p) => ({
+          ...p,
+          price: Number(p.price),
+          stock: Number(p.stock),
+          minStock: Number(p.minStock),
+        }));
       }),
     );
   }
 
   getProduct(code: string): Observable<Product> {
-    return this.http.get<Product>(`${this.API_URL}/${code}`);
+    return this.http.get<Product>(`${this.API_URL}/${code}`).pipe(
+      tap((product) => {
+        product.price = Number(product.price);
+        product.stock = Number(product.stock);
+        product.minStock = Number(product.minStock);
+      }),
+    );
   }
 
   addProduct(product: Product): Observable<Product> {

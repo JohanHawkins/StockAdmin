@@ -37,7 +37,7 @@ export class MovementsComponent implements OnInit {
   filterDateTo = '';
 
   newMovement: Movement = {
-    id: '',
+    code: '',
     productCode: '',
     type: '' as any,
     quantity: 0,
@@ -80,7 +80,7 @@ export class MovementsComponent implements OnInit {
   generateNewCode(): void {
     this.movementService.generateCode().subscribe({
       next: (response) => {
-        this.newMovement.id = response.code;
+        this.newMovement.code = response.code;
       },
     });
   }
@@ -134,7 +134,7 @@ export class MovementsComponent implements OnInit {
 
   resetForm(): void {
     this.newMovement = {
-      id: '',
+      code: '',
       productCode: '',
       type: '' as any,
       quantity: 0,

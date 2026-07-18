@@ -172,6 +172,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   trackByMovementId(index: number, movement: Movement): string {
-    return movement.id;
+    return movement.code;
   }
 }

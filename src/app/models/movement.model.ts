@@ -1,5 +1,5 @@
 export interface Movement {
-  id: string;
+  code: string;
   productCode: string;
   type: 'ENTRADA' | 'SALIDA';
   quantity: number;
