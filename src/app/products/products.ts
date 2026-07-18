@@ -34,7 +34,7 @@ export class ProductsComponent implements OnInit {
   categories: Category[] = [];
 
   currentPage = 1;
-  itemsPerPage = 5;
+  itemsPerPage = 10;
 
   sortColumn: keyof Product = 'code';
   sortDirection: 'asc' | 'desc' = 'asc';
