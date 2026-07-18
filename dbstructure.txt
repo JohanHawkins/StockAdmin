@@ -1,0 +1,113 @@
+# StockAdmin - Estructura de Base de Datos
+
+Motor: PostgreSQL 12+
+Esquema: src/server/schema.sql
+
+---
+
+## Diagrama de Relaciones
+
+```
+users (1) ──────< movements (N)
+                    │
+categories (1) ───< products (N) >──── movements (N)
+```
+
+---
+
+## Tablas
+
+### users
+Almacena los usuarios del sistema (admin y empleados).
+
+| Columna | Tipo | Restricciones |
+|---------|------|---------------|
+| id | SERIAL | PRIMARY KEY |
+| nombre | VARCHAR(100) | NOT NULL |
+| email | VARCHAR(150) | UNIQUE, NOT NULL |
+| password | VARCHAR(255) | NOT NULL |
+| role | VARCHAR(10) | NOT NULL, CHECK ('admin', 'empleado') |
+| created_at | TIMESTAMP | DEFAULT CURRENT_TIMESTAMP |
+| updated_at | TIMESTAMP | DEFAULT CURRENT_TIMESTAMP |
+
+### categories
+Almacena las categorías de productos.
+
+| Columna | Tipo | Restricciones |
+|---------|------|---------------|
+| id | SERIAL | PRIMARY KEY |
+| code | VARCHAR(10) | UNIQUE, NOT NULL |
+| name | VARCHAR(100) | NOT NULL |
+| created_at | TIMESTAMP | DEFAULT CURRENT_TIMESTAMP |
+| updated_at | TIMESTAMP | DEFAULT CURRENT_TIMESTAMP |
+
+### products
+Almacena los productos del inventario.
+
+| Columna | Tipo | Restricciones |
+|---------|------|---------------|
+| id | SERIAL | PRIMARY KEY |
+| code | VARCHAR(10) | UNIQUE, NOT NULL |
+| name | VARCHAR(150) | NOT NULL |
+| description | TEXT | |
+| price | DECIMAL(10,2) | NOT NULL, CHECK (price > 0) |
+| stock | INTEGER | NOT NULL, DEFAULT 0, CHECK (stock >= 0) |
+| min_stock | INTEGER | NOT NULL, DEFAULT 0, CHECK (min_stock >= 0) |
+| category_id | INTEGER | REFERENCES categories(id) ON DELETE RESTRICT |
+| status | VARCHAR(10) | NOT NULL, DEFAULT 'Activo', CHECK ('Activo', 'Inactivo') |
+| created_at | TIMESTAMP | DEFAULT CURRENT_TIMESTAMP |
+| updated_at | TIMESTAMP | DEFAULT CURRENT_TIMESTAMP |
+
+### movements
+Almacena los movimientos de inventario (entradas y salidas).
+
+| Columna | Tipo | Restricciones |
+|---------|------|---------------|
+| id | SERIAL | PRIMARY KEY |
+| code | VARCHAR(10) | UNIQUE, NOT NULL |
+| product_id | INTEGER | REFERENCES products(id) ON DELETE RESTRICT |
+| type | VARCHAR(10) | NOT NULL, CHECK ('ENTRADA', 'SALIDA') |
+| quantity | INTEGER | NOT NULL, CHECK (quantity > 0) |
+| observation | TEXT | |
+| user_id | INTEGER | REFERENCES users(id) ON DELETE RESTRICT |
+| created_at | TIMESTAMP | DEFAULT CURRENT_TIMESTAMP |
+
+---
+
+## Relaciones
+
+| Relación | Tipo | Descripción |
+|----------|------|-------------|
+| users → movements | 1:N | Un usuario puede registrar muchos movimientos |
+| categories → products | 1:N | Una categoría puede tener muchos productos |
+| products → movements | 1:N | Un producto puede tener muchos movimientos |
+
+---
+
+## Índices
+
+| Índice | Tabla | Columna | Propósito |
+|--------|-------|---------|-----------|
+| idx_products_category | products | category_id | Búsqueda por categoría |
+| idx_products_status | products | status | Filtro por estado |
+| idx_products_code | products | code | Búsqueda por código |
+| idx_movements_product | movements | product_id | Movimientos por producto |
+| idx_movements_user | movements | user_id | Movimientos por usuario |
+| idx_movements_type | movements | type | Filtro por tipo (ENTRADA/SALIDA) |
+| idx_movements_created | movements | created_at | Ordenamiento por fecha |
+| idx_users_email | users | email | Login por email |
+
+---
+
+## Datos Iniciales (Seed)
+
+### Usuarios
+
+| nombre | email | password | role |
+|--------|-------|----------|------|
+| Administrador | admin@admin.com | 123456 | admin |
+| Empleado | empleado@empleado.com | 123456 | empleado |
+
+### Categorías y Productos
+
+Se crean desde la interfaz de usuario, no hay datos semilla.

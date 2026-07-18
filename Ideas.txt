@@ -1,4 +1,4 @@
-# Sistema de Gestión de Inventario Web
+# StockAdmin - Sistema de Gestión de Inventario
 
 ## Cuentas de Prueba
 
@@ -9,22 +9,16 @@
 
 ---
 
-## Objetivo del Proyecto
-
-Construir una aplicación web moderna para administrar inventario de manera sencilla y profesional.
-
----
-
-# Tecnologías
+## Tecnologías
 
 - **Frontend:** Angular 21 (SSR)
 - **Backend:** Node.js + Express (integrado en Angular SSR)
 - **Base de Datos:** PostgreSQL
-- **Paquetes:** pg (node-postgres)
+- **Paquetes:** pg (node-postgres), dotenv
 
 ---
 
-# Permisos por Rol
+## Permisos por Rol
 
 | Funcionalidad | Admin | Empleado |
 |---------------|-------|---------|
@@ -35,88 +29,21 @@ Construir una aplicación web moderna para administrar inventario de manera senc
 
 ---
 
-# Estado del Proyecto
+## Estado del Proyecto
 
-## Completado (98%)
+### Completado (98%)
 
-### Login ✅
-- Formulario de login (email + contraseña)
-- Servicio de autenticación con roles
-- Guard de rutas protegidas
-- Redirección al dashboard tras login
-- Conexión a PostgreSQL para validación de credenciales
+- Login con autenticación y roles
+- Dashboard con estadísticas
+- Productos (CRUD, búsqueda, paginación, estado)
+- Categorías (CRUD, protección al eliminar)
+- Movimientos (entradas/salidas, filtros, validación de stock)
+- UI/UX (sidebar, modo oscuro, responsive, 404)
+- Backend API REST con PostgreSQL
+- Change detection corregido en todos los módulos
+- Spinner de carga global al navegar
 
-### Dashboard ✅
-- Total de productos, categorías, movimientos
-- Stock total y valor del inventario
-- Producto con mayor stock y más costoso
-- Último movimiento registrado
-- Tablas de productos recientes, stock bajo y movimientos
-
-### Productos ✅
-- CRUD completo (crear, editar, eliminar)
-- Código automático (P001, P002...)
-- Búsqueda por nombre
-- Cambiar estado (Activar/Desactivar)
-- Campos: código, nombre, descripción, precio, stock, stock mínimo, categoría, estado
-- Validaciones completas
-- Formato de moneda con separadores
-
-### Categorías ✅
-- CRUD completo
-- Código automático (C001, C002...)
-- Evitar eliminar categoría con productos asociados
-- Mostrar cantidad de productos por categoría
-
-### Movimientos ✅
-- Registrar entradas y salidas
-- Actualización automática del stock
-- Validación de stock para salidas
-- Filtros por fecha, tipo y producto
-- Campo de observación
-
-### UI/UX ✅
-- Layout con sidebar colapsable y navbar
-- Modo oscuro con toggle y persistencia
-- Responsive (móvil)
-- Variables CSS globales
-- Animaciones y transiciones
-- Login con efecto glassmorphism
-- Loading states y manejo de errores
-- Página 404
-
-### Corrección de Bugs - Change Detection ✅
-- Login: spinner infinito al ingresar credenciales incorrectas (correo no registrado)
-- Categorías: modal no se cerraba al crear/editar categoría, toast de error no aparecía/desaparecía
-- Productos: mismo problema con modales de crear, editar, eliminar y cambiar estado
-- Movimientos: mismo problema al registrar movimientos
-- Datos no se renderizaban al navegar a Categorías/Productos/Movimientos hasta interactuar
-- Causa raíz: Angular SSR con `withFetch()` no dispara change detection tras respuestas HTTP
-- Solución: inyectar `ChangeDetectorRef` y llamar `detectChanges()` en callbacks de HTTP
-
-### Modelos de Datos ✅
-- Product: code, name, description, price, stock, minStock, categoryCode, status
-- Category: code, name
-- Movement: id, productCode, type, quantity, date, observation
-- User: id, nombre, email, password, role
-
-### Backend API REST ✅
-- Express integrado en Angular SSR (server.ts)
-- Rutas: /api/auth, /api/products, /api/categories, /api/movements
-- Pool de conexiones PostgreSQL con pg (máx 20 conexiones)
-- Queries parametrizadas (prevención SQL injection)
-- Transacciones para movimientos (BEGIN/COMMIT/ROLLBACK)
-- Seed data: solo 2 usuarios (admin y user). Categorías y productos se crean desde la UI
-
-### Base de Datos PostgreSQL ✅
-- Esquema completo: users, categories, products, movements
-- Índices optimizados para búsquedas frecuentes
-- Constraints de integridad referencial
-- Datos iniciales (seed) incluidos
-
----
-
-## Pendientes
+### Pendientes
 
 | # | Tarea | Módulo |
 |---|-------|--------|
@@ -128,167 +55,3 @@ Construir una aplicación web moderna para administrar inventario de manera senc
 | 6 | Pruebas de integración | Infraestructura |
 | 7 | README profesional con imágenes | Infraestructura |
 | 8 | Deploy (GitHub Pages / Vercel) | Infraestructura |
-| 9 | Variables de entorno (.env) para producción | Infraestructura |
-
----
-
-# Flujo del Sistema
-
-1. Usuario inicia sesión (admin o empleado)
-2. Ingresa al dashboard según su rol
-3. Administra productos (según permisos)
-4. Registra entradas o salidas
-5. El sistema actualiza el stock automáticamente
-6. Visualiza estadísticas en el dashboard
-
----
-
-# Cómo Ejecutar
-
-## Requisitos
-- Node.js 18+
-- PostgreSQL 12+ (agregado al PATH)
-
-## Instalación de BD
-```bash
-# Crear la base de datos
-psql -U postgres -c "CREATE DATABASE stockadmin;"
-
-# Ejecutar el esquema (desde la raíz del proyecto)
-psql -U postgres -d stockadmin -f src/server/schema.sql
-```
-
-## Variables de Entorno (opcional)
-Copiar `.env.example` como `.env` y ajustar los valores:
-```
-DB_HOST=localhost
-DB_PORT=5432
-DB_NAME=stockadmin
-DB_USER=postgres
-DB_PASSWORD=postgres
-```
-
-## Ejecución
-```bash
-# Instalar dependencias
-npm install
-
-# Compilar el proyecto
-npm run build
-
-# Arrancar el servidor (puerto 4000)
-npm run serve:ssr:StockAdmin
-```
-
----
-
-# Base de Datos - PostgreSQL
-
-## Diagrama de Relaciones
-
-```
-users (1) ──────< movements (N)
-                    │
-categories (1) ───< products (N) >──── movements (N)
-```
-
-## Tablas
-
-### users
-Almacena los usuarios del sistema.
-
-```sql
-CREATE TABLE users (
-    id SERIAL PRIMARY KEY,
-    nombre VARCHAR(100) NOT NULL,
-    email VARCHAR(150) UNIQUE NOT NULL,
-    password VARCHAR(255) NOT NULL,
-    role VARCHAR(10) NOT NULL CHECK (role IN ('admin', 'empleado')),
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-```
-
-### categories
-Almacena las categorías de productos.
-
-```sql
-CREATE TABLE categories (
-    id SERIAL PRIMARY KEY,
-    code VARCHAR(10) UNIQUE NOT NULL,
-    name VARCHAR(100) NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-```
-
-### products
-Almacena los productos del inventario.
-
-```sql
-CREATE TABLE products (
-    id SERIAL PRIMARY KEY,
-    code VARCHAR(10) UNIQUE NOT NULL,
-    name VARCHAR(150) NOT NULL,
-    description TEXT,
-    price DECIMAL(10, 2) NOT NULL CHECK (price > 0),
-    stock INTEGER NOT NULL DEFAULT 0 CHECK (stock >= 0),
-    min_stock INTEGER NOT NULL DEFAULT 0 CHECK (min_stock >= 0),
-    category_id INTEGER REFERENCES categories(id) ON DELETE RESTRICT,
-    status VARCHAR(10) NOT NULL DEFAULT 'Activo' CHECK (status IN ('Activo', 'Inactivo')),
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-```
-
-### movements
-Almacena los movimientos de inventario (entradas/salidas).
-
-```sql
-CREATE TABLE movements (
-    id SERIAL PRIMARY KEY,
-    code VARCHAR(10) UNIQUE NOT NULL,
-    product_id INTEGER REFERENCES products(id) ON DELETE RESTRICT,
-    type VARCHAR(10) NOT NULL CHECK (type IN ('ENTRADA', 'SALIDA')),
-    quantity INTEGER NOT NULL CHECK (quantity > 0),
-    observation TEXT,
-    user_id INTEGER REFERENCES users(id) ON DELETE RESTRICT,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-```
-
-## Relaciones
-
-| Relación | Tipo | Descripción |
-|----------|------|-------------|
-| users → movements | 1:N | Un usuario puede registrar muchos movimientos |
-| categories → products | 1:N | Una categoría puede tener muchos productos |
-| products → movements | 1:N | Un producto puede tener muchos movimientos |
-
-## Índices Recomendados
-
-```sql
--- Búsquedas frecuentes
-CREATE INDEX idx_products_category ON products(category_id);
-CREATE INDEX idx_products_status ON products(status);
-CREATE INDEX idx_products_code ON products(code);
-CREATE INDEX idx_movements_product ON movements(product_id);
-CREATE INDEX idx_movements_user ON movements(user_id);
-CREATE INDEX idx_movements_type ON movements(type);
-CREATE INDEX idx_movements_created ON movements(created_at);
-CREATE INDEX idx_users_email ON users(email);
-```
-
-## Datos Iniciales (Seed)
-
-```sql
--- Usuario admin por defecto
-INSERT INTO users (nombre, email, password, role) 
-VALUES ('Administrador', 'admin@admin.com', '123456', 'admin');
-
--- Empleado por defecto
-INSERT INTO users (nombre, email, password, role) 
-VALUES ('Empleado', 'empleado@empleado.com', '123456', 'empleado');
-
--- Las categorías y productos se crean desde la interfaz de usuario
-```

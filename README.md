@@ -1,265 +1,175 @@
-# Sistema de Gestión de Inventario Web
+# StockAdmin
 
-## Estado Actual del Proyecto
+Sistema de gestión de inventario web construido con Angular 21 y PostgreSQL. Aplicación SPA con SSR, autenticación por roles y operaciones CRUD completas.
 
-Frontend desarrollado con Angular 21 y componentes Standalone. El proyecto es un panel administrativo de inventario con navegación SPA y páginas para dashboard, productos y categorías.
+## Capturas
 
----
+> Agregar capturas de pantalla del dashboard, productos, categorías y movimientos.
 
-# Tecnologías Utilizadas
+## Cuentas de Prueba
 
-## Frontend
+| Rol | Email | Contraseña |
+|-----|-------|------------|
+| Admin | admin@admin.com | 123456 |
+| Empleado | empleado@empleado.com | 123456 |
 
-- Angular 21
-- TypeScript 5.9
-- HTML5
-- CSS3
-- Angular Router
-- Angular SSR (`@angular/ssr`)
-- Express
+## Tecnologías
 
----
+- **Frontend:** Angular 21, TypeScript 5.9, HTML5, CSS3
+- **Backend:** Node.js + Express 5 (integrado en Angular SSR)
+- **Base de Datos:** PostgreSQL 12+
+- **Paquetes clave:** pg (node-postgres), dotenv, zone.js
 
-# Arquitectura Actual
+## Características
 
-El proyecto utiliza:
+### Módulos
 
-- Angular Standalone Components
-- Angular Router
-- SPA con configuración SSR básica
-- Componentes y servicios organizados
-- Layout administrativo con sidebar y navbar
-- Routing basado en `app.routes.ts`
+- **Login** — Autenticación con roles (admin/empleado), guard de rutas protegidas
+- **Dashboard** — Estadísticas generales, productos recientes, stock bajo, últimos movimientos
+- **Productos** — CRUD completo, código automático, búsqueda, paginación, activar/desactivar
+- **Categorías** — CRUD completo, código automático, protección al eliminar con productos asociados
+- **Movimientos** — Registro de entradas/salidas, actualización automática de stock, filtros por fecha/tipo/producto
 
----
+### UI/UX
 
-# Estructura del Proyecto
+- Layout con sidebar colapsable y navbar
+- Modo oscuro con toggle y persistencia en localStorage
+- Diseño responsive (móvil)
+- Spinner de carga global al navegar entre vistas
+- Toasts de notificación
+- Modales para crear/editar/eliminar
+- Página 404
+- Login con efecto glassmorphism
 
-```text
+### Permisos por Rol
+
+| Funcionalidad | Admin | Empleado |
+|---------------|-------|----------|
+| Dashboard | CRUD completo | Solo lectura |
+| Productos | Crear, Editar, Eliminar, Activar/Desactivar | Solo lectura |
+| Categorías | Crear, Editar, Eliminar | Solo lectura |
+| Movimientos | Crear, Filtros | Crear, Filtros |
+
+### Backend API REST
+
+| Método | Ruta | Descripción |
+|--------|------|-------------|
+| POST | /api/auth/login | Iniciar sesión |
+| GET | /api/auth/users | Listar usuarios |
+| GET | /api/products | Listar productos |
+| POST | /api/products | Crear producto |
+| PUT | /api/products/:code | Actualizar producto |
+| DELETE | /api/products/:code | Eliminar producto |
+| PATCH | /api/products/:code/toggle-status | Cambiar estado |
+| GET | /api/categories | Listar categorías |
+| POST | /api/categories | Crear categoría |
+| PUT | /api/categories/:code | Actualizar categoría |
+| DELETE | /api/categories/:code | Eliminar categoría |
+| GET | /api/movements | Listar movimientos |
+| POST | /api/movements | Crear movimiento |
+| GET | /api/movements/generate-code | Generar código |
+
+## Estructura del Proyecto
+
+```
 src/
- └── app/
-      ├── dashboard/
-      ├── layout/
-      ├── login/
-      ├── products/
-      ├── categories/
-      ├── app.config.ts
-      ├── app.routes.ts
-      ├── app.routes.server.ts
-      ├── app.ts
-      ├── app.html
-      └── app.css
+├── app/
+│   ├── dashboard/          # Dashboard con estadísticas
+│   ├── products/           # Módulo de productos
+│   ├── categories/         # Módulo de categorías
+│   ├── movements/          # Módulo de movimientos
+│   ├── login/              # Login
+│   ├── layout/             # Layout con sidebar y navbar
+│   ├── shared/
+│   │   ├── spinner/        # Componente de carga global
+│   │   ├── toast/          # Notificaciones toast
+│   │   └── error-handler/  # Manejador de errores global
+│   ├── guards/             # Auth guard y admin guard
+│   ├── services/           # Servicios HTTP (auth, product, category, movement)
+│   ├── models/             # Interfaces TypeScript
+│   ├── app.config.ts       # Configuración de la app
+│   ├── app.routes.ts       # Rutas del cliente
+│   └── app.routes.server.ts # Rutas del servidor (SSR)
+├── server/
+│   ├── routes/             # Rutas API Express
+│   ├── db.ts               # Pool de conexiones PostgreSQL
+│   └── schema.sql          # Esquema de la base de datos
+└── server.ts               # Entry point del servidor
 ```
 
----
+## Base de Datos
 
-# Funcionalidades Implementadas
+### Diagrama de Relaciones
 
-## 1. Login UI
+```
+users (1) ──────< movements (N)
+                    │
+categories (1) ───< products (N) >──── movements (N)
+```
 
-- Componente de login presente con inputs para email y contraseña
-- Botón Ingresar
-- No está todavía expuesto mediante ruta ni es parte de la navegación principal
+### Tablas
 
----
+- **users** — id, nombre, email, password, role (admin/empleado)
+- **categories** — id, code, name
+- **products** — id, code, name, description, price, stock, min_stock, category_id, status
+- **movements** — id, code, product_id, type (ENTRADA/SALIDA), quantity, observation, user_id
 
-## 2. Layout Administrativo
+## Requisitos
 
-Se implementó:
+- Node.js 18+
+- PostgreSQL 12+ (agregado al PATH)
+- npm 11+
 
-- Sidebar lateral con navegación
-- Navbar superior
-- Área dinámica de contenido con `router-outlet`
+## Instalación
 
----
+```bash
+# Clonar el repositorio
+git clone https://github.com/JohanHawkins/StockAdmin.git
+cd StockAdmin
 
-## 3. Sidebar Navegable
+# Instalar dependencias
+npm install
+```
 
-Elementos visibles:
+### Base de Datos
 
-- Dashboard
-- Productos
-- Categorías
-- Movimientos (placeholder)
-- Usuarios (placeholder)
+```bash
+# Crear la base de datos
+psql -U postgres -c "CREATE DATABASE stockadmin;"
 
-### Características
+# Ejecutar el esquema
+psql -U postgres -d stockadmin -f src/server/schema.sql
+```
 
-- Navegación SPA real para Dashboard, Productos y Categorías
-- Links de Movimientos y Usuarios aún no enlazados a rutas reales
-- `routerLink` en los items activos
+### Variables de Entorno
 
----
+```bash
+# Copiar el archivo de ejemplo
+cp .env.example .env
+```
 
-# Sistema de Rutas
+Editar `.env` con los valores de tu base de datos:
 
-## Rutas implementadas
+```
+DB_HOST=localhost
+DB_PORT=5432
+DB_NAME=stockadmin
+DB_USER=postgres
+DB_PASSWORD=postgres
+```
 
-| Ruta        | Pantalla              |
-| ----------- | --------------------- |
-| /           | Redirige a /dashboard |
-| /dashboard  | Dashboard             |
-| /products   | Productos             |
-| /categories | Categorías            |
+### Ejecución
 
----
+```bash
+# Compilar el proyecto
+npm run build
 
-# Dashboard
+# Arrancar el servidor (puerto 4000)
+npm run serve:ssr:StockAdmin
+```
 
-Pantalla principal del panel con:
+Abrir http://localhost:4000
 
-- Cards informativas
-- Resumen general del inventario
+## Licencia
 
-### Objetivo
-
-Visualizar información general del sistema.
-
----
-
-# Módulo Productos
-
-## Funcionalidades actuales
-
-- Tabla dinámica de productos
-- Búsqueda y filtro con `searchTerm`
-- Modal para crear y editar productos
-- Formulario con validación básica
-- Toasts de estado
-- CRUD completo: Create, Read, Update, Delete
-
-## Datos mostrados
-
-- Código
-- Nombre
-- Precio
-- Stock
-- Estado
-
----
-
-# Módulo Categorías
-
-## Funcionalidades actuales
-
-- Lista dinámica de categorías
-- Búsqueda y filtro
-- Modal para crear y editar categorías
-- Toasts de estado
-- CRUD completo: Create, Read, Update, Delete
-
----
-
-# Conceptos Angular Aprendidos
-
-## Componentes
-
-- Standalone Components
-- Reutilización de componentes
-
----
-
-## Routing
-
-- RouterModule
-- routerLink
-- router-outlet
-
----
-
-## Directivas
-
-- \*ngFor
-- \*ngIf
-
----
-
-## Forms
-
-- FormsModule
-- ngModel
-
----
-
-# Diseño UI Actual
-
-## Sidebar
-
-- Menú lateral administrativo
-
----
-
-## Navbar
-
-- Barra superior con título y usuario
-
----
-
-## Dashboard
-
-- Cards informativas
-
----
-
-## Productos
-
-- Tabla moderna
-- Modal emergente
-- Diseño responsive básico
-
----
-
-# Estado General del Proyecto
-
-## Actualmente el sistema:
-
-- Navega entre páginas con Angular Router
-- Usa layout administrativo
-- Permite crear, editar y eliminar productos
-- Permite crear, editar y eliminar categorías
-- Incluye placeholders de Movimientos y Usuarios
-- Está organizado con componentes y servicios
-- Tiene configuración SSR básica
-
----
-
-# Próximas Funcionalidades
-
-## Corto plazo
-
-- Exponer la pantalla de login y autenticación real
-- Añadir rutas y contenido para Movimientos
-- Añadir rutas y contenido para Usuarios
-- Mejorar filtros y búsqueda
-
----
-
-## Mediano plazo
-
-- Backend ASP.NET Core
-- API REST
-- PostgreSQL
-- Autenticación JWT
-
----
-
-## Largo plazo
-
-- Roles de usuario
-- Reportes
-- Dashboard avanzado
-- Exportación PDF/Excel
-
----
-
-# Objetivo del Proyecto
-
-Construir una aplicación:
-
-- Profesional
-- Escalable
-- Moderna
-- Presentable para GitHub
-- Útil para portafolio laboral
-
----
+Este es un proyecto privado.
