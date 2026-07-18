@@ -145,7 +145,7 @@ export class ProductsComponent implements OnInit {
       return;
     }
 
-    if (this.newProduct.price <= 0 || !Number.isInteger(this.newProduct.price)) {
+    if (this.newProduct.price <= 0) {
       this.formErrors.price = 'El precio debe ser un valor mayor a 0';
       this.showToast('El precio debe ser un valor mayor a 0', 'error');
       return;

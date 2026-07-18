@@ -1,5 +1,8 @@
-import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router, NavigationEnd } from '@angular/router';
+import { filter } from 'rxjs/operators';
+import { Subscription } from 'rxjs';
 import { ProductService } from '../services/product.service';
 import { CategoryService } from '../services/category.service';
 import { MovementService } from '../services/movement.service';
@@ -16,7 +19,7 @@ import { SpinnerComponent } from '../shared/spinner/spinner';
   styleUrl: './dashboard.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DashboardComponent implements OnInit {
+export class DashboardComponent implements OnInit, OnDestroy {
   products: Product[] = [];
   categories: Category[] = [];
   movements: Movement[] = [];
@@ -37,16 +40,27 @@ export class DashboardComponent implements OnInit {
 
   private productsMap = new Map<string, string>();
   private categoriesMap = new Map<string, string>();
+  private routerSub?: Subscription;
 
   constructor(
     private productService: ProductService,
     private categoryService: CategoryService,
     private movementService: MovementService,
+    private router: Router,
     private cdr: ChangeDetectorRef,
   ) {}
 
   ngOnInit(): void {
     this.loadData();
+    this.routerSub = this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd)
+    ).subscribe(() => {
+      this.loadData();
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.routerSub?.unsubscribe();
   }
 
   loadData(): void {
