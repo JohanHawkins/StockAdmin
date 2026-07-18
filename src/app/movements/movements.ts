@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ToastComponent } from '../shared/toast/toast';
@@ -49,6 +49,7 @@ export class MovementsComponent implements OnInit {
     private movementService: MovementService,
     private productService: ProductService,
     public authService: AuthService,
+    private cdr: ChangeDetectorRef,
   ) {}
 
   ngOnInit(): void {
@@ -58,9 +59,11 @@ export class MovementsComponent implements OnInit {
   loadData(): void {
     this.movementService.getMovements().subscribe((movements) => {
       this.movements = movements;
+      this.cdr.detectChanges();
     });
     this.productService.getProducts().subscribe((products) => {
       this.products = products;
+      this.cdr.detectChanges();
     });
   }
 
@@ -120,9 +123,11 @@ export class MovementsComponent implements OnInit {
         this.closeModal();
         this.resetForm();
         this.loadData();
+        this.cdr.detectChanges();
       },
       error: (error) => {
         this.showToast(error.error?.error || 'Error al registrar movimiento', 'error');
+        this.cdr.detectChanges();
       },
     });
   }

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ToastComponent } from '../shared/toast/toast';
@@ -37,6 +37,7 @@ export class CategoriesComponent implements OnInit {
     private categoryService: CategoryService,
     private productService: ProductService,
     public authService: AuthService,
+    private cdr: ChangeDetectorRef,
   ) {}
 
   ngOnInit(): void {
@@ -46,6 +47,7 @@ export class CategoriesComponent implements OnInit {
   loadData(): void {
     this.categoryService.getCategories().subscribe((categories) => {
       this.categories = categories;
+      this.cdr.detectChanges();
     });
   }
 
@@ -114,9 +116,11 @@ export class CategoriesComponent implements OnInit {
           this.resetForm();
           this.closeModal();
           this.loadData();
+          this.cdr.detectChanges();
         },
         error: () => {
           this.showToast('Error al actualizar categoría', 'error');
+          this.cdr.detectChanges();
         },
       });
     } else {
@@ -126,9 +130,11 @@ export class CategoriesComponent implements OnInit {
           this.resetForm();
           this.closeModal();
           this.loadData();
+          this.cdr.detectChanges();
         },
         error: () => {
           this.showToast('Error al crear categoría', 'error');
+          this.cdr.detectChanges();
         },
       });
     }
@@ -149,10 +155,12 @@ export class CategoriesComponent implements OnInit {
         this.showToast('Categoría eliminada correctamente', 'success');
         this.closeDeleteModal();
         this.loadData();
+        this.cdr.detectChanges();
       },
       error: (error) => {
         this.showToast(error.error?.error || 'Error al eliminar categoría', 'error');
         this.closeDeleteModal();
+        this.cdr.detectChanges();
       },
     });
   }

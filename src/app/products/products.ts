@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ToastComponent } from '../shared/toast/toast';
@@ -64,6 +64,7 @@ export class ProductsComponent implements OnInit {
     private movementService: MovementService,
     private categoryService: CategoryService,
     public authService: AuthService,
+    private cdr: ChangeDetectorRef,
   ) {}
 
   ngOnInit(): void {
@@ -73,9 +74,11 @@ export class ProductsComponent implements OnInit {
   loadData(): void {
     this.productService.getProducts().subscribe((products) => {
       this.products = products;
+      this.cdr.detectChanges();
     });
     this.categoryService.getCategories().subscribe((categories) => {
       this.categories = categories;
+      this.cdr.detectChanges();
     });
   }
 
@@ -169,9 +172,11 @@ export class ProductsComponent implements OnInit {
           this.showToast('Producto actualizado correctamente', 'success');
           this.closeModal();
           this.loadData();
+          this.cdr.detectChanges();
         },
         error: () => {
           this.showToast('Error al actualizar producto', 'error');
+          this.cdr.detectChanges();
         },
       });
     } else {
@@ -181,9 +186,11 @@ export class ProductsComponent implements OnInit {
           this.showToast('Producto creado correctamente', 'success');
           this.closeModal();
           this.loadData();
+          this.cdr.detectChanges();
         },
         error: () => {
           this.showToast('Error al crear producto', 'error');
+          this.cdr.detectChanges();
         },
       });
     }
@@ -220,9 +227,11 @@ export class ProductsComponent implements OnInit {
         this.showToast(`Producto cambiado a ${updatedProduct.status}`, 'success');
         this.closeStatusModal();
         this.loadData();
+        this.cdr.detectChanges();
       },
       error: () => {
         this.showToast('Error al cambiar estado', 'error');
+        this.cdr.detectChanges();
       },
     });
   }
@@ -233,10 +242,12 @@ export class ProductsComponent implements OnInit {
         this.showToast('Producto eliminado correctamente', 'success');
         this.closeDeleteModal();
         this.loadData();
+        this.cdr.detectChanges();
       },
       error: (error) => {
         this.showToast(error.error?.error || 'Error al eliminar producto', 'error');
         this.closeDeleteModal();
+        this.cdr.detectChanges();
       },
     });
   }

@@ -5,7 +5,7 @@
 | Rol | Email | Contraseña |
 |-----|-------|------------|
 | Admin | admin@admin.com | 123456 |
-| Usuario | user@user.com | 123456 |
+| Empleado | empleado@empleado.com | 123456 |
 
 ---
 
@@ -26,7 +26,7 @@ Construir una aplicación web moderna para administrar inventario de manera senc
 
 # Permisos por Rol
 
-| Funcionalidad | Admin | Usuario |
+| Funcionalidad | Admin | Empleado |
 |---------------|-------|---------|
 | Dashboard | CRUD completo | Solo lectura |
 | Productos | Crear, Editar, Eliminar, Activar/Desactivar | Solo lectura |
@@ -37,7 +37,7 @@ Construir una aplicación web moderna para administrar inventario de manera senc
 
 # Estado del Proyecto
 
-## Completado (95%)
+## Completado (98%)
 
 ### Login ✅
 - Formulario de login (email + contraseña)
@@ -85,6 +85,15 @@ Construir una aplicación web moderna para administrar inventario de manera senc
 - Loading states y manejo de errores
 - Página 404
 
+### Corrección de Bugs - Change Detection ✅
+- Login: spinner infinito al ingresar credenciales incorrectas (correo no registrado)
+- Categorías: modal no se cerraba al crear/editar categoría, toast de error no aparecía/desaparecía
+- Productos: mismo problema con modales de crear, editar, eliminar y cambiar estado
+- Movimientos: mismo problema al registrar movimientos
+- Datos no se renderizaban al navegar a Categorías/Productos/Movimientos hasta interactuar
+- Causa raíz: Angular SSR con `withFetch()` no dispara change detection tras respuestas HTTP
+- Solución: inyectar `ChangeDetectorRef` y llamar `detectChanges()` en callbacks de HTTP
+
 ### Modelos de Datos ✅
 - Product: code, name, description, price, stock, minStock, categoryCode, status
 - Category: code, name
@@ -97,7 +106,7 @@ Construir una aplicación web moderna para administrar inventario de manera senc
 - Pool de conexiones PostgreSQL con pg (máx 20 conexiones)
 - Queries parametrizadas (prevención SQL injection)
 - Transacciones para movimientos (BEGIN/COMMIT/ROLLBACK)
-- Seed data: 2 usuarios, 2 categorías, 2 productos
+- Seed data: solo 2 usuarios (admin y user). Categorías y productos se crean desde la UI
 
 ### Base de Datos PostgreSQL ✅
 - Esquema completo: users, categories, products, movements
@@ -125,7 +134,7 @@ Construir una aplicación web moderna para administrar inventario de manera senc
 
 # Flujo del Sistema
 
-1. Usuario inicia sesión (admin o usuario)
+1. Usuario inicia sesión (admin o empleado)
 2. Ingresa al dashboard según su rol
 3. Administra productos (según permisos)
 4. Registra entradas o salidas
@@ -194,7 +203,7 @@ CREATE TABLE users (
     nombre VARCHAR(100) NOT NULL,
     email VARCHAR(150) UNIQUE NOT NULL,
     password VARCHAR(255) NOT NULL,
-    role VARCHAR(10) NOT NULL CHECK (role IN ('admin', 'user')),
+    role VARCHAR(10) NOT NULL CHECK (role IN ('admin', 'empleado')),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -277,16 +286,9 @@ CREATE INDEX idx_users_email ON users(email);
 INSERT INTO users (nombre, email, password, role) 
 VALUES ('Administrador', 'admin@admin.com', '123456', 'admin');
 
--- Usuario regular por defecto
+-- Empleado por defecto
 INSERT INTO users (nombre, email, password, role) 
-VALUES ('Usuario', 'user@user.com', '123456', 'user');
+VALUES ('Empleado', 'empleado@empleado.com', '123456', 'empleado');
 
--- Categorías iniciales
-INSERT INTO categories (code, name) VALUES ('C001', 'Tecnología');
-INSERT INTO categories (code, name) VALUES ('C002', 'Accesorios');
-
--- Productos iniciales
-INSERT INTO products (code, name, description, price, stock, min_stock, category_id, status) VALUES 
-('P001', 'Mouse Gamer', 'Mouse gamer con RGB y 12000 DPI', 80.00, 10, 3, 1, 'Activo'),
-('P002', 'Teclado Mecánico', 'Teclado mecánico switches Blue', 150.00, 5, 2, 1, 'Activo');
+-- Las categorías y productos se crean desde la interfaz de usuario
 ```
