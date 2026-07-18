@@ -8,7 +8,7 @@ export interface SessionUser {
   id: number;
   nombre: string;
   email: string;
-  role: 'admin' | 'user';
+  role: 'admin' | 'empleado';
 }
 
 @Injectable({
@@ -74,7 +74,7 @@ export class AuthService {
     return this.currentUser?.role === 'admin';
   }
 
-  isUser(): boolean {
-    return this.currentUser?.role === 'user';
+  isEmpleado(): boolean {
+    return this.currentUser?.role === 'empleado';
   }
 }

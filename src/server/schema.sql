@@ -17,7 +17,7 @@ CREATE TABLE users (
     nombre VARCHAR(100) NOT NULL,
     email VARCHAR(150) UNIQUE NOT NULL,
     password VARCHAR(255) NOT NULL,
-    role VARCHAR(10) NOT NULL CHECK (role IN ('admin', 'user')),
+    role VARCHAR(10) NOT NULL CHECK (role IN ('admin', 'empleado')),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -83,14 +83,7 @@ CREATE INDEX idx_users_email ON users(email);
 -- Usuarios
 INSERT INTO users (nombre, email, password, role) VALUES 
 ('Administrador', 'admin@admin.com', '123456', 'admin'),
-('Usuario', 'user@user.com', '123456', 'user');
+('Empleado', 'empleado@empleado.com', '123456', 'empleado');
 
--- Categorías
-INSERT INTO categories (code, name) VALUES 
-('C001', 'Tecnología'),
-('C002', 'Accesorios');
-
--- Productos
-INSERT INTO products (code, name, description, price, stock, min_stock, category_id, status) VALUES 
-('P001', 'Mouse Gamer', 'Mouse gamer con RGB y 12000 DPI', 80.00, 10, 3, 1, 'Activo'),
-('P002', 'Teclado Mecánico', 'Teclado mecánico switches Blue', 150.00, 5, 2, 1, 'Activo');
+-- Categorías: vacías (el usuario las crea desde la UI)
+-- Productos: vacíos (el usuario los crea desde la UI)
