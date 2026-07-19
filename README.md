@@ -80,13 +80,15 @@ src/
 │   ├── movements/          # Módulo de movimientos
 │   ├── login/              # Login
 │   ├── layout/             # Layout con sidebar y navbar
+│   ├── not-found/          # Página 404
 │   ├── shared/
 │   │   ├── spinner/        # Componente de carga global
 │   │   ├── toast/          # Notificaciones toast
-│   │   └── error-handler/  # Manejador de errores global
+│   │   ├── error-handler/  # Manejador de errores global
+│   │   └── styles.css      # Estilos globales y variables CSS
 │   ├── guards/             # Auth guard y admin guard
 │   ├── services/           # Servicios HTTP (auth, product, category, movement)
-│   ├── models/             # Interfaces TypeScript
+│   ├── models/             # Interfaces TypeScript (product, category, movement)
 │   ├── app.config.ts       # Configuración de la app
 │   ├── app.routes.ts       # Rutas del cliente
 │   └── app.routes.server.ts # Rutas del servidor (SSR)

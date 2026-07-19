@@ -73,7 +73,4 @@ export class ProductService {
     );
   }
 
-  getLocalProducts(): Product[] {
-    return this.products;
-  }
 }

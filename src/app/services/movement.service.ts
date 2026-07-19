@@ -36,7 +36,4 @@ export class MovementService {
     return this.http.get<{ code: string }>(`${this.API_URL}/generate-code`);
   }
 
-  getLocalMovements(): Movement[] {
-    return this.movements;
-  }
 }

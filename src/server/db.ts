@@ -19,15 +19,9 @@ pool.on('error', (err) => {
 });
 
 export const query = async (text: string, params?: unknown[]) => {
-  const start = Date.now();
-  const res = await pool.query(text, params);
-  const duration = Date.now() - start;
-  console.log('Executed query', { text: text.substring(0, 50), duration, rows: res.rowCount });
-  return res;
+  return pool.query(text, params);
 };
 
 export const getClient = () => {
   return pool.connect();
 };
-
-export default pool;

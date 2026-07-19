@@ -51,7 +51,4 @@ export class CategoryService {
     );
   }
 
-  getLocalCategories(): Category[] {
-    return this.categories;
-  }
 }

@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ToastComponent } from '../shared/toast/toast';
 import { CategoryService } from '../services/category.service';
-import { ProductService } from '../services/product.service';
 import { AuthService } from '../services/auth.service';
 import { Category } from '../models/category.model';
 
@@ -35,7 +34,6 @@ export class CategoriesComponent implements OnInit {
 
   constructor(
     private categoryService: CategoryService,
-    private productService: ProductService,
     public authService: AuthService,
     private cdr: ChangeDetectorRef,
   ) {}

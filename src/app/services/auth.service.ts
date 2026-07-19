@@ -74,7 +74,4 @@ export class AuthService {
     return this.currentUser?.role === 'admin';
   }
 
-  isEmpleado(): boolean {
-    return this.currentUser?.role === 'empleado';
-  }
 }

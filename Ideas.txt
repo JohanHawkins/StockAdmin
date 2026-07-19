@@ -31,7 +31,7 @@
 
 ## Estado del Proyecto
 
-### Completado (98%)
+### Completado (100%)
 
 - Login con autenticación y roles
 - Dashboard con estadísticas
@@ -42,6 +42,7 @@
 - Backend API REST con PostgreSQL
 - Change detection corregido en todos los módulos
 - Spinner de carga global al navegar
+- Depuración de código: eliminados archivos, imports, métodos y CSS no utilizados
 
 ### Pendientes
 

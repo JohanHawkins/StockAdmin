@@ -8,7 +8,6 @@ import { CategoriesComponent } from './categories/categories';
 import { MovementsComponent } from './movements/movements';
 import { NotFoundComponent } from './not-found/not-found';
 import { authGuard } from './guards/auth.guard';
-import { adminGuard } from './guards/admin.guard';
 
 export const routes: Routes = [
   {
