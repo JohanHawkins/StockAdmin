@@ -18,6 +18,12 @@ import { Category } from '../models/category.model';
 export class ProductsComponent implements OnInit {
   searchTerm = '';
 
+  filterCategory = '';
+  filterStatus = '';
+  filterMinPrice: number | null = null;
+  filterMaxPrice: number | null = null;
+  filterLowStock = false;
+
   toastVisible = false;
   toastMessage = '';
   toastType: 'success' | 'error' = 'success';
@@ -319,19 +325,43 @@ export class ProductsComponent implements OnInit {
     return this.sortDirection === 'asc' ? '\u2191' : '\u2193';
   }
 
-  get filteredProducts(): Product[] {
-    const filtered = this.products.filter((p) =>
-      p.name.toLowerCase().includes(this.searchTerm.toLowerCase()),
-    );
+  private getFilteredList(): Product[] {
+    const term = this.searchTerm.trim().toLowerCase();
 
-    filtered.sort((a, b) => {
+    const filtered = this.products.filter((p) => {
+      if (term && !p.name.toLowerCase().includes(term) && !p.code.toLowerCase().includes(term)) {
+        return false;
+      }
+
+      if (this.filterCategory && p.categoryCode !== this.filterCategory) {
+        return false;
+      }
+
+      if (this.filterStatus && p.status !== this.filterStatus) {
+        return false;
+      }
+
+      if (this.filterMinPrice !== null && p.price < this.filterMinPrice) {
+        return false;
+      }
+
+      if (this.filterMaxPrice !== null && p.price > this.filterMaxPrice) {
+        return false;
+      }
+
+      if (this.filterLowStock && p.stock > p.minStock) {
+        return false;
+      }
+
+      return true;
+    });
+
+    return filtered.sort((a, b) => {
       const aVal = a[this.sortColumn];
       const bVal = b[this.sortColumn];
 
       if (typeof aVal === 'string' && typeof bVal === 'string') {
-        return this.sortDirection === 'asc'
-          ? aVal.localeCompare(bVal)
-          : bVal.localeCompare(aVal);
+        return this.sortDirection === 'asc' ? aVal.localeCompare(bVal) : bVal.localeCompare(aVal);
       }
 
       if (typeof aVal === 'number' && typeof bVal === 'number') {
@@ -340,15 +370,39 @@ export class ProductsComponent implements OnInit {
 
       return 0;
     });
+  }
 
+  get filteredProducts(): Product[] {
     const startIndex = (this.currentPage - 1) * this.itemsPerPage;
-    return filtered.slice(startIndex, startIndex + this.itemsPerPage);
+    return this.getFilteredList().slice(startIndex, startIndex + this.itemsPerPage);
   }
 
   get totalFilteredProducts(): number {
-    return this.products.filter((p) =>
-      p.name.toLowerCase().includes(this.searchTerm.toLowerCase()),
-    ).length;
+    return this.getFilteredList().length;
+  }
+
+  get hasActiveFilters(): boolean {
+    return (
+      this.searchTerm.trim() !== '' ||
+      !!this.filterCategory ||
+      !!this.filterStatus ||
+      this.filterMinPrice !== null ||
+      this.filterMaxPrice !== null ||
+      this.filterLowStock
+    );
+  }
+
+  resetPage(): void {
+    this.currentPage = 1;
+  }
+
+  clearFilters(): void {
+    this.filterCategory = '';
+    this.filterStatus = '';
+    this.filterMinPrice = null;
+    this.filterMaxPrice = null;
+    this.filterLowStock = false;
+    this.resetPage();
   }
 
   get totalPages(): number {

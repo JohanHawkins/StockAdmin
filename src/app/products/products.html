@@ -4,12 +4,66 @@
 
     <input
       type="text"
-      placeholder="Buscar producto..."
+      placeholder="Buscar por nombre o código..."
       [(ngModel)]="searchTerm"
+      (ngModelChange)="resetPage()"
       class="search-input"
     />
 
     <button (click)="openModal()" *ngIf="authService.isAdmin()">+ Nuevo Producto</button>
+  </div>
+
+  <div class="filters">
+    <div class="filter-group">
+      <label>Categoría</label>
+      <select [(ngModel)]="filterCategory" (ngModelChange)="resetPage()">
+        <option value="">Todas</option>
+        <option *ngFor="let category of categories" [value]="category.code">
+          {{ category.name }}
+        </option>
+      </select>
+    </div>
+
+    <div class="filter-group">
+      <label>Estado</label>
+      <select [(ngModel)]="filterStatus" (ngModelChange)="resetPage()">
+        <option value="">Todos</option>
+        <option value="Activo">Activo</option>
+        <option value="Inactivo">Inactivo</option>
+      </select>
+    </div>
+
+    <div class="filter-group">
+      <label>Precio Mínimo</label>
+      <input
+        type="number"
+        min="0"
+        placeholder="Sin mínimo"
+        [(ngModel)]="filterMinPrice"
+        (ngModelChange)="resetPage()"
+      />
+    </div>
+
+    <div class="filter-group">
+      <label>Precio Máximo</label>
+      <input
+        type="number"
+        min="0"
+        placeholder="Sin máximo"
+        [(ngModel)]="filterMaxPrice"
+        (ngModelChange)="resetPage()"
+      />
+    </div>
+
+    <div class="filter-group">
+      <label>Solo stock bajo</label>
+      <label class="checkbox-label">
+        <input type="checkbox" [(ngModel)]="filterLowStock" (ngModelChange)="resetPage()" />
+        Stock &le; Stock mín.
+      </label>
+    </div>
+
+    <button class="clear-filters-btn" (click)="clearFilters()">Limpiar Filtros</button>
   </div>
 
   <table>
@@ -17,10 +71,14 @@
       <tr>
         <th class="sortable" (click)="sortBy('code')">Código {{ getSortIcon('code') }}</th>
         <th class="sortable" (click)="sortBy('name')">Nombre {{ getSortIcon('name') }}</th>
-        <th class="sortable" (click)="sortBy('categoryCode')">Categoría {{ getSortIcon('categoryCode') }}</th>
+        <th class="sortable" (click)="sortBy('categoryCode')">
+          Categoría {{ getSortIcon('categoryCode') }}
+        </th>
         <th class="sortable" (click)="sortBy('price')">Precio {{ getSortIcon('price') }}</th>
         <th class="sortable" (click)="sortBy('stock')">Stock {{ getSortIcon('stock') }}</th>
-        <th class="sortable" (click)="sortBy('minStock')">Stock Mín. {{ getSortIcon('minStock') }}</th>
+        <th class="sortable" (click)="sortBy('minStock')">
+          Stock Mín. {{ getSortIcon('minStock') }}
+        </th>
         <th>Estado</th>
         <th>Acciones</th>
       </tr>
@@ -41,17 +99,35 @@
         <td>{{ product.minStock }}</td>
 
         <td>
-          <span class="status-badge" [class.active]="product.status === 'Activo'" [class.inactive]="product.status === 'Inactivo'">
+          <span
+            class="status-badge"
+            [class.active]="product.status === 'Activo'"
+            [class.inactive]="product.status === 'Inactivo'"
+          >
             {{ product.status }}
           </span>
         </td>
 
         <td class="actions" *ngIf="authService.isAdmin()">
-          <button class="edit-btn" (click)="editProduct(product)" title="Editar producto">Editar</button>
+          <button class="edit-btn" (click)="editProduct(product)" title="Editar producto">
+            Editar
+          </button>
 
-          <button class="delete-btn" (click)="openDeleteModal(product.code)" title="Eliminar producto">Eliminar</button>
+          <button
+            class="delete-btn"
+            (click)="openDeleteModal(product.code)"
+            title="Eliminar producto"
+          >
+            Eliminar
+          </button>
 
-          <button class="status-btn" [class.deactivate]="product.status === 'Activo'" [class.activate]="product.status === 'Inactivo'" (click)="openStatusModal(product.code)" [title]="product.status === 'Activo' ? 'Desactivar producto' : 'Activar producto'">
+          <button
+            class="status-btn"
+            [class.deactivate]="product.status === 'Activo'"
+            [class.activate]="product.status === 'Inactivo'"
+            (click)="openStatusModal(product.code)"
+            [title]="product.status === 'Activo' ? 'Desactivar producto' : 'Activar producto'"
+          >
             {{ product.status === 'Activo' ? 'Desactivar' : 'Activar' }}
           </button>
         </td>
@@ -60,7 +136,7 @@
 
     <tbody *ngIf="filteredProducts.length === 0">
       <tr>
-        <td colspan="8" class="empty-message">Producto no encontrado</td>
+        <td colspan="8" class="empty-message">No se encontraron productos</td>
       </tr>
     </tbody>
   </table>
@@ -111,19 +187,13 @@
     <div class="form-group">
       <label>Descripción</label>
 
-      <textarea
-        [(ngModel)]="newProduct.description"
-        rows="3"
-      ></textarea>
+      <textarea [(ngModel)]="newProduct.description" rows="3"></textarea>
     </div>
 
     <div class="form-group">
       <label>Categoría</label>
 
-      <select
-        [(ngModel)]="newProduct.categoryCode"
-        [class.input-error]="formErrors.categoryCode"
-      >
+      <select [(ngModel)]="newProduct.categoryCode" [class.input-error]="formErrors.categoryCode">
         <option value="">Seleccione una categoría</option>
         <option *ngFor="let category of categories" [value]="category.code">
           {{ category.name }}
@@ -238,7 +308,8 @@
 
     <p *ngIf="selectedProduct">
       ¿Desea cambiar el estado de <strong>{{ selectedProduct.name }}</strong> a
-      <strong>{{ selectedProduct.status === 'Activo' ? 'Inactivo' : 'Activo' }}</strong>?
+      <strong>{{ selectedProduct.status === 'Activo' ? 'Inactivo' : 'Activo' }}</strong
+      >?
     </p>
 
     <div class="modal-actions">

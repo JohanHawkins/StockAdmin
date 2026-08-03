@@ -43,6 +43,7 @@
 - Change detection corregido en todos los módulos
 - Spinner de carga global al navegar
 - Depuración de código: eliminados archivos, imports, métodos y CSS no utilizados
+- Filtros avanzados de productos (categoría, estado, rango de precio, stock bajo, búsqueda por nombre/código)
 
 ### Pendientes
 
@@ -50,9 +51,8 @@
 |---|-------|--------|
 | 1 | Exportar productos a CSV | Productos |
 | 2 | Importar productos desde CSV | Productos |
-| 3 | Filtros avanzados de productos | Productos |
-| 4 | Exportar historial de movimientos | Movimientos |
-| 5 | Pruebas unitarias | Infraestructura |
-| 6 | Pruebas de integración | Infraestructura |
-| 7 | README profesional con imágenes | Infraestructura |
-| 8 | Deploy (GitHub Pages / Vercel) | Infraestructura |
+| 3 | Exportar historial de movimientos | Movimientos |
+| 4 | Pruebas unitarias | Infraestructura |
+| 5 | Pruebas de integración | Infraestructura |
+| 6 | README profesional con imágenes | Infraestructura |
+| 7 | Deploy (GitHub Pages / Vercel) | Infraestructura |
