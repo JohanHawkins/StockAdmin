@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, tap } from 'rxjs';
-import { Product } from '../models/product.model';
+import { Observable, map, tap } from 'rxjs';
+import { Product, ImportResult } from '../models/product.model';
 
 @Injectable({
   providedIn: 'root',
@@ -14,24 +14,28 @@ export class ProductService {
 
   getProducts(): Observable<Product[]> {
     return this.http.get<Product[]>(this.API_URL).pipe(
-      tap((products) => {
-        this.products = products.map((p) => ({
+      map((products) =>
+        products.map((p) => ({
           ...p,
           price: Number(p.price),
           stock: Number(p.stock),
           minStock: Number(p.minStock),
-        }));
+        })),
+      ),
+      tap((products) => {
+        this.products = products;
       }),
     );
   }
 
   getProduct(code: string): Observable<Product> {
     return this.http.get<Product>(`${this.API_URL}/${code}`).pipe(
-      tap((product) => {
-        product.price = Number(product.price);
-        product.stock = Number(product.stock);
-        product.minStock = Number(product.minStock);
-      }),
+      map((product) => ({
+        ...product,
+        price: Number(product.price),
+        stock: Number(product.stock),
+        minStock: Number(product.minStock),
+      })),
     );
   }
 
@@ -41,6 +45,10 @@ export class ProductService {
         this.products.push(newProduct);
       }),
     );
+  }
+
+  importProducts(products: Product[]): Observable<ImportResult> {
+    return this.http.post<ImportResult>(`${this.API_URL}/import`, { products });
   }
 
   updateProduct(code: string, product: Product): Observable<Product> {

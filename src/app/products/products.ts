@@ -7,6 +7,7 @@ import { CategoryService } from '../services/category.service';
 import { AuthService } from '../services/auth.service';
 import { Product } from '../models/product.model';
 import { Category } from '../models/category.model';
+import { csvToObjects, serializeCSV, toNumber } from '../shared/csv';
 
 @Component({
   selector: 'app-products',
@@ -34,6 +35,8 @@ export class ProductsComponent implements OnInit {
 
   isEditing = false;
   currentCode = '';
+
+  importing = false;
 
   products: Product[] = [];
   categories: Category[] = [];
@@ -94,6 +97,94 @@ export class ProductsComponent implements OnInit {
     setTimeout(() => {
       this.toastVisible = false;
     }, 3000);
+  }
+
+  exportCSV(): void {
+    const rows = this.getFilteredList();
+
+    if (rows.length === 0) {
+      this.showToast('No hay productos para exportar', 'error');
+      return;
+    }
+
+    const headers = ['code', 'name', 'description', 'price', 'stock', 'minStock', 'categoryCode', 'status'];
+    const data = rows.map((p) => [
+      p.code,
+      p.name,
+      p.description,
+      p.price.toFixed(2),
+      p.stock,
+      p.minStock,
+      p.categoryCode,
+      p.status,
+    ]);
+
+    const csv = serializeCSV(headers, data);
+    const blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `productos-${new Date().toISOString().slice(0, 10)}.csv`;
+    link.click();
+    URL.revokeObjectURL(url);
+
+    this.showToast(`Se exportaron ${rows.length} productos`, 'success');
+  }
+
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+    input.value = '';
+
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      const objects = csvToObjects(String(reader.result ?? ''));
+      this.importObjects(objects);
+    };
+    reader.readAsText(file);
+  }
+
+  private importObjects(objects: Array<Record<string, string>>): void {
+    if (objects.length === 0) {
+      this.showToast('El archivo CSV no contiene datos válidos', 'error');
+      return;
+    }
+
+    const products: Product[] = objects.map((o) => ({
+      code: o['code'] ?? '',
+      name: o['name'] ?? '',
+      description: o['description'] ?? '',
+      price: toNumber(o['price'] ?? '0'),
+      stock: Math.floor(toNumber(o['stock'] ?? '0')),
+      minStock: Math.floor(toNumber(o['minStock'] ?? '0')),
+      categoryCode: o['categoryCode'] ?? '',
+      status: o['status'] || 'Activo',
+    }));
+
+    this.importing = true;
+    this.productService.importProducts(products).subscribe({
+      next: (result) => {
+        this.importing = false;
+        this.loadData();
+        this.cdr.detectChanges();
+
+        const parts = [`Importados: ${result.created}`];
+        if (result.skipped > 0) {
+          parts.push(`omitidos (duplicados): ${result.skipped}`);
+        }
+        if (result.errors.length > 0) {
+          parts.push(`con errores: ${result.errors.length}`);
+        }
+        this.showToast(parts.join(' · '), result.errors.length > 0 ? 'error' : 'success');
+      },
+      error: () => {
+        this.importing = false;
+        this.showToast('Error al importar productos', 'error');
+        this.cdr.detectChanges();
+      },
+    });
   }
 
   openModal() {

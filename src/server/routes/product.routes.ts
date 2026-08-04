@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { query } from '../db';
+import { query, getClient } from '../db';
 
 const router = Router();
 
@@ -63,6 +63,98 @@ router.get('/:code', async (req, res): Promise<void> => {
   } catch (error) {
     console.error('Error al obtener producto:', error);
     res.status(500).json({ error: 'Error interno del servidor' });
+  }
+});
+
+// POST /api/products/import
+router.post('/import', async (req, res): Promise<void> => {
+  const { products } = req.body;
+
+  if (!Array.isArray(products) || products.length === 0) {
+    res.status(400).json({ error: 'No se recibieron productos para importar' });
+    return;
+  }
+
+  const client = await getClient();
+  const created: string[] = [];
+  const skipped: string[] = [];
+  const errors: Array<{ code?: string; row: number; message: string }> = [];
+
+  try {
+    await client.query('BEGIN');
+
+    for (let i = 0; i < products.length; i++) {
+      const p = products[i] ?? {};
+      const code = String(p.code ?? '').trim();
+      const name = String(p.name ?? '').trim();
+      const description = String(p.description ?? '').trim();
+      const price = Number(p.price);
+      const stock = Number(p.stock);
+      const minStock = Number(p.minStock);
+      const categoryCode = String(p.categoryCode ?? '').trim();
+      const status = String(p.status ?? 'Activo').trim();
+
+      const rowError = (message: string) =>
+        errors.push({ code: code || undefined, row: i + 2, message });
+
+      if (!code || !name || !categoryCode) {
+        rowError('Código, nombre y categoría son obligatorios');
+        continue;
+      }
+
+      if (!Number.isFinite(price) || price <= 0) {
+        rowError('Precio inválido (debe ser un número mayor a 0)');
+        continue;
+      }
+
+      if (!Number.isInteger(stock) || stock < 0) {
+        rowError('Stock inválido (debe ser un entero mayor o igual a 0)');
+        continue;
+      }
+
+      if (!Number.isInteger(minStock) || minStock < 0) {
+        rowError('Stock mínimo inválido (debe ser un entero mayor o igual a 0)');
+        continue;
+      }
+
+      const validStatus = status === 'Inactivo' ? 'Inactivo' : 'Activo';
+
+      const catResult = await client.query('SELECT id FROM categories WHERE code = $1', [
+        categoryCode,
+      ]);
+      if (catResult.rows.length === 0) {
+        rowError(`Categoría '${categoryCode}' no existe`);
+        continue;
+      }
+
+      const exists = await client.query('SELECT code FROM products WHERE code = $1', [code]);
+      if (exists.rows.length > 0) {
+        skipped.push(code);
+        continue;
+      }
+
+      await client.query(
+        `INSERT INTO products (code, name, description, price, stock, min_stock, category_id, status)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
+        [code, name, description, price, stock, minStock, catResult.rows[0].id, validStatus]
+      );
+      created.push(code);
+    }
+
+    await client.query('COMMIT');
+    res.json({
+      created: created.length,
+      createdCodes: created,
+      skipped: skipped.length,
+      skippedCodes: skipped,
+      errors,
+    });
+  } catch (error) {
+    await client.query('ROLLBACK');
+    console.error('Error al importar productos:', error);
+    res.status(500).json({ error: 'Error interno del servidor' });
+  } finally {
+    client.release();
   }
 });
 

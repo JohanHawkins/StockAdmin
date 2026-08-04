@@ -38,6 +38,28 @@
   transform: translateY(0);
 }
 
+.products-actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.products-actions .export-btn {
+  background: linear-gradient(135deg, var(--accent-success) 0%, #059669 100%);
+}
+
+.products-actions .import-btn {
+  background: linear-gradient(135deg, var(--accent-warning) 0%, #d97706 100%);
+}
+
+.products-actions button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
 /* Filters Panel */
 .filters {
   display: flex;
@@ -305,6 +327,14 @@
 
   .products-header button {
     width: 100%;
+  }
+
+  .products-actions {
+    width: 100%;
+  }
+
+  .products-actions button {
+    flex: 1;
   }
 
   .search-input {

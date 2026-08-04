@@ -10,7 +10,28 @@
       class="search-input"
     />
 
-    <button (click)="openModal()" *ngIf="authService.isAdmin()">+ Nuevo Producto</button>
+    <div class="products-actions">
+      <button class="export-btn" (click)="exportCSV()">Exportar CSV</button>
+
+      <button
+        class="import-btn"
+        *ngIf="authService.isAdmin()"
+        (click)="fileInput.click()"
+        [disabled]="importing"
+      >
+        {{ importing ? 'Importando...' : 'Importar CSV' }}
+      </button>
+
+      <button (click)="openModal()" *ngIf="authService.isAdmin()">+ Nuevo Producto</button>
+
+      <input
+        #fileInput
+        type="file"
+        accept=".csv,text/csv"
+        hidden
+        (change)="onFileSelected($event)"
+      />
+    </div>
   </div>
 
   <div class="filters">

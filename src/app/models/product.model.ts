@@ -8,3 +8,17 @@ export interface Product {
   categoryCode: string;
   status: string;
 }
+
+export interface ImportError {
+  code?: string;
+  row: number;
+  message: string;
+}
+
+export interface ImportResult {
+  created: number;
+  createdCodes: string[];
+  skipped: number;
+  skippedCodes: string[];
+  errors: ImportError[];
+}

@@ -44,13 +44,13 @@
 - Spinner de carga global al navegar
 - Depuración de código: eliminados archivos, imports, métodos y CSS no utilizados
 - Filtros avanzados de productos (categoría, estado, rango de precio, stock bajo, búsqueda por nombre/código)
+- Exportar productos a CSV (respeta filtros y orden actuales, compatible con Excel)
+- Importar productos desde CSV (validación por fila, omite duplicados, transacción en BD)
 
 ### Pendientes
 
 | # | Tarea | Módulo |
 |---|-------|--------|
-| 1 | Exportar productos a CSV | Productos |
-| 2 | Importar productos desde CSV | Productos |
 | 3 | Exportar historial de movimientos | Movimientos |
 | 4 | Pruebas unitarias | Infraestructura |
 | 5 | Pruebas de integración | Infraestructura |
