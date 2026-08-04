@@ -57,7 +57,7 @@ export class CategoriesComponent implements OnInit {
 
   getProductCount(categoryCode: string): number {
     const category = this.categories.find((c) => c.code === categoryCode);
-    return (category as any)?.productCount ?? 0;
+    return Number(category?.productCount ?? 0);
   }
 
   hasProducts(categoryCode: string): boolean {
