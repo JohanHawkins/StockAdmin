@@ -26,6 +26,8 @@
   position: relative;
   overflow: hidden;
   border: 1px solid var(--border-color);
+  container-type: inline-size;
+  min-width: 0;
 }
 
 .card::before {
@@ -61,10 +63,21 @@
 }
 
 .card h2 {
-  font-size: 2rem;
+  font-size: clamp(1.25rem, 9.5cqw, 3rem);
   font-weight: 700;
+  line-height: 1.2;
   margin-bottom: 4px;
   color: var(--text-primary);
+  overflow-wrap: anywhere;
+}
+
+.card h3 {
+  font-size: clamp(1rem, 5.5cqw, 1.375rem);
+  font-weight: 600;
+  line-height: 1.3;
+  margin-bottom: 6px;
+  color: var(--text-primary);
+  overflow-wrap: anywhere;
 }
 
 .card p {
@@ -72,6 +85,18 @@
   color: var(--text-secondary);
   margin: 0;
   font-weight: 500;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+
+@supports not (container-type: inline-size) {
+  .card h2 {
+    font-size: clamp(1.375rem, 5.25vw, 3rem);
+  }
+
+  .card h3 {
+    font-size: clamp(1.0625rem, 3.25vw, 1.375rem);
+  }
 }
 
 /* Card Variants */
@@ -216,10 +241,6 @@
 
   .card {
     padding: 20px;
-  }
-
-  .card h2 {
-    font-size: 1.5rem;
   }
 
   .section-panel {

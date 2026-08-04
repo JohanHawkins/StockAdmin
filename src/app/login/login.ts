@@ -37,19 +37,15 @@ export class LoginComponent {
     this.cdr.detectChanges();
 
     this.authService.login(this.email, this.password).subscribe({
-      next: (success) => {
-        if (success) {
+      next: (result) => {
+        if (result === true) {
           this.router.navigate(['/dashboard']);
         } else {
-          this.errorMessage = 'Email o contraseña incorrectos';
           this.isLoading = false;
+          this.errorMessage =
+            result === false ? 'Email o contraseña incorrectos' : 'Error de conexión con el servidor';
           this.cdr.detectChanges();
         }
-      },
-      error: () => {
-        this.errorMessage = 'Error de conexión con el servidor';
-        this.isLoading = false;
-        this.cdr.detectChanges();
       },
     });
   }

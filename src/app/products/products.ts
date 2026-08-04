@@ -160,7 +160,7 @@ export class ProductsComponent implements OnInit {
       stock: Math.floor(toNumber(o['stock'] ?? '0')),
       minStock: Math.floor(toNumber(o['minStock'] ?? '0')),
       categoryCode: o['categoryCode'] ?? '',
-      status: o['status'] || 'Activo',
+      status: o['status'] === 'Inactivo' ? 'Inactivo' : 'Activo',
     }));
 
     this.importing = true;
@@ -257,8 +257,6 @@ export class ProductsComponent implements OnInit {
       this.showToast('El stock mínimo debe ser un valor mayor o igual a 0', 'error');
       return;
     }
-
-    const wasEditing = this.isEditing;
 
     if (this.isEditing) {
       this.productService.updateProduct(this.currentCode, { ...this.newProduct }).subscribe({
@@ -395,11 +393,16 @@ export class ProductsComponent implements OnInit {
   }
 
   generateProductCode(): string {
-    if (this.products.length === 0) return 'P001';
+    let max = 0;
 
-    const lastProduct = this.products[this.products.length - 1];
-    const lastCodeNumber = parseInt(lastProduct.code.replace('P', ''));
-    return 'P' + (lastCodeNumber + 1).toString().padStart(3, '0');
+    for (const product of this.products) {
+      const match = /^P(\d+)$/.exec(product.code);
+      if (match) {
+        max = Math.max(max, parseInt(match[1], 10));
+      }
+    }
+
+    return 'P' + (max + 1).toString().padStart(3, '0');
   }
 
   sortBy(column: keyof Product): void {

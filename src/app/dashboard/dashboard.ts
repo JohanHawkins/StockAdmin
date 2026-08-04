@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRe
 import { CommonModule } from '@angular/common';
 import { Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
-import { Subscription } from 'rxjs';
+import { Subscription, forkJoin } from 'rxjs';
 import { ProductService } from '../services/product.service';
 import { CategoryService } from '../services/category.service';
 import { MovementService } from '../services/movement.service';
@@ -64,18 +64,24 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   loadData(): void {
-    this.productService.getProducts().subscribe((products) => {
-      this.products = products;
-      this.categoryService.getCategories().subscribe((categories) => {
+    forkJoin({
+      products: this.productService.getProducts(),
+      categories: this.categoryService.getCategories(),
+      movements: this.movementService.getMovements(),
+    }).subscribe({
+      next: ({ products, categories, movements }) => {
+        this.products = products;
         this.categories = categories;
-        this.movementService.getMovements().subscribe((movements) => {
-          this.movements = movements;
-          this.buildMaps();
-          this.calculateStats();
-          this.isLoading = false;
-          this.cdr.markForCheck();
-        });
-      });
+        this.movements = movements;
+        this.buildMaps();
+        this.calculateStats();
+        this.isLoading = false;
+        this.cdr.markForCheck();
+      },
+      error: () => {
+        this.isLoading = false;
+        this.cdr.markForCheck();
+      },
     });
   }
 

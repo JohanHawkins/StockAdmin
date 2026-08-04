@@ -1,6 +1,6 @@
 import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { Observable, tap, map, catchError, of } from 'rxjs';
 
@@ -41,7 +41,7 @@ export class AuthService {
     }
   }
 
-  login(email: string, password: string): Observable<boolean> {
+  login(email: string, password: string): Observable<boolean | null> {
     return this.http.post<SessionUser>(`${this.API_URL}/login`, { email, password }).pipe(
       tap((user) => {
         this.currentUser = user;
@@ -50,7 +50,9 @@ export class AuthService {
         }
       }),
       map(() => true),
-      catchError(() => of(false)),
+      catchError((error: HttpErrorResponse) =>
+        of(error.status === 401 || error.status === 400 ? false : null),
+      ),
     );
   }
 

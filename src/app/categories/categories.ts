@@ -185,10 +185,15 @@ export class CategoriesComponent implements OnInit {
   }
 
   generateCategoryCode(): string {
-    if (this.categories.length === 0) return 'C001';
+    let max = 0;
 
-    const last = this.categories[this.categories.length - 1];
-    const number = parseInt(last.code.replace('C', ''));
-    return 'C' + (number + 1).toString().padStart(3, '0');
+    for (const category of this.categories) {
+      const match = /^C(\d+)$/.exec(category.code);
+      if (match) {
+        max = Math.max(max, parseInt(match[1], 10));
+      }
+    }
+
+    return 'C' + (max + 1).toString().padStart(3, '0');
   }
 }

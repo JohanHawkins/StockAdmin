@@ -31,41 +31,6 @@ router.get('/', async (_req, res): Promise<void> => {
   }
 });
 
-// GET /api/products/:code
-router.get('/:code', async (req, res): Promise<void> => {
-  try {
-    const { code } = req.params;
-    const result = await query(`
-      SELECT 
-        p.id,
-        p.code,
-        p.name,
-        p.description,
-        p.price,
-        p.stock,
-        p.min_stock as "minStock",
-        c.code as "categoryCode",
-        c.name as "categoryName",
-        p.status,
-        p.created_at as "createdAt",
-        p.updated_at as "updatedAt"
-      FROM products p
-      LEFT JOIN categories c ON p.category_id = c.id
-      WHERE p.code = $1
-    `, [code]);
-
-    if (result.rows.length === 0) {
-      res.status(404).json({ error: 'Producto no encontrado' });
-      return;
-    }
-
-    res.json(result.rows[0]);
-  } catch (error) {
-    console.error('Error al obtener producto:', error);
-    res.status(500).json({ error: 'Error interno del servidor' });
-  }
-});
-
 // POST /api/products/import
 router.post('/import', async (req, res): Promise<void> => {
   const { products } = req.body;

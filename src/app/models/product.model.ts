@@ -1,3 +1,5 @@
+export type ProductStatus = 'Activo' | 'Inactivo';
+
 export interface Product {
   code: string;
   name: string;
@@ -6,7 +8,7 @@ export interface Product {
   stock: number;
   minStock: number;
   categoryCode: string;
-  status: string;
+  status: ProductStatus;
 }
 
 export interface ImportError {

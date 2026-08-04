@@ -40,7 +40,7 @@ export class MovementsComponent implements OnInit {
   newMovement: Movement = {
     code: '',
     productCode: '',
-    type: '' as any,
+    type: '' as Movement['type'],
     quantity: 0,
     date: new Date(),
     observation: '',
@@ -137,7 +137,7 @@ export class MovementsComponent implements OnInit {
     this.newMovement = {
       code: '',
       productCode: '',
-      type: '' as any,
+      type: '' as Movement['type'],
       quantity: 0,
       date: new Date(),
       observation: '',

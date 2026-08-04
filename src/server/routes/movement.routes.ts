@@ -50,39 +50,6 @@ router.get('/generate-code', async (_req, res): Promise<void> => {
   }
 });
 
-// GET /api/movements/:code
-router.get('/:code', async (req, res): Promise<void> => {
-  try {
-    const { code } = req.params;
-    const result = await query(`
-      SELECT 
-        m.id,
-        m.code,
-        p.code as "productCode",
-        p.name as "productName",
-        m.type,
-        m.quantity,
-        m.observation,
-        u.nombre as "userName",
-        m.created_at as "date"
-      FROM movements m
-      LEFT JOIN products p ON m.product_id = p.id
-      LEFT JOIN users u ON m.user_id = u.id
-      WHERE m.code = $1
-    `, [code]);
-
-    if (result.rows.length === 0) {
-      res.status(404).json({ error: 'Movimiento no encontrado' });
-      return;
-    }
-
-    res.json(result.rows[0]);
-  } catch (error) {
-    console.error('Error al obtener movimiento:', error);
-    res.status(500).json({ error: 'Error interno del servidor' });
-  }
-});
-
 // POST /api/movements
 router.post('/', async (req, res): Promise<void> => {
   const client = await getClient();

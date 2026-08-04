@@ -36,15 +36,4 @@ router.post('/login', async (req, res): Promise<void> => {
   }
 });
 
-// GET /api/auth/users
-router.get('/users', async (_req, res): Promise<void> => {
-  try {
-    const result = await query('SELECT id, nombre, email, role FROM users ORDER BY id');
-    res.json(result.rows);
-  } catch (error) {
-    console.error('Error al obtener usuarios:', error);
-    res.status(500).json({ error: 'Error interno del servidor' });
-  }
-});
-
 export default router;
