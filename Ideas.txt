@@ -56,12 +56,15 @@
   - Dashboard carga en paralelo con forkJoin (sin spinner infinito ante errores)
   - Tipado del estado de producto ('Activo' | 'Inactivo') y eliminación de casts 'as any' en movimientos
 - README profesional con capturas de pantalla
+- Pruebas unitarias con Vitest (61 tests, 9 archivos):
+  - Utilidades CSV (parseCSV, detectDelimiter, toNumber, serializeCSV)
+  - Servicios (auth: login true/false/null, sesión y logout; product, category, movement: endpoints y parseo numérico)
+  - Componentes (login, dashboard, products: validaciones, totales, generación de códigos, filtros y ordenamiento)
 
 ### Pendientes
 
 | # | Tarea | Módulo |
 |---|-------|--------|
-| 4 | Pruebas unitarias (ampliar cobertura: servicios, csv.ts, componentes) | Infraestructura |
 | 5 | Pruebas de integración | Infraestructura |
 | 6 | Deploy (requiere plataforma con SSR + PostgreSQL; GitHub Pages no aplica) | Infraestructura |
 | 7 | Seguridad: hash de contraseñas y autenticación real en la API | Backend |
