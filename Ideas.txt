@@ -22,10 +22,12 @@
 
 | Funcionalidad | Admin | Empleado |
 |---------------|-------|---------|
-| Dashboard | CRUD completo | Solo lectura |
+| Dashboard | Solo lectura | Solo lectura |
 | Productos | Crear, Editar, Eliminar, Activar/Desactivar | Solo lectura |
 | Categorías | Crear, Editar, Eliminar | Solo lectura |
 | Movimientos | Crear, Filtros | Crear, Filtros |
+
+> Nota: el rol se aplica actualmente en la interfaz (botones ocultos). La API no verifica el rol por sí sola.
 
 ---
 
@@ -47,12 +49,19 @@
 - Exportar productos a CSV (respeta filtros y orden actuales, compatible con Excel)
 - Importar productos desde CSV (validación por fila, omite duplicados, transacción en BD)
 - Exportar historial de movimientos a CSV (respeta filtros aplicados)
+- Auditoría y mejora de código:
+  - Eliminados endpoints REST sin uso (GET /api/products/:code, GET /api/movements/:code, GET /api/auth/users)
+  - Corregido generador automático de códigos P###/C### (fallaba con códigos importados no numéricos)
+  - Login distingue credenciales incorrectas de errores de conexión
+  - Dashboard carga en paralelo con forkJoin (sin spinner infinito ante errores)
+  - Tipado del estado de producto ('Activo' | 'Inactivo') y eliminación de casts 'as any' en movimientos
+- README profesional con capturas de pantalla
 
 ### Pendientes
 
 | # | Tarea | Módulo |
 |---|-------|--------|
-| 4 | Pruebas unitarias | Infraestructura |
+| 4 | Pruebas unitarias (ampliar cobertura: servicios, csv.ts, componentes) | Infraestructura |
 | 5 | Pruebas de integración | Infraestructura |
-| 6 | README profesional con imágenes | Infraestructura |
-| 7 | Deploy (GitHub Pages / Vercel) | Infraestructura |
+| 6 | Deploy (requiere plataforma con SSR + PostgreSQL; GitHub Pages no aplica) | Infraestructura |
+| 7 | Seguridad: hash de contraseñas y autenticación real en la API | Backend |

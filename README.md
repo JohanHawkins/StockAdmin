@@ -4,7 +4,11 @@ Sistema de gestión de inventario web construido con Angular 21 y PostgreSQL. Ap
 
 ## Capturas
 
-> Agregar capturas de pantalla del dashboard, productos, categorías y movimientos.
+![Dashboard](docs/screenshots/dashboard.png)
+![Productos](docs/screenshots/productos.png)
+![Categorías](docs/screenshots/categorias.png)
+![Movimientos](docs/screenshots/movimientos.png)
+![Login](docs/screenshots/login.png)
 
 ## Cuentas de Prueba
 
@@ -24,11 +28,11 @@ Sistema de gestión de inventario web construido con Angular 21 y PostgreSQL. Ap
 
 ### Módulos
 
-- **Login** — Autenticación con roles (admin/empleado), guard de rutas protegidas
+- **Login** — Autenticación con roles (admin/empleado), guard de rutas protegidas, mensajes distintos para credenciales incorrectas y errores de conexión
 - **Dashboard** — Estadísticas generales, productos recientes, stock bajo, últimos movimientos
-- **Productos** — CRUD completo, código automático, búsqueda, paginación, activar/desactivar
+- **Productos** — CRUD completo, código automático, búsqueda, paginación, activar/desactivar, exportar a CSV y importar desde CSV
 - **Categorías** — CRUD completo, código automático, protección al eliminar con productos asociados
-- **Movimientos** — Registro de entradas/salidas, actualización automática de stock, filtros por fecha/tipo/producto
+- **Movimientos** — Registro de entradas/salidas, actualización automática de stock, filtros por fecha/tipo/producto, exportar historial a CSV
 
 ### UI/UX
 
@@ -45,29 +49,32 @@ Sistema de gestión de inventario web construido con Angular 21 y PostgreSQL. Ap
 
 | Funcionalidad | Admin | Empleado |
 |---------------|-------|----------|
-| Dashboard | CRUD completo | Solo lectura |
+| Dashboard | Solo lectura | Solo lectura |
 | Productos | Crear, Editar, Eliminar, Activar/Desactivar | Solo lectura |
 | Categorías | Crear, Editar, Eliminar | Solo lectura |
 | Movimientos | Crear, Filtros | Crear, Filtros |
+
+> Nota: el rol se aplica actualmente en la interfaz (botones ocultos). La API no verifica el rol por sí sola.
 
 ### Backend API REST
 
 | Método | Ruta | Descripción |
 |--------|------|-------------|
 | POST | /api/auth/login | Iniciar sesión |
-| GET | /api/auth/users | Listar usuarios |
 | GET | /api/products | Listar productos |
 | POST | /api/products | Crear producto |
+| POST | /api/products/import | Importar productos desde CSV |
 | PUT | /api/products/:code | Actualizar producto |
 | DELETE | /api/products/:code | Eliminar producto |
-| PATCH | /api/products/:code/toggle-status | Cambiar estado |
+| PATCH | /api/products/:code/toggle-status | Cambiar estado (Activo/Inactivo) |
 | GET | /api/categories | Listar categorías |
+| GET | /api/categories/:code | Obtener categoría por código |
 | POST | /api/categories | Crear categoría |
 | PUT | /api/categories/:code | Actualizar categoría |
 | DELETE | /api/categories/:code | Eliminar categoría |
 | GET | /api/movements | Listar movimientos |
-| POST | /api/movements | Crear movimiento |
-| GET | /api/movements/generate-code | Generar código |
+| POST | /api/movements | Crear movimiento (actualiza stock) |
+| GET | /api/movements/generate-code | Generar código de movimiento |
 
 ## Estructura del Proyecto
 
@@ -85,8 +92,9 @@ src/
 │   │   ├── spinner/        # Componente de carga global
 │   │   ├── toast/          # Notificaciones toast
 │   │   ├── error-handler/  # Manejador de errores global
+│   │   ├── csv.ts          # Utilidades de CSV (parseo, exportación, delimitadores)
 │   │   └── styles.css      # Estilos globales y variables CSS
-│   ├── guards/             # Auth guard y admin guard
+│   ├── guards/             # Auth guard
 │   ├── services/           # Servicios HTTP (auth, product, category, movement)
 │   ├── models/             # Interfaces TypeScript (product, category, movement)
 │   ├── app.config.ts       # Configuración de la app
@@ -96,6 +104,8 @@ src/
 │   ├── routes/             # Rutas API Express
 │   ├── db.ts               # Pool de conexiones PostgreSQL
 │   └── schema.sql          # Esquema de la base de datos
+├── docs/
+│   └── screenshots/        # Capturas de pantalla del README
 └── server.ts               # Entry point del servidor
 ```
 
@@ -171,6 +181,13 @@ npm run serve:ssr:StockAdmin
 ```
 
 Abrir http://localhost:4000
+
+## Pruebas
+
+```bash
+# Ejecutar los tests (Vitest)
+npm test
+```
 
 ## Licencia
 
