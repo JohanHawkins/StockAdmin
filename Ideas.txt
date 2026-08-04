@@ -46,12 +46,12 @@
 - Filtros avanzados de productos (categoría, estado, rango de precio, stock bajo, búsqueda por nombre/código)
 - Exportar productos a CSV (respeta filtros y orden actuales, compatible con Excel)
 - Importar productos desde CSV (validación por fila, omite duplicados, transacción en BD)
+- Exportar historial de movimientos a CSV (respeta filtros aplicados)
 
 ### Pendientes
 
 | # | Tarea | Módulo |
 |---|-------|--------|
-| 3 | Exportar historial de movimientos | Movimientos |
 | 4 | Pruebas unitarias | Infraestructura |
 | 5 | Pruebas de integración | Infraestructura |
 | 6 | README profesional con imágenes | Infraestructura |

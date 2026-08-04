@@ -38,6 +38,17 @@
   transform: translateY(0);
 }
 
+.movements-actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.movements-actions .export-btn {
+  background: linear-gradient(135deg, var(--accent-success) 0%, #059669 100%);
+}
+
 /* Stock Info Panel */
 .stock-info {
   margin-bottom: 24px;
@@ -143,6 +154,14 @@
 
   .movements-header button {
     width: 100%;
+  }
+
+  .movements-actions {
+    width: 100%;
+  }
+
+  .movements-actions button {
+    flex: 1;
   }
 
   .filters {

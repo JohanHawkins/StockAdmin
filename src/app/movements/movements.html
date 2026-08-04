@@ -1,7 +1,11 @@
 <div class="movements-container">
   <div class="movements-header">
     <h1>Gestión de Movimientos</h1>
-    <button (click)="openModal()">+ Nuevo Movimiento</button>
+
+    <div class="movements-actions">
+      <button class="export-btn" (click)="exportCSV()">Exportar CSV</button>
+      <button (click)="openModal()">+ Nuevo Movimiento</button>
+    </div>
   </div>
 
   <div class="filters">

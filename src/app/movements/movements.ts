@@ -7,6 +7,7 @@ import { ProductService } from '../services/product.service';
 import { AuthService } from '../services/auth.service';
 import { Movement } from '../models/movement.model';
 import { Product } from '../models/product.model';
+import { serializeCSV } from '../shared/csv';
 
 @Component({
   selector: 'app-movements',
@@ -201,5 +202,42 @@ export class MovementsComponent implements OnInit {
     this.filterProductCode = '';
     this.filterDateFrom = '';
     this.filterDateTo = '';
+  }
+
+  exportCSV(): void {
+    const rows = this.filteredMovements;
+
+    if (rows.length === 0) {
+      this.showToast('No hay movimientos para exportar', 'error');
+      return;
+    }
+
+    const headers = ['code', 'productName', 'productCode', 'type', 'quantity', 'observation', 'date'];
+    const data = rows.map((m) => [
+      m.code,
+      this.getProductName(m.productCode),
+      m.productCode,
+      m.type,
+      m.quantity,
+      m.observation || '',
+      this.formatDate(m.date),
+    ]);
+
+    const csv = serializeCSV(headers, data);
+    const blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `movimientos-${new Date().toISOString().slice(0, 10)}.csv`;
+    link.click();
+    URL.revokeObjectURL(url);
+
+    this.showToast(`Se exportaron ${rows.length} movimientos`, 'success');
+  }
+
+  private formatDate(date: Date): string {
+    const d = new Date(date);
+    const pad = (n: number) => n.toString().padStart(2, '0');
+    return `${pad(d.getDate())}/${pad(d.getMonth() + 1)}/${d.getFullYear()} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
   }
 }

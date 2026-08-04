@@ -14,7 +14,9 @@ const browserDistFolder = join(import.meta.dirname, '../browser');
 const app = express();
 const angularApp = new AngularNodeAppEngine({
   trustProxyHeaders: true,
-  allowedHosts: ['localhost', '127.0.0.1', '*.devtunnels.ms'],
+  allowedHosts: process.env['ALLOWED_HOSTS']
+    ? process.env['ALLOWED_HOSTS'].split(',')
+    : ['localhost', '127.0.0.1', '*.devtunnels.ms'],
 });
 
 // Body parser
@@ -34,6 +36,18 @@ app.use(
     redirect: false,
   }),
 );
+
+/**
+ * Evitar que los documentos HTML servidos por SSR se cacheen en el navegador.
+ * El nombre de los bundles cambia en cada build; una copia en caché del HTML
+ * podría referenciar un bundle que ya no existe y dejar la página en blanco.
+ */
+app.use((req, res, next) => {
+  if (req.method === 'GET') {
+    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+  }
+  next();
+});
 
 /**
  * Handle all other requests by rendering the Angular application.
